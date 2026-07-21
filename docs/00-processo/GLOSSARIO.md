@@ -1,0 +1,51 @@
+# Glossário do Projeto
+
+> Vocabulário canônico. Agentes e documentos devem usar SEMPRE estes termos.
+
+## Mundo e narrativa
+| Termo | Definição |
+|---|---|
+| **Névora** | Nome do jogo (ADR-004); de "névoa" — a bruma de esporos que apagou o mundo |
+| **Alvéola** | O mundo do jogo, construído em torno da Lumeira |
+| **Lumeira** | A árvore colossal de seiva luminosa; "coração" do mundo |
+| **Sévia** | Seiva luminosa cristalizada; moeda e combustível |
+| **Faróis de Cera** | Torres que queimam Sévia e regulam os ciclos do mundo |
+| **Acendedores** | Ordem de seres de cera viva, guardiões dos faróis (os jogadores) |
+| **Chama-Âmago** | A chama no peito de cada Acendedor; vida/identidade (cor por jogador) |
+| **A Cinza** | Fungo cinzento; sistema imunológico da Lumeira, corrompido |
+| **Encinzado** | Criatura corrompida pela Cinza (inimigos elite) |
+| **O Apagão** | A catástrofe histórica em que os faróis caíram |
+| **Cerélia** | Antiga capital de cera, hoje afundada |
+| **Pavio (vila)** | Vila-hub construída num farol caído |
+| **Pavio-Rei** | Antagonista final; o Primeiro Acendedor fundido à raiz |
+| **Últimos Moldados** | A fornada final de Acendedores — os personagens dos jogadores |
+| **Sementes de Lume** | 7 itens secretos que desbloqueiam o final verdadeiro |
+
+## Gameplay
+| Termo | Definição |
+|---|---|
+| **Ferrão de Cera** | Arma inicial (agulha-punhal) |
+| **Faísca** | Ferramenta inicial (isqueiro de sílex) |
+| **Fulgor** | Recurso ativo (medidor da chama): cura ou Artes |
+| **Arte de Chama** | Golpe especial de cada arma (consome Fulgor) |
+| **Selos de Cera** | Sistema de build (charms) equipados em Entalhes |
+| **Entalhes** | Slots de Selos (3→6) |
+| **Lampião de Descanso** | Ponto de save/respawn/descanso |
+| **Eco de Cera** | Estátua deixada na morte (recuperação de Sévia) |
+| **Derretendo** | Estado caído em co-op (revivível por aliado) |
+| **Rebate de Cera** | Parry |
+| **Sopro Restaurador** | Cura canalizada (gasta Fulgor) |
+| **Calor de Companhia** | Buff de descanso em grupo (só co-op) |
+| **Correios-Besouro** | Rede de viagem rápida |
+
+## Técnico
+| Termo | Definição |
+|---|---|
+| **sim** | Pacote de simulação compartilhada cliente/servidor |
+| **Expedição** | Nome do modelo de sessão co-op (regras de progresso do visitante) |
+| **Sala** | Instância de servidor de um grupo (1–4 jogadores) |
+| **Snapshot** | Estado enviado pelo servidor aos clientes |
+| **Greybox** | Protótipo de level sem arte final |
+| **Couch co-op** | Co-op local: 2+ pessoas no mesmo aparelho/tela, um controle cada |
+| **Atos gratuitos** | Contingência de lançamento: updates de conteúdo grátis que completam a campanha pós-v1.0 |
+| **Porte (G/M/P)** | Classificação de tamanho de região: Grande / Média / Passagem |
