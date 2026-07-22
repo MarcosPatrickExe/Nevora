@@ -72,11 +72,12 @@ Hollow Knight e Silksong nunca realizaram.
 | 007 | Mundo grande: **18 regiões + hub** (~450 salas) | 🟢 |
 | 008 | Sistema de design de personagem (`docs/art/`) + arma inicial renomeada para **Atiçador** | 🟢 |
 | 009 | Geração de imagens: Canva MCP p/ menu/UI; personagens/cenários seguem externos | 🟢 |
+| 010 | Estilo visual: **desenhado à mão e digitalizado** (processo tipo Cuphead) | 🟢 |
+| 011 | Protótipo web greybox em `prototype/` (menu, combate, 5 regiões, touch/PWA) | 🟢 |
 
 ## Decisões em aberto
 
 | # | Decisão | Onde discutir |
 |---|---|---|
 | 1 | Modelo comercial da versão web (demo grátis × completo pago) | `08-publicacao/PUBLICACAO.md` |
-| 2 | Estilo de produção de arte (rig 2D × pixel art HD) | `07-arte-audio/DIRECAO_DE_ARTE.md` |
-| 3 | Regra de progresso do visitante em co-op ("Expedição") | `05-multiplayer/MULTIPLAYER_DESIGN.md` |
+| 2 | Regra de progresso do visitante em co-op ("Expedição") | `05-multiplayer/MULTIPLAYER_DESIGN.md` |

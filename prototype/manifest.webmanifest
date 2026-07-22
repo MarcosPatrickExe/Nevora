@@ -1,0 +1,13 @@
+{
+  "name": "Névora — Protótipo",
+  "short_name": "Névora",
+  "description": "Protótipo greybox do metroidvania cooperativo Névora: 5 regiões, combate e exploração.",
+  "start_url": ".",
+  "display": "fullscreen",
+  "orientation": "landscape",
+  "background_color": "#141013",
+  "theme_color": "#141013",
+  "icons": [
+    { "src": "icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" }
+  ]
+}

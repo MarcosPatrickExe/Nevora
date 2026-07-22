@@ -11,6 +11,28 @@
 > com Hollow Knight/Silksong e outros metroidvanias de referência (ver
 > `01-visao/GAME_REFERENCES.md`).
 
+## Bloco de estilo obrigatório (ADR-010 — acrescentar a TODO prompt)
+
+Estilo "desenhado à mão e digitalizado" (processo tipo Cuphead — nunca o
+conteúdo/época de Cuphead). Acrescentar ao final de todo prompt positivo:
+
+```
+traditional hand-drawn animation style, drawn on paper and digitized,
+visible ink outlines with varying line weight, subtle line boil,
+hand-painted watercolor and gouache textured background, paper grain,
+vintage traditional animation production quality
+```
+
+E acrescentar ao negative prompt de todos:
+
+```
+1930s cartoon characters, rubber hose limbs, Cuphead characters, Mugman,
+pie-cut eyes, white gloves, vector flat art, pixel art, cel-shaded 3D
+```
+
+(Absorvemos o acabamento artesanal sem herdar a identidade de época nem os
+personagens do Cuphead.)
+
 ---
 
 ## Acendedores (protagonistas)

@@ -23,16 +23,35 @@ fria de fungo**. Nossa assinatura visual:
    literalmente **mais cinzentos** que o cenário (leitura instantânea de
    ameaça + tema visual da história).
 
-## Estilo de produção (a decidir com testes)
+## Estilo de produção — 🟢 decidido (ADR-010)
 
-| Opção | Prós | Contras |
-|---|---|---|
-| **A. Vetorial/recorte animado por esqueleto** (Spine/rig 2D) ⭐ | animação fluida barata, escala em qualquer resolução, blending de animações (padrão Silksong-like moderno), leve p/ web | exige rigs bons p/ não ficar "boneco de papel" |
-| B. Pixel art HD | charme, produção previsível | briga com o mercado lotado de pixel metroidvania; fluidez custa muitos frames |
-| C. Pintado frame a frame | teto visual altíssimo | custo proibitivo p/ equipe pequena |
+**Desenhado à mão e digitalizado** — todo elemento do jogo (personagens,
+inimigos, cenários, props, UI ilustrada) deve parecer ter sido desenhado à
+mão no papel e depois digitalizado, como o fluxo de produção de **Cuphead**
+(referência de PROCESSO e acabamento; jamais de conteúdo, personagens ou
+estética de época 1930s — nosso mundo continua sendo "Cera e Penumbra").
 
-Recomendação: **A**, com pintura de cenários em camadas de parallax (2.5 D de
-profundidade, estilo Ori simplificado) + partículas generosas.
+Assinaturas do acabamento:
+- **Traço de tinta visível** com espessura variável e imperfeições de mão;
+- **Line boil** (fervilhar de linha): o contorno redesenhado frame a frame
+  vibra sutilmente mesmo em poses paradas;
+- **Fundos pintados** com textura de papel/aquarela/guache em camadas de
+  parallax;
+- Personagens integrados aos fundos por luz (rim light da chama), não por
+  filtro.
+
+Custo e mitigação (validar na Fase 2):
+- Animação frame a frame é o item mais caro do projeto. Plano híbrido a
+  testar: personagens jogáveis e bosses frame a frame; inimigos comuns e
+  NPCs secundários em rig 2D "disfarçado" com line boil e frames-chave
+  redesenhados; VFX em frames desenhados reutilizáveis.
+- Ferramentas candidatas: papel+scanner ou desenho digital com pincéis de
+  tinta (Procreate/Krita/CSP), composição e limpeza no fluxo do
+  `content-pipeline`.
+
+Opções anteriores (registradas como histórico): A. rig 2D vetorial ⭐antiga
+recomendação · B. pixel art HD · C. pintado frame a frame — a decisão do
+Diretor efetiva uma variação de C com mitigação híbrida.
 
 ## Diretrizes de personagem
 

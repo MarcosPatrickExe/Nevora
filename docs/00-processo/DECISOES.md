@@ -108,3 +108,35 @@ Formato:
   trazidos de volta para comparação com a documentação.
 - Consequências: dois fluxos de produção de arte distintos e documentados;
   revisitar se um conector de geração livre for adicionado no futuro.
+
+## ADR-010 — Estilo visual: desenhado à mão e digitalizado (processo tipo Cuphead)
+- Data: 2026-07-22 · Status: **aceita** (decisão do Diretor)
+- Contexto: era preciso fechar o estilo de produção de arte (rig 2D × pixel
+  art × frame a frame). O Diretor definiu: personagens, inimigos, cenários e
+  demais elementos devem parecer **desenhados à mão e depois digitalizados**,
+  como o fluxo de produção de Cuphead (referência de PROCESSO e acabamento —
+  nunca de conteúdo, personagens ou época/tema 1930s).
+- Decisão: arte final com traço de tinta visível, imperfeições de mão,
+  "line boil" (fervilhar de linha) nas animações e fundos com textura de
+  pintura sobre papel. O look de Névora continua sendo "Cera e Penumbra" —
+  apenas o acabamento é artesanal/digitalizado.
+- Consequências: (a) animação frame a frame é o item mais caro do projeto —
+  mitigação a validar na Fase 2: híbrido com personagens principais frame a
+  frame e elementos secundários em rig disfarçado com line boil; (b) todos os
+  prompts de geração (`art/IMAGE_PROMPTS.md`) ganham um bloco de estilo
+  obrigatório; (c) o protótipo web usa placeholders procedurais com line boil
+  para já ensaiar o feeling do traço.
+
+## ADR-011 — Protótipo web Fase 1 (pasta `prototype/`)
+- Data: 2026-07-22 · Status: **aceita** (pedido do Diretor)
+- Decisão: iniciar o protótipo jogável web ANTES do fim da Fase 0 para
+  validar cedo: menu inicial, movimentação, combate, comportamento de
+  inimigos, 5 regiões interligadas (Vale das Velas, Bosque Murmurante,
+  Galerias Fúngicas, Vidraçal e Picos Uivantes) com 1 inimigo típico cada.
+- Regras: código-fonte em **`prototype/`** (mesmo nível de `docs/` — as
+  regras do jogo continuam morando em `docs/`); controles touch na tela
+  quando o dispositivo é touch/PWA instalado; no desktop com teclado, tela
+  de mapeamento de teclas em vez de botões visíveis; suporte a PWA.
+- Consequências: o protótipo é **greybox descartável** (arte placeholder
+  procedural) — valida feel e estrutura, não substitui a stack definitiva da
+  Fase 1 (ADR-002) nem a arte final (ADR-010).
