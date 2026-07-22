@@ -5,8 +5,7 @@
 ## Mundo e narrativa
 | Termo | Definição |
 |---|---|
-| **Névora** | Nome do jogo (ADR-004); de "névoa" — a bruma de esporos que apagou o mundo |
-| **Alvéola** | O mundo do jogo, construído em torno da Lumeira |
+| **Névora** | Nome do jogo **e do mundo** que guarda todos os mapas (como Fiarlongo/Pharloom em Silksong); de "névoa" — a bruma de esporos que o apagou. Mundo construído em torno da Lumeira. Nome antigo "Alvéola" aposentado (ADR-004) |
 | **Lumeira** | A árvore colossal de seiva luminosa; "coração" do mundo |
 | **Sévia** | Seiva luminosa cristalizada; moeda e combustível |
 | **Faróis de Cera** | Torres que queimam Sévia e regulam os ciclos do mundo |

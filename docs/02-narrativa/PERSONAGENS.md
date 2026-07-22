@@ -38,7 +38,7 @@ Formiga-cortadeira robusta que fundiu a própria bigorna às costas. Forja e
 evolui armas na vila de Pavio. Fala em golpes: "menos conversa, mais têmpera".
 
 ### Tio Sebo *(mercador viajante)*
-Caracol (não-inseto de propósito — imigrante de "fora de Alvéola", ninguém sabe
+Caracol (não-inseto de propósito — imigrante de "fora de Névora", ninguém sabe
 de onde) cuja concha é uma loja inteira. Aparece em pontos remotos do mapa
 vendendo ferramentas raras. Sabe mais do que diz. Possível gancho para DLC.
 

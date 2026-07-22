@@ -42,8 +42,11 @@ Formato:
 ## ADR-003 — Repositório novo e dedicado para o jogo (fora do ptk_plays)
 - Data: — · Status: **proposta** (Diretor criará o repo; docs serão migradas)
 
-## ADR-004 — Nome do jogo: **Névora**
-- Data: 2026-07-21 · Status: **aceita** (decisão do Diretor)
+## ADR-004 — Nome do jogo e do mundo: **Névora**
+- Data: 2026-07-21 (complementada em 2026-07-22) · Status: **aceita** (decisão do Diretor)
+- Complemento do Diretor: **Névora também é o nome do mundo** que guarda todos
+  os mapas — jogo e mundo compartilham o nome (como Fiarlongo/Pharloom guarda
+  os mapas de Silksong). O nome provisório do mundo, "Alvéola", foi aposentado.
 - Consequências: pesquisa de marca (INPI + global) antes do anúncio público;
   domínios e handles sociais a garantir. Codinome "Enxame" aposentado.
 

@@ -14,9 +14,9 @@ os próprios guardiões causaram.
 
 ---
 
-## O mundo: **Alvéola**
+## O mundo: **Névora**
 
-Alvéola é uma vasta terra de insetos construída em torno (e por dentro) da
+Névora é uma vasta terra de insetos construída em torno (e por dentro) da
 **Lumeira**, uma árvore colossal e antiquíssima cuja seiva emite luz própria.
 Há eras, a civilização dos insetos aprendeu a cristalizar essa seiva — a
 **Sévia** — e a queimá-la em grandes **Faróis de Cera**, torres que banham as
@@ -34,7 +34,7 @@ Séculos atrás, no auge da civilização — a era da esplendorosa cidade de ce
 **Cerélia** — o consumo de Sévia saiu de controle. A Lumeira começou a
 definhar. Como um corpo com febre, a árvore reagiu: liberou das raízes a
 **Cinza**, um fungo cinzento e silencioso cujo propósito é *apagar* — cobrir a
-luz, adormecer o mundo, forçar Alvéola a hibernar até a árvore se curar.
+luz, adormecer o mundo, forçar Névora a hibernar até a árvore se curar.
 
 Mas a Cinza encontrou resistência: o **Primeiro Acendedor**, fundador da ordem,
 recusou-se a deixar sua era terminar. Ele mergulhou no coração da Lumeira para
@@ -54,7 +54,7 @@ extinguiu defendendo as torres. O mundo virou penumbra.
 
 ### Abertura
 
-No **Vale das Velas**, o último farol aceso de Alvéola pisca e morre. No
+No **Vale das Velas**, o último farol aceso de Névora pisca e morre. No
 instante em que a escuridão o engole, uma câmara sob a torre se abre: nichos de
 pedra onde repousam figuras de cera. **Uma delas abre os olhos** (no co-op,
 duas, três ou quatro despertam juntas — a narrativa trata os jogadores como os

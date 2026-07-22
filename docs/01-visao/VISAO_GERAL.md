@@ -15,10 +15,11 @@
 | **Idiomas no lançamento** | pt-BR e en-US (arquitetura preparada para mais) |
 | **Sessão típica** | 20–60 min; campanha completa 25–35 h (100%: 45+ h) |
 
-> **Névora** — de *névoa*: a bruma de esporos que apagou o mundo, e o nevoeiro
-> que a luz dos jogadores rasga. Curto, sonoro, funciona em pt e en
-> (pronúncia natural), sem colisão óbvia com IPs do gênero (pesquisa formal de
-> marca pendente — ver `08-publicacao/PUBLICACAO.md`).
+> **Névora** — nome do jogo **e do mundo** onde tudo acontece (como
+> Fiarlongo/Pharloom em Silksong). De *névoa*: a bruma de esporos que apagou o
+> mundo, e o nevoeiro que a luz dos jogadores rasga. Curto, sonoro, funciona em
+> pt e en (pronúncia natural), sem colisão óbvia com IPs do gênero (pesquisa
+> formal de marca pendente — ver `08-publicacao/PUBLICACAO.md`).
 
 ---
 

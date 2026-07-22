@@ -1,4 +1,4 @@
-# Biomas e Climas de Alvéola
+# Biomas e Climas de Névora
 
 > Status: 🟢 Escopo aprovado pelo Diretor: **18 regiões + vila-hub** — mapa
 > grande, escala Silksong (ADR-007). Conteúdo de cada região: 🟡 proposta.
@@ -159,7 +159,7 @@ ensina/exige uma mecânica própria; regiões M/P aprofundam mecânicas existent
 
 ### 17. Abismo dos Esporos *(P — endgame opcional, dificuldade máxima)*
 - **Clima:** nenhum — vazio de esporos suspensos, quase sem chão.
-- **Visual:** a fenda mais funda de Alvéola, onde a Cinza nasceu; céu
+- **Visual:** a fenda mais funda de Névora, onde a Cinza nasceu; céu
   invertido de esporos-estrela.
 - **Mecânica:** plataformas que só existem perto de luz; travessia com todas
   as habilidades no limite (nosso "desafio dos deuses").
@@ -198,7 +198,7 @@ ensina/exige uma mecânica própria; regiões M/P aprofundam mecânicas existent
 
 ## Sugestões em aberto
 
-1. **Bioma de DLC:** "Jardim de Fora" — a superfície acima de Alvéola, mundo
+1. **Bioma de DLC:** "Jardim de Fora" — a superfície acima de Névora, mundo
    dos gigantes (escala nova). Guardar para pós-lançamento.
 2. **Clima dinâmico global** (eventos raros de ~10 min que afetam o mundo):
    custo técnico médio, ótimo para co-op. Decidir na Fase 2.
