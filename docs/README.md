@@ -33,6 +33,7 @@ Hollow Knight e Silksong nunca realizaram.
 | [`07-arte-audio/`](./07-arte-audio/) | Direção de arte, identidade visual, áudio e trilha | 🟡 proposta |
 | [`08-publicacao/`](./08-publicacao/) | Pendências futuras: Steam, Epic, Play Store, App Store, ratings | 🟡 backlog |
 | [`09-roadmap/`](./09-roadmap/) | Fases do projeto, da pré-produção ao lançamento | 🟡 proposta |
+| [`art/`](./art/) | Sistema de design de personagem: bíblia geral, Acendedores, NPCs/chefes | 🟢 aprovado |
 
 ### Legenda de status usada nos documentos
 
@@ -69,12 +70,13 @@ Hollow Knight e Silksong nunca realizaram.
 | 005 | Construído para 2 jogadores; arquitetura/IDs/UI/protocolos prontos p/ 4 | 🟢 |
 | 006 | Câmera co-op **parametrizável**: independente ⇄ elástica | 🟢 |
 | 007 | Mundo grande: **18 regiões + hub** (~450 salas) | 🟢 |
+| 008 | Sistema de design de personagem (`docs/art/`) + arma inicial renomeada para **Atiçador** | 🟢 |
+| 009 | Geração de imagens: Canva MCP p/ menu/UI; personagens/cenários seguem externos | 🟢 |
 
 ## Decisões em aberto
 
 | # | Decisão | Onde discutir |
 |---|---|---|
-| 1 | Repositório definitivo do jogo (este repo é um app Flutter à parte) | `06-tecnologia/ARQUITETURA.md` (ADR-003) |
-| 2 | Modelo comercial da versão web (demo grátis × completo pago) | `08-publicacao/PUBLICACAO.md` |
-| 3 | Estilo de produção de arte (rig 2D × pixel art HD) | `07-arte-audio/DIRECAO_DE_ARTE.md` |
-| 4 | Regra de progresso do visitante em co-op ("Expedição") | `05-multiplayer/MULTIPLAYER_DESIGN.md` |
+| 1 | Modelo comercial da versão web (demo grátis × completo pago) | `08-publicacao/PUBLICACAO.md` |
+| 2 | Estilo de produção de arte (rig 2D × pixel art HD) | `07-arte-audio/DIRECAO_DE_ARTE.md` |
+| 3 | Regra de progresso do visitante em co-op ("Expedição") | `05-multiplayer/MULTIPLAYER_DESIGN.md` |

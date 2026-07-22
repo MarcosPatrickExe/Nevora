@@ -1,7 +1,7 @@
 # Armas e Ferramentas
 
 > Status: 🟡 Proposta. 6 classes de arma + ~12 ferramentas. O jogador começa
-> com **1 arma simples (Ferrão de Cera)** e **1 ferramenta (Faísca)** e expande
+> com **1 arma simples (o Atiçador)** e **1 ferramenta (Faísca)** e expande
 > o arsenal explorando — nenhuma arma vem de loja: **toda arma é uma conquista
 > de exploração ou de boss**.
 
@@ -16,10 +16,16 @@
 
 ## As 6 classes de arma
 
-### 1. Ferrão de Cera *(inicial)* — a agulha do noviço
-- **Estilo:** punhal-agulha rápido, alcance curto, dano baixo, ritmo altíssimo.
+### 1. Atiçador *(inicial)* — o utensílio do noviço
+- **Origem:** ferramenta de bronze usada originalmente para manipular pavios,
+  cortar cera, acender mecanismos, abrir lacres e perfurar quitina — vira
+  arma nas mãos de um Acendedor em expedição. Ver design completo em
+  `art/PLAYER_CHARACTER_DESIGN.md`.
+- **Visual:** cabo de madeira carbonizada, pequena lâmina curva, ponta
+  bifurcada, reservatório de Fulgor no centro; comprimento de antebraço.
+- **Estilo:** punhal-utensílio rápido, alcance curto, dano baixo, ritmo altíssimo.
 - **Força:** melhor velocidade de pogo; anima cancel generoso. Nunca fica
-  obsoleto: evolui para "Ferrão-Régio" (crítico ao atacar pelas costas).
+  obsoleto: evolui para "Atiçador-Régio" (crítico ao atacar pelas costas).
 - **Arte de Chama:** *Estocada Fundente* — investida perfurante em linha.
 - **Co-op:** acertos aplicam "marca de calor" (+dano do próximo golpe aliado).
 
@@ -78,16 +84,16 @@ Equipáveis em 2 slots (3 com Selo). Recarregam nos Lampiões.
 ## Evolução (forja da Dona Fervura)
 
 - Cada arma: 3 níveis (materiais de bioma + Sévia). Nível 3 desbloqueia uma
-  **variação estética + modificador** escolhível (ex.: Ferrão-Régio × Ferrão
-  Fervente) — respec permitido.
+  **variação estética + modificador** escolhível (ex.: Atiçador-Régio ×
+  Atiçador Fervente) — respec permitido.
 - Sugestão a discutir: infusões elementais temporárias (calor/gelo/âmbar) como
   consumível da forja para bosses específicos — profundidade sem power creep.
 
 ## Regras anti-cópia
 
 - ❌ Nenhuma arma pode se chamar/parecer "Nail", "Needle" ou variações dos
-  jogos de referência. "Ferrão" é termo biológico genérico — validado, mas a
-  silhueta deve ser de **agulha de costura de cera com cabo de castiçal**
-  (identidade própria), não uma espada-prego.
+  jogos de referência. O Atiçador é um utensílio de bronze (cabo de madeira
+  carbonizada, lâmina curva, ponta bifurcada) — não uma agulha/prego
+  disfarçada de espada.
 - ✔ Identidade de forma: nossas armas são **utensílios do ofício de acender**
   (pavios, sinos, fios, cera) reaproveitados como armas — coerência de mundo.

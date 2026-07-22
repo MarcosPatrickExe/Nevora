@@ -77,3 +77,34 @@ Formato:
   longa); mitigação via portes, pipeline data-driven e agentes paralelos.
   Lançamento em "Atos" gratuitos permanece como **plano de contingência**
   (não é o plano padrão), registrado no ROADMAP.
+
+## ADR-008 — Sistema de design de personagem + renomeação da arma inicial
+- Data: 2026-07-22 · Status: **aceita** (diretriz detalhada do Diretor)
+- Contexto: era preciso transformar a descrição visual de Névora num
+  **sistema de design consistente** (não personagens desenhados como ideias
+  isoladas), com regra central, linguagem de formas por grupo e materiais
+  predominantes definidos.
+- Decisão: criada a pasta `docs/art/` com três documentos —
+  `CHARACTER_ART_BIBLE.md` (sistema geral), `PLAYER_CHARACTER_DESIGN.md`
+  (Acendedores) e `NPC_AND_BOSS_DESIGN.md` (elenco e chefes). A arma inicial
+  "Ferrão de Cera" é renomeada para **Atiçador** (utensílio de acender
+  pavios, não uma agulha/prego) em toda a documentação.
+- Consequências: `07-arte-audio/DIRECAO_DE_ARTE.md` passa a ceder a `art/`
+  em qualquer detalhe de personagem; toda arte futura de personagem é
+  validada pelo teste de silhueta e pela linguagem de formas do grupo antes
+  de aprovação.
+
+## ADR-009 — Geração de imagens: conector MCP Canva para arte de menu/UI
+- Data: 2026-07-22 · Status: **aceita** (decisão do Diretor)
+- Contexto: avaliados os conectores MCP Adobe for Creativity e Canva para
+  gerar concept art. Descoberta: nenhum dos dois é um gerador livre de
+  texto-para-imagem — Adobe só organiza/edita assets já existentes; Canva
+  `generate-design` compõe designs a partir de templates (funciona bem para
+  wallpaper/pôster, não para concept art de criatura/cenário livre).
+- Decisão: usar o conector Canva para artes de **menu principal e telas de
+  UI** (onde a composição tipo wallpaper/pôster funciona). Personagens e
+  cenários continuam sendo gerados externamente pelo Diretor (ex.:
+  Midjourney) usando os prompts derivados de `art/` e `03-mundo/BIOMAS.md`,
+  trazidos de volta para comparação com a documentação.
+- Consequências: dois fluxos de produção de arte distintos e documentados;
+  revisitar se um conector de geração livre for adicionado no futuro.

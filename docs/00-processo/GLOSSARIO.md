@@ -23,7 +23,7 @@
 ## Gameplay
 | Termo | Definição |
 |---|---|
-| **Ferrão de Cera** | Arma inicial (agulha-punhal) |
+| **Atiçador** | Arma inicial (utensílio de bronze para acender pavios) |
 | **Faísca** | Ferramenta inicial (isqueiro de sílex) |
 | **Fulgor** | Recurso ativo (medidor da chama): cura ou Artes |
 | **Arte de Chama** | Golpe especial de cada arma (consome Fulgor) |

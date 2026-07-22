@@ -36,9 +36,21 @@ profundidade, estilo Ori simplificado) + partículas generosas.
 
 ## Diretrizes de personagem
 
-- Silhueta primeiro: todo personagem legível em preto chapado.
-- Protagonistas: gota de cera + pavio aceso (nunca capuz/chifres — território
-  visual de HK é proibido). Rosto = duas brasas simples.
+> 🟢 Sistema completo de design de personagem definido em `../art/` — este
+> resumo cede a esses documentos em qualquer detalhe:
+> - [`art/CHARACTER_ART_BIBLE.md`](../art/CHARACTER_ART_BIBLE.md) — regra
+>   central ("todo ser carrega em seu corpo sinais de sua função, origem e
+>   relação com a luz"), linguagem de formas por grupo, materiais, testes de
+>   silhueta/cor.
+> - [`art/PLAYER_CHARACTER_DESIGN.md`](../art/PLAYER_CHARACTER_DESIGN.md) —
+>   os 4 Acendedores, proporções, a chama como expressão, arma (Atiçador).
+> - [`art/NPC_AND_BOSS_DESIGN.md`](../art/NPC_AND_BOSS_DESIGN.md) — Pavia,
+>   Cri, Dona Fervura, Tio Sebo, Fia & Meada, Bolhinha, bosses, Encinzados.
+
+- Silhueta primeiro: todo personagem legível em preto chapado, a 25% do
+  tamanho, ao lado de 3 outros personagens (teste de silhueta).
+- Protagonistas: gota de cera + pavio aceso (nunca capuz/chifres/máscara —
+  território visual de HK é proibido). Rosto = duas brasas simples.
 - Inimigos: insetos estilizados com **um traço de design brasileiro** (cores e
   padrões de fauna tropical estilizada) — diferenciação natural do bestiário
   eurogótico das referências.

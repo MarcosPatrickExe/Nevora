@@ -62,7 +62,7 @@ duas, três ou quatro despertam juntas — a narrativa trata os jogadores como o
 enfraquecer, e que nunca chegou a servir).
 
 O jogador desperta fraco, com:
-- o **Ferrão de Cera** — uma agulha-punhal cerimonial, arma dos noviços;
+- o **Atiçador** — utensílio de bronze de acender pavios, arma dos noviços;
 - a **Faísca** — um isqueiro de sílex, ferramenta básica capaz de acender
   pavios, queimar teias de bolor e revelar inscrições à luz do fogo.
 

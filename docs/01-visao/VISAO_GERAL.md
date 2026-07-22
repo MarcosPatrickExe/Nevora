@@ -50,7 +50,7 @@ mais de um jogador — não um multiplayer "colado" depois.
 > "Somos os últimos portadores da chama. O mundo apagou — nós vamos reacendê-lo,
 > farol por farol, juntos."
 
-O jogador começa **fraco**: uma arma simples (o Ferrão de Cera) e uma ferramenta
+O jogador começa **fraco**: uma arma simples (o Atiçador) e uma ferramenta
 básica (a Faísca). Cada região dominada, cada chefe derrotado e cada segredo
 encontrado transforma esse ser frágil em uma lenda — e a jornada de poder é
 sentida no corpo: novos golpes, novos movimentos, novas formas de atravessar o
