@@ -1,0 +1,151 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900">
+  <defs>
+    <!-- traço à mão: deslocamento por ruído -->
+    <filter id="ink" x="-8%" y="-8%" width="116%" height="116%">
+      <feTurbulence type="turbulence" baseFrequency="0.016" numOctaves="3" seed="7" result="n"/>
+      <feDisplacementMap in="SourceGraphic" in2="n" scale="7"/>
+    </filter>
+    <filter id="ink2" x="-8%" y="-8%" width="116%" height="116%">
+      <feTurbulence type="turbulence" baseFrequency="0.02" numOctaves="2" seed="31" result="n"/>
+      <feDisplacementMap in="SourceGraphic" in2="n" scale="9"/>
+    </filter>
+    <!-- textura de papel -->
+    <filter id="paper">
+      <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" seed="4" result="n"/>
+      <feColorMatrix in="n" type="matrix" values="0 0 0 0 0.45 0 0 0 0 0.38 0 0 0 0 0.30 0 0 0 0.05 0"/>
+      <feComposite operator="over" in2="SourceGraphic"/>
+    </filter>
+    <radialGradient id="flameA" cx="50%" cy="70%" r="60%">
+      <stop offset="0%" stop-color="#fff3c4"/><stop offset="55%" stop-color="#ffb13b"/><stop offset="100%" stop-color="#d2691e" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="flameC" cx="50%" cy="70%" r="60%">
+      <stop offset="0%" stop-color="#eaffff"/><stop offset="55%" stop-color="#39d9e8"/><stop offset="100%" stop-color="#1a7c9c" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="flameM" cx="50%" cy="70%" r="60%">
+      <stop offset="0%" stop-color="#ffe6f5"/><stop offset="55%" stop-color="#f14fd0"/><stop offset="100%" stop-color="#8c1f77" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="flameV" cx="50%" cy="70%" r="60%">
+      <stop offset="0%" stop-color="#f4ffd6"/><stop offset="55%" stop-color="#a8e83a"/><stop offset="100%" stop-color="#4f7c1a" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="vig" cx="50%" cy="46%" r="75%">
+      <stop offset="0%" stop-color="#efe6d2"/><stop offset="100%" stop-color="#cdbfa4"/>
+    </radialGradient>
+  </defs>
+
+  <!-- fundo papel -->
+  <rect width="1600" height="900" fill="url(#vig)" filter="url(#paper)"/>
+  <text x="800" y="82" text-anchor="middle" font-family="serif" font-size="46" fill="#3a2c1e" font-style="italic">Os Quatro Acendedores</text>
+  <text x="800" y="120" text-anchor="middle" font-family="serif" font-size="22" fill="#7a684f" font-style="italic">estudo de personagens — Névora · corpo de cera viva, chama própria, mesmo esqueleto</text>
+
+  <!-- ======================= ÂMBAR (equilibrado) ======================= -->
+  <g transform="translate(230,470)">
+    <ellipse cx="0" cy="190" rx="95" ry="16" fill="#3a2c1e" opacity="0.14"/>
+    <g filter="url(#ink)">
+      <!-- corpo/vestimenta de cera -->
+      <path d="M0,-150 C58,-138 66,-40 60,40 C56,110 58,150 40,178 C20,190 -20,190 -40,178 C-58,150 -56,110 -60,40 C-66,-40 -58,-138 0,-150 Z"
+            fill="#efe3cb" stroke="#2a1c14" stroke-width="6"/>
+      <!-- escorridos -->
+      <path d="M-60,60 C-70,86 -62,120 -52,138" fill="none" stroke="#2a1c14" stroke-width="5"/>
+      <path d="M62,86 C70,110 62,140 54,156" fill="none" stroke="#2a1c14" stroke-width="4"/>
+      <path d="M-30,178 C-30,196 -18,200 -16,182" fill="#efe3cb" stroke="#2a1c14" stroke-width="4"/>
+      <!-- anel de bronze -->
+      <path d="M-58,52 C-20,66 20,66 58,52" fill="none" stroke="#a97b32" stroke-width="12"/>
+      <path d="M-58,52 C-20,66 20,66 58,52" fill="none" stroke="#2a1c14" stroke-width="3" opacity="0.5"/>
+      <!-- braços curtos -->
+      <path d="M-56,10 C-80,22 -86,44 -78,58" fill="none" stroke="#2a1c14" stroke-width="6"/>
+      <path d="M56,10 C84,18 92,40 84,56" fill="none" stroke="#2a1c14" stroke-width="6"/>
+      <!-- Atiçador: cabo carbonizado + lâmina curva bifurcada -->
+      <g transform="translate(88,50) rotate(-24)">
+        <rect x="-5" y="0" width="10" height="46" rx="4" fill="#3a2c22" stroke="#2a1c14" stroke-width="3"/>
+        <path d="M0,0 C4,-26 18,-38 34,-42 M34,-42 L26,-30 M34,-42 L42,-34" fill="none" stroke="#c89b52" stroke-width="7" stroke-linecap="round"/>
+        <circle cx="0" cy="0" r="7" fill="#ffb13b" stroke="#2a1c14" stroke-width="3"/>
+      </g>
+    </g>
+    <!-- rosto -->
+    <g filter="url(#ink2)">
+      <circle cx="-14" cy="-62" r="7" fill="#ff9d3b"/><circle cx="16" cy="-62" r="7" fill="#ff9d3b"/>
+      <path d="M0,-150 L2,-176" stroke="#2a1c14" stroke-width="5" stroke-linecap="round"/>
+    </g>
+    <path d="M-14,-186 C-16,-214 0,-232 4,-236 C16,-222 20,-204 8,-184 C2,-178 -8,-178 -14,-186 Z" fill="url(#flameA)"/>
+    <text x="0" y="240" text-anchor="middle" font-family="serif" font-size="27" fill="#3a2c1e">ÂMBAR</text>
+    <text x="0" y="268" text-anchor="middle" font-family="serif" font-size="17" fill="#7a684f" font-style="italic">equilibrado · silhueta compacta</text>
+  </g>
+
+  <!-- ======================= CIANO (mobilidade) ======================= -->
+  <g transform="translate(620,470)">
+    <ellipse cx="0" cy="190" rx="80" ry="14" fill="#3a2c1e" opacity="0.14"/>
+    <g filter="url(#ink)">
+      <path d="M6,-170 C50,-150 48,-60 42,30 C38,110 44,152 28,180 C12,190 -16,190 -30,180 C-44,150 -40,104 -44,30 C-50,-56 -40,-152 6,-170 Z"
+            fill="#e8f0f2" stroke="#22303a" stroke-width="6" transform="rotate(-4)"/>
+      <!-- escorridos longos -->
+      <path d="M-44,20 C-56,70 -50,130 -42,164" fill="none" stroke="#22303a" stroke-width="5"/>
+      <path d="M44,44 C52,96 46,150 40,172" fill="none" stroke="#22303a" stroke-width="4"/>
+      <path d="M-16,184 C-16,206 -6,210 -4,188" fill="#e8f0f2" stroke="#22303a" stroke-width="4"/>
+      <!-- placas de vidro opaco nos ombros -->
+      <path d="M-40,-64 L-24,-84 L-12,-62 Z" fill="#bfe6ea" stroke="#22303a" stroke-width="4" opacity="0.9"/>
+      <path d="M34,-70 L46,-88 L54,-64 Z" fill="#bfe6ea" stroke="#22303a" stroke-width="4" opacity="0.9"/>
+      <path d="M-46,40 C-14,52 18,52 44,40" fill="none" stroke="#7fa8b0" stroke-width="10"/>
+      <path d="M-46,6 C-68,16 -74,36 -66,50" fill="none" stroke="#22303a" stroke-width="5"/>
+      <path d="M44,2 C66,10 74,30 66,46" fill="none" stroke="#22303a" stroke-width="5"/>
+    </g>
+    <g filter="url(#ink2)">
+      <circle cx="-8" cy="-84" r="6" fill="#39d9e8"/><circle cx="18" cy="-88" r="6" fill="#39d9e8"/>
+      <path d="M8,-170 L14,-196" stroke="#22303a" stroke-width="5" stroke-linecap="round"/>
+    </g>
+    <path d="M2,-206 C-2,-238 14,-260 20,-266 C30,-248 32,-224 22,-202 C16,-196 8,-198 2,-206 Z" fill="url(#flameC)"/>
+    <text x="0" y="240" text-anchor="middle" font-family="serif" font-size="27" fill="#3a2c1e">CIANO</text>
+    <text x="0" y="268" text-anchor="middle" font-family="serif" font-size="17" fill="#7a684f" font-style="italic">mobilidade · silhueta vertical</text>
+  </g>
+
+  <!-- ======================= MAGENTA (ataque) ======================= -->
+  <g transform="translate(1000,470)">
+    <ellipse cx="0" cy="190" rx="95" ry="15" fill="#3a2c1e" opacity="0.14"/>
+    <g filter="url(#ink)">
+      <path d="M-16,-142 C48,-150 78,-96 66,-30 C58,20 66,90 76,140 C70,176 30,192 0,190 C-40,190 -72,172 -66,132 C-58,80 -66,20 -70,-30 C-78,-92 -60,-134 -16,-142 Z"
+            fill="#f4dfe4" stroke="#361a26" stroke-width="6"/>
+      <!-- rachaduras brilhantes -->
+      <path d="M-30,-60 L-12,-38 L-26,-16 M28,-72 L40,-48 M10,20 L28,44 L16,66" fill="none" stroke="#f14fd0" stroke-width="4"/>
+      <!-- base assimétrica -->
+      <path d="M-66,132 C-84,150 -78,176 -60,182" fill="none" stroke="#361a26" stroke-width="5"/>
+      <path d="M50,182 C50,206 64,210 64,186" fill="#f4dfe4" stroke="#361a26" stroke-width="4"/>
+      <path d="M-64,44 C-20,60 26,60 68,42" fill="none" stroke="#a97b32" stroke-width="11"/>
+      <path d="M-62,0 C-88,10 -96,34 -86,50" fill="none" stroke="#361a26" stroke-width="6"/>
+      <path d="M64,-6 C90,0 100,24 90,42" fill="none" stroke="#361a26" stroke-width="6"/>
+    </g>
+    <g filter="url(#ink2)">
+      <circle cx="-20" cy="-64" r="7" fill="#f14fd0"/><circle cx="14" cy="-64" r="7" fill="#f14fd0"/>
+      <!-- pavio deslocado para a lateral -->
+      <path d="M-38,-136 L-48,-160" stroke="#361a26" stroke-width="5" stroke-linecap="round"/>
+    </g>
+    <path d="M-58,-170 C-64,-198 -50,-220 -44,-226 C-34,-210 -30,-188 -42,-166 C-48,-160 -54,-162 -58,-170 Z" fill="url(#flameM)"/>
+    <text x="0" y="240" text-anchor="middle" font-family="serif" font-size="27" fill="#3a2c1e">MAGENTA</text>
+    <text x="0" y="268" text-anchor="middle" font-family="serif" font-size="17" fill="#7a684f" font-style="italic">ataque · diagonais fortes</text>
+  </g>
+
+  <!-- ======================= VERDE-LIMA (suporte) ======================= -->
+  <g transform="translate(1380,490)">
+    <ellipse cx="0" cy="170" rx="105" ry="16" fill="#3a2c1e" opacity="0.14"/>
+    <g filter="url(#ink)">
+      <path d="M0,-118 C64,-108 84,-52 80,10 C78,74 84,124 62,152 C30,170 -30,170 -62,152 C-84,124 -78,74 -80,10 C-84,-52 -64,-108 0,-118 Z"
+            fill="#e6e8cf" stroke="#28301c" stroke-width="6"/>
+      <!-- gotas laterais -->
+      <path d="M-80,40 C-98,52 -100,76 -88,88 M80,52 C96,64 98,86 86,96" fill="none" stroke="#28301c" stroke-width="5"/>
+      <path d="M-40,160 C-40,182 -28,186 -26,164 M30,162 C30,180 42,184 42,166" fill="#e6e8cf" stroke="#28301c" stroke-width="4"/>
+      <!-- filamentos de micélio controlado no braço -->
+      <path d="M-78,10 C-102,20 -110,42 -100,58" fill="none" stroke="#28301c" stroke-width="6"/>
+      <path d="M-100,34 C-112,36 -118,44 -122,54 M-104,46 C-114,52 -118,60 -120,68" fill="none" stroke="#7fae5a" stroke-width="4"/>
+      <circle cx="-122" cy="56" r="4" fill="#a8e83a" stroke="#28301c" stroke-width="2"/>
+      <path d="M78,6 C100,14 108,36 98,52" fill="none" stroke="#28301c" stroke-width="6"/>
+      <path d="M-78,44 C-26,60 28,60 78,44" fill="none" stroke="#a97b32" stroke-width="11"/>
+    </g>
+    <g filter="url(#ink2)">
+      <circle cx="-14" cy="-48" r="7" fill="#a8e83a"/><circle cx="16" cy="-48" r="7" fill="#a8e83a"/>
+      <path d="M0,-118 L0,-142" stroke="#28301c" stroke-width="5" stroke-linecap="round"/>
+    </g>
+    <path d="M-12,-152 C-14,-178 0,-196 4,-200 C14,-186 18,-168 6,-150 C0,-144 -8,-144 -12,-152 Z" fill="url(#flameV)"/>
+    <text x="0" y="220" text-anchor="middle" font-family="serif" font-size="27" fill="#3a2c1e">VERDE-LIMA</text>
+    <text x="0" y="248" text-anchor="middle" font-family="serif" font-size="17" fill="#7a684f" font-style="italic">suporte · silhueta larga</text>
+  </g>
+
+  <text x="800" y="860" text-anchor="middle" font-family="serif" font-size="18" fill="#8a785e" font-style="italic">estilo: desenhado à mão e digitalizado (ADR-010) · concept interno — arte final será redesenhada por artista</text>
+</svg>

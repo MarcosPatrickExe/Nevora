@@ -1,0 +1,60 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="900" viewBox="0 0 900 900">
+  <defs>
+    <filter id="ink" x="-10%" y="-10%" width="120%" height="120%">
+      <feTurbulence type="turbulence" baseFrequency="0.015" numOctaves="3" seed="19" result="n"/>
+      <feDisplacementMap in="SourceGraphic" in2="n" scale="8"/>
+    </filter>
+    <filter id="paper">
+      <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" seed="14" result="n"/>
+      <feColorMatrix in="n" type="matrix" values="0 0 0 0 0.45 0 0 0 0 0.38 0 0 0 0 0.3 0 0 0 0.05 0"/>
+      <feComposite operator="over" in2="SourceGraphic"/>
+    </filter>
+    <radialGradient id="vig3" cx="50%" cy="45%" r="70%">
+      <stop offset="0%" stop-color="#efe6d2"/><stop offset="100%" stop-color="#cdbfa4"/>
+    </radialGradient>
+    <radialGradient id="tail" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#fff6c8"/><stop offset="45%" stop-color="#ffd94a"/><stop offset="100%" stop-color="#ffb13b" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <rect width="900" height="900" fill="url(#vig3)" filter="url(#paper)"/>
+  <text x="450" y="90" text-anchor="middle" font-family="serif" font-size="46" fill="#3a2c1e" font-style="italic">Bolhinha</text>
+  <text x="450" y="128" text-anchor="middle" font-family="serif" font-size="21" fill="#7a684f" font-style="italic">vaga-lume filhote · mascote e ping cooperativo</text>
+
+  <g transform="translate(450,470)">
+    <!-- cauda luminosa desproporcional -->
+    <ellipse cx="-150" cy="90" rx="190" ry="170" fill="url(#tail)" opacity="0.85"/>
+    <g filter="url(#ink)">
+      <path d="M-95,60 C-160,58 -190,110 -170,150 C-140,186 -70,170 -60,120 Z" fill="#ffd94a" stroke="#2a1c14" stroke-width="7"/>
+      <path d="M-120,92 C-136,104 -140,126 -130,140" fill="none" stroke="#b8862a" stroke-width="5"/>
+      <!-- corpo quase esférico -->
+      <circle cx="30" cy="10" r="130" fill="#f6ecc8" stroke="#2a1c14" stroke-width="8"/>
+      <path d="M-52,-56 C-24,-84 82,-88 116,-48" fill="none" stroke="#2a1c14" stroke-width="5" opacity="0.35"/>
+      <!-- manchinhas ciano -->
+      <circle cx="-30" cy="66" r="9" fill="#7fd8de"/>
+      <circle cx="6" cy="92" r="6" fill="#7fd8de"/>
+      <circle cx="96" cy="78" r="7" fill="#7fd8de"/>
+      <!-- asas pequenas demais -->
+      <path d="M-10,-108 C-40,-160 6,-176 22,-136 Z" fill="#dff0f2" opacity="0.9" stroke="#2a1c14" stroke-width="6"/>
+      <path d="M60,-112 C60,-172 110,-160 100,-118 Z" fill="#cfe6ea" opacity="0.9" stroke="#2a1c14" stroke-width="6"/>
+      <!-- perninhas minúsculas -->
+      <path d="M-10,134 L-14,158 M50,138 L52,162 M104,120 L114,142" stroke="#2a1c14" stroke-width="7" stroke-linecap="round"/>
+      <!-- antenas curvas -->
+      <path d="M6,-116 C-6,-150 -34,-158 -52,-148 M74,-114 C82,-150 108,-160 126,-148" fill="none" stroke="#2a1c14" stroke-width="6" stroke-linecap="round"/>
+      <circle cx="-52" cy="-148" r="8" fill="#f6ecc8" stroke="#2a1c14" stroke-width="5"/>
+      <circle cx="126" cy="-148" r="8" fill="#f6ecc8" stroke="#2a1c14" stroke-width="5"/>
+    </g>
+    <!-- olhos grandes (não humanos: sem pupila branca, brasa dourada) -->
+    <g filter="url(#ink)">
+      <ellipse cx="0" cy="-10" rx="30" ry="36" fill="#2a1c14"/>
+      <ellipse cx="78" cy="-14" rx="26" ry="32" fill="#2a1c14"/>
+      <ellipse cx="6" cy="-20" rx="10" ry="12" fill="#ffd94a"/>
+      <ellipse cx="83" cy="-24" rx="8" ry="10" fill="#ffd94a"/>
+    </g>
+    <!-- bochechas -->
+    <circle cx="-44" cy="34" r="12" fill="#f0b26a" opacity="0.5"/>
+    <circle cx="112" cy="28" r="10" fill="#f0b26a" opacity="0.5"/>
+  </g>
+
+  <text x="450" y="856" text-anchor="middle" font-family="serif" font-size="18" fill="#8a785e" font-style="italic">estilo: desenhado à mão e digitalizado (ADR-010) · concept interno</text>
+</svg>

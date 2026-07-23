@@ -1,0 +1,106 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1920" height="1080" viewBox="0 0 1920 1080">
+  <defs>
+    <linearGradient id="dusk" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#1c1026"/><stop offset="45%" stop-color="#41203a"/><stop offset="100%" stop-color="#8a4526"/>
+    </linearGradient>
+    <filter id="ink" x="-6%" y="-6%" width="112%" height="112%">
+      <feTurbulence type="turbulence" baseFrequency="0.012" numOctaves="3" seed="29" result="n"/>
+      <feDisplacementMap in="SourceGraphic" in2="n" scale="9"/>
+    </filter>
+    <filter id="wash">
+      <feTurbulence type="fractalNoise" baseFrequency="0.012 0.03" numOctaves="3" seed="8" result="n"/>
+      <feDisplacementMap in="SourceGraphic" in2="n" scale="30"/>
+    </filter>
+    <filter id="paper">
+      <feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="2" seed="12" result="n"/>
+      <feColorMatrix in="n" type="matrix" values="0 0 0 0 0.5 0 0 0 0 0.42 0 0 0 0 0.34 0 0 0 0.055 0"/>
+      <feComposite operator="over" in2="SourceGraphic"/>
+    </filter>
+    <radialGradient id="glow3" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#ffe9b0" stop-opacity="0.9"/>
+      <stop offset="45%" stop-color="#ffb13b" stop-opacity="0.5"/>
+      <stop offset="100%" stop-color="#ffb13b" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="flame3" cx="50%" cy="72%" r="60%">
+      <stop offset="0%" stop-color="#fff7d6"/><stop offset="55%" stop-color="#ffb13b"/><stop offset="100%" stop-color="#d2691e" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <rect width="1920" height="1080" fill="url(#dusk)"/>
+
+  <!-- estrelas/esporos altos (espaço reservado ao título no centro-topo) -->
+  <g fill="#e8d8f0">
+    <circle cx="200" cy="140" r="2" opacity="0.5"/><circle cx="420" cy="90" r="1.6" opacity="0.4"/>
+    <circle cx="1500" cy="120" r="2" opacity="0.5"/><circle cx="1720" cy="200" r="1.6" opacity="0.35"/>
+    <circle cx="1620" cy="70" r="1.4" opacity="0.4"/><circle cx="320" cy="230" r="1.4" opacity="0.35"/>
+  </g>
+
+  <!-- montes de cera ao longe -->
+  <g filter="url(#wash)">
+    <path d="M-40,700 C240,600 520,660 800,620 C1100,580 1380,660 1960,600 L1960,1090 L-40,1090 Z" fill="#301b2e" opacity="0.9"/>
+    <path d="M-40,820 C300,730 640,790 980,750 C1320,710 1660,790 1960,740 L1960,1090 L-40,1090 Z" fill="#241322"/>
+  </g>
+
+  <!-- velas gigantes laterais (molduram o título) -->
+  <g filter="url(#ink)">
+    <g transform="translate(180,330)">
+      <path d="M-80,540 C-96,220 -66,30 0,10 C66,30 90,230 76,540 Z" fill="#241019" stroke="#120709" stroke-width="9"/>
+      <path d="M-52,90 C-68,190 -60,320 -48,400" fill="none" stroke="#120709" stroke-width="7"/>
+      <path d="M0,10 L2,-30" stroke="#120709" stroke-width="8" stroke-linecap="round"/>
+      <path d="M-10,-38 C-14,-66 -2,-86 2,-92 C12,-76 16,-56 6,-34 C2,-28 -6,-28 -10,-38 Z" fill="url(#flame3)" opacity="0.9"/>
+      <ellipse cx="0" cy="-60" rx="60" ry="54" fill="url(#glow3)" opacity="0.5"/>
+    </g>
+    <g transform="translate(1760,300)">
+      <path d="M-76,570 C-92,240 -62,40 0,16 C62,40 86,250 72,570 Z" fill="#281420" stroke="#120709" stroke-width="9"/>
+      <path d="M50,110 C64,220 56,350 46,430" fill="none" stroke="#120709" stroke-width="7"/>
+      <path d="M0,16 L-2,-24" stroke="#120709" stroke-width="8" stroke-linecap="round"/>
+      <path d="M-10,-32 C-14,-60 -2,-80 2,-86 C12,-70 16,-50 6,-28 C2,-22 -6,-22 -10,-32 Z" fill="url(#flame3)" opacity="0.9"/>
+      <ellipse cx="0" cy="-54" rx="56" ry="50" fill="url(#glow3)" opacity="0.5"/>
+    </g>
+  </g>
+
+  <!-- farol pequeno no horizonte central -->
+  <g transform="translate(960,600)">
+    <ellipse cx="0" cy="-20" rx="220" ry="180" fill="url(#glow3)" opacity="0.6"/>
+    <g filter="url(#ink)">
+      <path d="M-40,260 C-50,110 -34,20 0,8 C34,20 46,116 40,260 Z" fill="#6b4226" stroke="#1c0d06" stroke-width="7"/>
+      <path d="M-28,60 C-36,120 -32,180 -26,220" fill="none" stroke="#1c0d06" stroke-width="5"/>
+      <path d="M-12,140 C-12,124 2,120 4,138 C4,148 -2,152 -4,152 C-9,150 -12,146 -12,140 Z" fill="#ffb13b" stroke="#1c0d06" stroke-width="4"/>
+      <path d="M0,8 L0,-14" stroke="#1c0d06" stroke-width="6" stroke-linecap="round"/>
+    </g>
+    <path d="M-13,-22 C-16,-62 -2,-88 4,-96 C17,-76 21,-46 8,-16 C3,-6 -8,-8 -13,-22 Z" fill="url(#flame3)"/>
+  </g>
+
+  <!-- os 4 acendedores subindo a trilha (silhuetas com chamas coloridas) -->
+  <g filter="url(#ink)">
+    <path d="M-40,940 C360,880 820,910 1180,880 C1480,860 1720,880 1960,860 L1960,1090 L-40,1090 Z" fill="#1c0f16" stroke="#0d060a" stroke-width="8"/>
+    <path d="M300,1000 C620,960 940,975 1240,940 C1440,920 1620,928 1780,910" fill="none" stroke="#33202a" stroke-width="22" opacity="0.8"/>
+  </g>
+  <g>
+    <!-- âmbar -->
+    <g transform="translate(700,930)" filter="url(#ink)">
+      <path d="M0,-30 C13,-27 15,-7 13,9 C12,24 13,30 8,34 C3,36 -6,36 -9,34 C-14,30 -13,22 -13,9 C-15,-9 -12,-27 0,-30 Z" fill="#181018" stroke="#0d060a" stroke-width="3"/>
+      <path d="M-2,-37 C-3,-46 1,-52 2,-54 C7,-47 8,-41 3,-35 Z" fill="#ffb13b"/>
+    </g>
+    <!-- ciano -->
+    <g transform="translate(790,950)" filter="url(#ink)">
+      <path d="M0,-26 C11,-23 13,-6 11,8 C10,20 11,26 7,29 C3,31 -5,31 -8,29 C-12,26 -11,18 -11,8 C-13,-8 -10,-23 0,-26 Z" fill="#141019" stroke="#0d060a" stroke-width="3"/>
+      <path d="M-2,-32 C-3,-40 1,-45 2,-47 C6,-41 7,-36 3,-30 Z" fill="#39d9e8"/>
+    </g>
+    <!-- magenta -->
+    <g transform="translate(860,935)" filter="url(#ink)">
+      <path d="M0,-24 C10,-21 12,-5 10,7 C9,18 10,24 6,27 C2,29 -5,29 -8,27 C-11,24 -10,16 -10,7 C-12,-7 -9,-21 0,-24 Z" fill="#180f16" stroke="#0d060a" stroke-width="3"/>
+      <path d="M-5,-29 C-6,-37 -2,-42 -1,-44 C3,-38 4,-33 0,-27 Z" fill="#f14fd0"/>
+    </g>
+    <!-- verde-lima -->
+    <g transform="translate(925,955)" filter="url(#ink)">
+      <path d="M0,-22 C10,-19 11,-4 10,6 C9,16 10,21 6,24 C2,26 -5,26 -8,24 C-11,21 -10,14 -10,6 C-11,-6 -9,-19 0,-22 Z" fill="#131611" stroke="#0d060a" stroke-width="3"/>
+      <path d="M-2,-27 C-3,-34 1,-39 2,-41 C5,-35 6,-31 3,-25 Z" fill="#a8e83a"/>
+    </g>
+  </g>
+
+  <!-- vinheta -->
+  <rect width="1920" height="1080" fill="url(#glow3)" opacity="0.05"/>
+  <rect width="1920" height="1080" fill="none" filter="url(#paper)"/>
+  <text x="1890" y="1054" text-anchor="end" font-family="serif" font-size="22" fill="#f0dcc0" opacity="0.55" font-style="italic">Névora · fundo de menu — concept interno (ADR-010) · espaço p/ título no centro-topo</text>
+</svg>

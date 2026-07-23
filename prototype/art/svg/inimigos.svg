@@ -1,0 +1,131 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900">
+  <defs>
+    <filter id="ink" x="-10%" y="-10%" width="120%" height="120%">
+      <feTurbulence type="turbulence" baseFrequency="0.016" numOctaves="3" seed="11" result="n"/>
+      <feDisplacementMap in="SourceGraphic" in2="n" scale="7"/>
+    </filter>
+    <filter id="ink2" x="-10%" y="-10%" width="120%" height="120%">
+      <feTurbulence type="turbulence" baseFrequency="0.022" numOctaves="2" seed="43" result="n"/>
+      <feDisplacementMap in="SourceGraphic" in2="n" scale="9"/>
+    </filter>
+    <filter id="paper">
+      <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" seed="9" result="n"/>
+      <feColorMatrix in="n" type="matrix" values="0 0 0 0 0.45 0 0 0 0 0.38 0 0 0 0 0.30 0 0 0 0.05 0"/>
+      <feComposite operator="over" in2="SourceGraphic"/>
+    </filter>
+    <radialGradient id="vig2" cx="50%" cy="46%" r="75%">
+      <stop offset="0%" stop-color="#ece2cc"/><stop offset="100%" stop-color="#c9baa0"/>
+    </radialGradient>
+  </defs>
+
+  <rect width="1600" height="900" fill="url(#vig2)" filter="url(#paper)"/>
+  <text x="800" y="80" text-anchor="middle" font-family="serif" font-size="44" fill="#3a2c1e" font-style="italic">Bestiário Encinzado — os cinco do protótipo</text>
+  <text x="800" y="116" text-anchor="middle" font-family="serif" font-size="20" fill="#7a684f" font-style="italic">a Cinza apaga a cor: corpos cinzentos, um acento da região, olhos sem brilho</text>
+
+  <!-- ===== 1. Besourito Sineiro (Vale das Velas) ===== -->
+  <g transform="translate(220,400)">
+    <ellipse cx="0" cy="96" rx="120" ry="14" fill="#3a2c1e" opacity="0.12"/>
+    <g filter="url(#ink)">
+      <path d="M-110,60 C-116,-30 -46,-96 24,-88 C96,-80 128,-10 112,58 C60,84 -60,86 -110,60 Z" fill="#8d919b" stroke="#26201a" stroke-width="6"/>
+      <path d="M64,-84 C58,-58 62,-20 82,10" fill="none" stroke="#26201a" stroke-width="5"/>
+      <!-- sino de bronze fundido ao casco -->
+      <path d="M-58,-40 C-58,-74 -18,-78 -14,-46 C-12,-30 -20,-16 -36,-12 C-52,-16 -58,-28 -58,-40 Z" fill="#a97b32" stroke="#26201a" stroke-width="5"/>
+      <path d="M-40,-12 L-38,0" stroke="#26201a" stroke-width="4"/>
+      <path d="M-52,-56 L-24,-30" stroke="#5c5f68" stroke-width="4"/>
+      <!-- cabeça -->
+      <path d="M108,24 C136,20 148,40 138,58 C126,72 104,70 96,58" fill="#5c5f68" stroke="#26201a" stroke-width="5"/>
+      <circle cx="126" cy="44" r="5" fill="#c9c2b2"/>
+      <!-- patas -->
+      <path d="M-70,72 L-84,96 M-20,78 L-26,98 M40,76 L48,98 M90,66 L106,92" stroke="#26201a" stroke-width="6" stroke-linecap="round"/>
+      <!-- bolor -->
+      <path d="M-96,20 C-108,10 -104,-6 -92,-8 C-100,-22 -84,-32 -74,-24" fill="none" stroke="#b9b4a6" stroke-width="7"/>
+    </g>
+    <text x="0" y="150" text-anchor="middle" font-family="serif" font-size="25" fill="#3a2c1e">Besourito Sineiro</text>
+    <text x="0" y="178" text-anchor="middle" font-family="serif" font-size="16" fill="#7a684f" font-style="italic">Vale das Velas · patrulha e investe ao ouvir passos</text>
+  </g>
+
+  <!-- ===== 2. Mariposa-Serra (Bosque) ===== -->
+  <g transform="translate(640,370)">
+    <g filter="url(#ink)">
+      <!-- asas serrilhadas -->
+      <path d="M-16,-10 L-120,-66 L-96,-38 L-128,-30 L-100,-12 L-126,4 L-92,10 L-110,34 L-20,12 Z" fill="#9aa0aa" stroke="#26201a" stroke-width="5"/>
+      <path d="M-2,-12 L96,-74 L76,-42 L108,-40 L82,-16 L106,-2 L74,6 L88,32 L6,10 Z" fill="#8d919b" stroke="#26201a" stroke-width="5"/>
+      <!-- corpo -->
+      <ellipse cx="-6" cy="6" rx="26" ry="40" fill="#5c5f68" stroke="#26201a" stroke-width="5"/>
+      <path d="M-14,-30 C-24,-46 -22,-58 -14,-66 M2,-30 C10,-46 10,-58 4,-66" fill="none" stroke="#26201a" stroke-width="4"/>
+      <!-- acento do bosque -->
+      <circle cx="-6" cy="-6" r="5" fill="#7fd07f"/>
+      <path d="M-30,30 C-40,44 -36,58 -26,64" fill="none" stroke="#b9b4a6" stroke-width="6"/>
+    </g>
+    <g filter="url(#ink2)"><circle cx="-16" cy="-16" r="4" fill="#d8d4c8"/><circle cx="4" cy="-16" r="4" fill="#d8d4c8"/></g>
+    <text x="-10" y="180" text-anchor="middle" font-family="serif" font-size="25" fill="#3a2c1e">Mariposa-Serra</text>
+    <text x="-10" y="208" text-anchor="middle" font-family="serif" font-size="16" fill="#7a684f" font-style="italic">Bosque Murmurante · paira e mergulha em arco</text>
+  </g>
+
+  <!-- ===== 3. Esporão (Galerias) ===== -->
+  <g transform="translate(1000,400)">
+    <ellipse cx="0" cy="98" rx="90" ry="12" fill="#3a2c1e" opacity="0.12"/>
+    <g filter="url(#ink)">
+      <!-- tronco -->
+      <path d="M-26,96 C-30,40 -24,10 -14,-6 L18,-6 C26,12 30,44 26,96 Z" fill="#5c5f68" stroke="#26201a" stroke-width="6"/>
+      <!-- chapéu -->
+      <path d="M-78,-6 C-70,-64 66,-64 78,-6 C40,-22 -40,-22 -78,-6 Z" fill="#8d919b" stroke="#26201a" stroke-width="6"/>
+      <!-- lamelas -->
+      <path d="M-54,-12 L-44,4 M-24,-16 L-20,6 M8,-16 L10,6 M40,-14 L34,4" stroke="#26201a" stroke-width="4"/>
+      <!-- esporos subindo (acento azul) -->
+      <circle cx="-30" cy="-72" r="7" fill="#7f9fff" opacity="0.9"/>
+      <circle cx="10" cy="-92" r="5" fill="#7f9fff" opacity="0.7"/>
+      <circle cx="44" cy="-70" r="6" fill="#7f9fff" opacity="0.8"/>
+      <circle cx="-4" cy="-58" r="4" fill="#aab8ff" opacity="0.8"/>
+      <!-- olhos apagados no tronco -->
+      <circle cx="-4" cy="26" r="5" fill="#c9c2b2"/><circle cx="12" cy="26" r="5" fill="#c9c2b2"/>
+      <path d="M-22,70 C-34,64 -36,52 -28,46" fill="none" stroke="#b9b4a6" stroke-width="6"/>
+    </g>
+    <text x="0" y="150" text-anchor="middle" font-family="serif" font-size="25" fill="#3a2c1e">Esporão</text>
+    <text x="0" y="178" text-anchor="middle" font-family="serif" font-size="16" fill="#7a684f" font-style="italic">Galerias Fúngicas · torreta que arremessa esporos</text>
+  </g>
+
+  <!-- ===== 4. Formiga-Vidro (Vidraçal) ===== -->
+  <g transform="translate(1370,410)">
+    <ellipse cx="0" cy="86" rx="110" ry="12" fill="#3a2c1e" opacity="0.12"/>
+    <g filter="url(#ink)">
+      <!-- abdômen translúcido -->
+      <ellipse cx="-58" cy="20" rx="52" ry="38" fill="#dce9ec" opacity="0.62" stroke="#26201a" stroke-width="5"/>
+      <path d="M-84,4 L-58,30 M-58,-6 L-40,26" stroke="#ffffff" stroke-width="4" opacity="0.8"/>
+      <!-- tórax -->
+      <ellipse cx="8" cy="12" rx="30" ry="24" fill="#cfdfe2" opacity="0.8" stroke="#26201a" stroke-width="5"/>
+      <!-- cabeça angular -->
+      <path d="M34,-6 L74,-18 L84,8 L58,22 Z" fill="#dce9ec" opacity="0.85" stroke="#26201a" stroke-width="5"/>
+      <!-- mandíbulas de vidro (acento) -->
+      <path d="M82,-8 L104,-18 M84,6 L106,12" stroke="#ffd98a" stroke-width="5" stroke-linecap="round"/>
+      <!-- patas angulares -->
+      <path d="M-70,50 L-84,84 M-30,54 L-34,86 M12,34 L6,84 M34,30 L52,80" stroke="#26201a" stroke-width="5" stroke-linecap="round"/>
+      <circle cx="64" cy="-2" r="4" fill="#c9c2b2"/>
+    </g>
+    <text x="0" y="150" text-anchor="middle" font-family="serif" font-size="25" fill="#3a2c1e">Formiga-Vidro</text>
+    <text x="0" y="178" text-anchor="middle" font-family="serif" font-size="16" fill="#7a684f" font-style="italic">Vidraçal · frágil, dá o bote em um piscar</text>
+  </g>
+
+  <!-- ===== 5. Vespa-Geada (Picos) ===== -->
+  <g transform="translate(800,700)">
+    <g filter="url(#ink)">
+      <!-- asas rígidas -->
+      <path d="M-10,-26 C-60,-64 -110,-58 -122,-40 C-96,-30 -50,-20 -14,-12 Z" fill="#dfeaf2" opacity="0.75" stroke="#26201a" stroke-width="5"/>
+      <path d="M6,-28 C48,-70 100,-66 114,-46 C88,-34 44,-22 10,-14 Z" fill="#d3e2ee" opacity="0.75" stroke="#26201a" stroke-width="5"/>
+      <!-- corpo segmentado -->
+      <ellipse cx="-34" cy="6" rx="40" ry="26" fill="#8d919b" stroke="#26201a" stroke-width="5"/>
+      <path d="M-58,-8 C-58,16 -54,24 -46,30 M-38,-14 C-40,12 -36,26 -30,32" fill="none" stroke="#26201a" stroke-width="3"/>
+      <ellipse cx="24" cy="0" rx="26" ry="20" fill="#5c5f68" stroke="#26201a" stroke-width="5"/>
+      <!-- ferrão-estalactite (acento gelo) -->
+      <path d="M-72,10 L-108,26 L-84,18 L-98,40 Z" fill="#aef0ff" stroke="#26201a" stroke-width="4"/>
+      <circle cx="30" cy="-6" r="4" fill="#c9c2b2"/><circle cx="42" cy="-2" r="3.4" fill="#c9c2b2"/>
+      <path d="M46,10 C58,14 62,24 58,32" fill="none" stroke="#26201a" stroke-width="4"/>
+      <!-- gelo acumulado no dorso -->
+      <path d="M-44,-22 L-36,-38 L-28,-22 M-20,-24 L-14,-36 L-8,-22" fill="#dff6ff" stroke="#26201a" stroke-width="3"/>
+    </g>
+    <text x="-6" y="112" text-anchor="middle" font-family="serif" font-size="25" fill="#3a2c1e">Vespa-Geada</text>
+    <text x="-6" y="140" text-anchor="middle" font-family="serif" font-size="16" fill="#7a684f" font-style="italic">Picos Uivantes · dispara farpas de gelo à distância</text>
+  </g>
+
+  <text x="800" y="866" text-anchor="middle" font-family="serif" font-size="18" fill="#8a785e" font-style="italic">estilo: desenhado à mão e digitalizado (ADR-010) · concept interno — regra dos Encinzados em docs/art/NPC_AND_BOSS_DESIGN.md</text>
+</svg>

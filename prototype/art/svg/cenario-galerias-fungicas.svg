@@ -1,0 +1,103 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1920" height="1080" viewBox="0 0 1920 1080">
+  <defs>
+    <linearGradient id="cave" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#06070f"/><stop offset="60%" stop-color="#0c1020"/><stop offset="100%" stop-color="#131a30"/>
+    </linearGradient>
+    <filter id="ink" x="-6%" y="-6%" width="112%" height="112%">
+      <feTurbulence type="turbulence" baseFrequency="0.012" numOctaves="3" seed="23" result="n"/>
+      <feDisplacementMap in="SourceGraphic" in2="n" scale="10"/>
+    </filter>
+    <filter id="paper">
+      <feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="2" seed="6" result="n"/>
+      <feColorMatrix in="n" type="matrix" values="0 0 0 0 0.35 0 0 0 0 0.38 0 0 0 0 0.5 0 0 0 0.05 0"/>
+      <feComposite operator="over" in2="SourceGraphic"/>
+    </filter>
+    <radialGradient id="warm" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#ffdf9a" stop-opacity="0.9"/>
+      <stop offset="40%" stop-color="#ffab45" stop-opacity="0.4"/>
+      <stop offset="100%" stop-color="#ff9a3b" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="blueglow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#9fb8ff" stop-opacity="0.85"/>
+      <stop offset="100%" stop-color="#5a76ff" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="flame2" cx="50%" cy="72%" r="60%">
+      <stop offset="0%" stop-color="#fff7d6"/><stop offset="55%" stop-color="#ffb13b"/><stop offset="100%" stop-color="#d2691e" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <rect width="1920" height="1080" fill="url(#cave)"/>
+
+  <!-- estalactites e estalagmites -->
+  <g filter="url(#ink)">
+    <path d="M0,0 L120,0 L70,240 Z M240,0 L400,0 L330,180 Z M520,0 L640,0 L590,320 Z M900,0 L1060,0 L990,220 Z M1240,0 L1380,0 L1320,300 Z M1560,0 L1720,0 L1650,190 Z M1800,0 L1920,0 L1880,260 Z"
+          fill="#0a0d1c" stroke="#040510" stroke-width="7"/>
+    <path d="M-20,1080 L180,1080 L90,820 Z M480,1080 L640,1080 L570,900 Z M1500,1080 L1700,1080 L1610,860 Z"
+          fill="#0a0d1c" stroke="#040510" stroke-width="7"/>
+    <path d="M-20,960 C300,920 700,950 1000,930 C1300,910 1660,940 1940,920 L1940,1090 L-20,1090 Z" fill="#101527" stroke="#040510" stroke-width="8"/>
+  </g>
+
+  <!-- cogumelos-lanterna bioluminescentes -->
+  <g>
+    <g transform="translate(330,860)">
+      <ellipse cx="0" cy="-40" rx="130" ry="110" fill="url(#blueglow)" opacity="0.5"/>
+      <g filter="url(#ink)">
+        <path d="M-12,60 C-16,10 -10,-16 -4,-28 L10,-28 C18,-12 20,16 16,60 Z" fill="#1c2540" stroke="#0a0d1c" stroke-width="5"/>
+        <path d="M-52,-26 C-46,-72 50,-72 58,-26 C30,-40 -24,-40 -52,-26 Z" fill="#31427c" stroke="#0a0d1c" stroke-width="6"/>
+        <path d="M-30,-30 L-24,-18 M0,-34 L2,-18 M28,-30 L24,-18" stroke="#8fa8ff" stroke-width="4"/>
+      </g>
+      <circle cx="-60" cy="-90" r="5" fill="#9fb8ff" opacity="0.8"/>
+      <circle cx="30" cy="-120" r="4" fill="#9fb8ff" opacity="0.6"/>
+    </g>
+    <g transform="translate(1470,880)">
+      <ellipse cx="0" cy="-60" rx="170" ry="140" fill="url(#blueglow)" opacity="0.45"/>
+      <g filter="url(#ink)">
+        <path d="M-16,80 C-22,10 -14,-30 -6,-44 L14,-44 C24,-24 28,20 22,80 Z" fill="#1c2540" stroke="#0a0d1c" stroke-width="6"/>
+        <path d="M-70,-40 C-60,-104 66,-104 76,-40 C40,-60 -34,-60 -70,-40 Z" fill="#3a4e94" stroke="#0a0d1c" stroke-width="7"/>
+      </g>
+      <circle cx="70" cy="-140" r="6" fill="#9fb8ff" opacity="0.7"/>
+      <circle cx="-40" cy="-170" r="4" fill="#9fb8ff" opacity="0.5"/>
+    </g>
+    <g transform="translate(900,300)">
+      <ellipse cx="0" cy="0" rx="90" ry="70" fill="url(#blueglow)" opacity="0.3"/>
+      <g filter="url(#ink)">
+        <path d="M-34,10 C-30,-22 30,-22 36,10 C16,0 -14,0 -34,10 Z" fill="#2c3a6e" stroke="#0a0d1c" stroke-width="5"/>
+        <path d="M-4,10 L-2,42" stroke="#0a0d1c" stroke-width="5"/>
+      </g>
+    </g>
+  </g>
+
+  <!-- teias de bolor -->
+  <g filter="url(#ink)" opacity="0.5">
+    <path d="M700,0 C720,80 700,160 660,220 M700,0 C740,60 760,140 750,200 M660,220 C700,200 740,210 750,200"
+          fill="none" stroke="#3d4358" stroke-width="4"/>
+  </g>
+
+  <!-- O ACENDEDOR com seu halo de luz -->
+  <g transform="translate(880,880)">
+    <ellipse cx="0" cy="-30" rx="320" ry="260" fill="url(#warm)" opacity="0.75"/>
+    <g filter="url(#ink)">
+      <ellipse cx="2" cy="46" rx="34" ry="8" fill="#02030a" opacity="0.55"/>
+      <path d="M0,-38 C17,-35 20,-8 17,12 C15,32 17,40 10,45 C4,48 -8,48 -12,45 C-19,40 -17,28 -17,12 C-20,-10 -16,-35 0,-38 Z"
+            fill="#efe3cb" stroke="#241209" stroke-width="5"/>
+      <path d="M-15,14 C-6,18 8,18 16,14" stroke="#a97b32" stroke-width="4" fill="none"/>
+      <path d="M-17,26 C-21,34 -19,42 -15,44" stroke="#241209" stroke-width="3.4" fill="none"/>
+      <circle cx="1" cy="-18" r="2.6" fill="#ff9d3b"/><circle cx="8" cy="-18" r="2.6" fill="#ff9d3b"/>
+      <path d="M0,-38 L1,-47" stroke="#241209" stroke-width="3.4" stroke-linecap="round"/>
+      <!-- Atiçador erguido iluminando -->
+      <path d="M16,0 C30,-8 40,-22 44,-36 M44,-36 L38,-28 M44,-36 L50,-30" fill="none" stroke="#c89b52" stroke-width="5" stroke-linecap="round"/>
+    </g>
+    <path d="M-4,-51 C-6,-64 1,-73 3,-76 C9,-67 11,-58 4,-49 C1,-46 -2,-47 -4,-51 Z" fill="url(#flame2)"/>
+    <ellipse cx="3" cy="-62" rx="30" ry="26" fill="url(#warm)" opacity="0.55"/>
+  </g>
+
+  <!-- esporos flutuando na luz -->
+  <g fill="#cfd8ff">
+    <circle cx="760" cy="700" r="3" opacity="0.7"/><circle cx="1020" cy="640" r="2.4" opacity="0.5"/>
+    <circle cx="900" cy="540" r="2" opacity="0.4"/><circle cx="820" cy="800" r="2.6" opacity="0.6"/>
+    <circle cx="1090" cy="760" r="3.2" opacity="0.55"/><circle cx="700, " cy="860" r="2" opacity="0.5"/>
+  </g>
+
+  <rect width="1920" height="1080" fill="none" filter="url(#paper)"/>
+  <text x="1890" y="1054" text-anchor="end" font-family="serif" font-size="22" fill="#aab4d8" opacity="0.6" font-style="italic">Névora · Galerias Fúngicas — concept interno (ADR-010)</text>
+</svg>
