@@ -2,6 +2,18 @@
 
 > Status: 🟡 Proposta técnica. Decisões finais dependem do protótipo da Fase 3.
 
+> 🟢 **ADR-012 — duas fases de rede reconhecidas explicitamente:**
+> 1. **Validação com amigos (agora):** Colyseus/WebSocket puro, testado entre
+>    jogadores da mesma cidade — latência baixa por natureza, não expõe
+>    problemas de rede real.
+> 2. **Produção/lançamento Steam (antes de lançar):** exigência de robustez
+>    bem maior — jogadores espalhados geograficamente. Forte candidato:
+>    **Steam Datagram Relay (SDR)** via Steamworks Networking Sockets (grátis
+>    para jogos na Steam, resolve NAT traversal e otimiza rota via rede de
+>    relés global da Valve sem expor IP dos jogadores) — ver detalhes e
+>    pendência em `08-publicacao/PUBLICACAO.md`. Não tratar o sucesso da
+>    fase 1 como prova de que a fase 2 está resolvida.
+
 > 🟢 **ADR-005 aplicado à rede:** todos os protocolos, schemas de estado,
 > snapshots, IDs de jogador (index 0–3) e limites de sala nascem dimensionados
 > para **4 jogadores**, mesmo com o desenvolvimento e os testes iniciais

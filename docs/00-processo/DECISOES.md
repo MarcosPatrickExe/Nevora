@@ -140,3 +140,39 @@ Formato:
 - Consequências: o protótipo é **greybox descartável** (arte placeholder
   procedural) — valida feel e estrutura, não substitui a stack definitiva da
   Fase 1 (ADR-002) nem a arte final (ADR-010).
+
+## ADR-012 — Multiplayer do protótipo: Colyseus/WebSocket agora; robustez de produção fica para antes do lançamento Steam
+- Data: 2026-07-24 · Status: **aceita** (decisão do Diretor)
+- Contexto: discussão sobre como sincronizar ações entre jogadores (ex.:
+  pulo) em tempo real (ver `09-roadmap/BACKLOG_PROTOTIPO.md`, item 7).
+  Prós/contras de WebSocket levantados; Colyseus já é a escolha da stack
+  final (ADR-002) e usa WebSocket por padrão.
+- Decisão: **usar Colyseus (WebSocket) já no protótipo de rede.** O Diretor
+  vai testar com amigos que moram na mesma cidade — latência baixa por
+  natureza, então WebSocket puro é suficiente para essa fase e o trabalho
+  não é descartável (reaproveita direto na stack final).
+- ⚠️ **Nota registrada para não esquecer (palavra do Diretor):** o padrão de
+  rede validado nos testes com amigos (mesma cidade, baixa latência) **não é
+  suficiente para o lançamento na Steam**, onde jogadores estarão
+  espalhados geograficamente e a robustez precisa ser bem maior. Antes do
+  lançamento, revisitar com testes de latência real e considerar:
+  - **Steam Datagram Relay (SDR)**, via Steamworks Networking Sockets —
+    tecnologia gratuita da própria Valve para jogos na Steam: roteia o
+    tráfego pela rede de relés global da Valve, otimiza a rota entre
+    jogadores automaticamente, resolve NAT traversal sem servidor STUN/TURN
+    próprio, e nunca expõe o IP dos jogadores. É o caminho mais natural para
+    "multiplayer robusto" especificamente por já estarmos mirando Steam —
+    forte candidato a substituir/complementar Colyseus no build de loja.
+  - Servidores de sala **por região** (SA/NA/EU — já previsto em
+    `05-multiplayer/NETCODE.md`), para reduzir a distância física.
+  - Reavaliar WebRTC DataChannel (não confiável/não ordenado) para o
+    tráfego de posição de alta frequência, conforme já discutido no ADR e
+    no NETCODE.md.
+  - Infra com autoscaling e monitoramento (custo por sala, sala morta ociosa
+    etc.) — mencionado em `08-publicacao/PUBLICACAO.md`.
+- Consequências: **duas fases de rede reconhecidas explicitamente** —
+  (1) validação com amigos (agora, Colyseus/WebSocket, baixa exigência de
+  robustez) e (2) produção Steam (antes do lançamento, decisão própria com
+  testes de latência real e provável adoção de SDR). Não confundir uma com
+  a outra: passar nos testes com amigos não significa estar pronto pra
+  Steam.

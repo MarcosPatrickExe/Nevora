@@ -114,14 +114,19 @@ de já montar o protótipo de rede com Colyseus desde já, o que faria esse
 trabalho **não ser descartável**: ele viraria o início de verdade do
 netcode do jogo final, em vez de algo jogado fora na Fase 1.
 
-**⚠️ Pergunta em aberto para o Diretor decidir (não decidido ainda):**
-1. **Colyseus (WebSocket) já** — reaproveita para o jogo final, mas puxa
-   parte do trabalho da "Fase 1: Protótipo de Game Feel" pra agora, fora
-   da ordem do roadmap original.
-2. **WebSocket/Socket.IO artesanal e descartável** — mais rápido de montar
-   agora, mas provavelmente reescrito do zero na Fase 1 de verdade.
-3. **Não decidir agora** — só manter registrado aqui até chegar a vez deste
-   item na fila de prioridades.
+**🟢 Decidido (ADR-012, 2026-07-24):** Colyseus (WebSocket) já — o Diretor
+vai testar com amigos que moram na mesma cidade (latência baixa por
+natureza), então WebSocket puro atende bem essa fase, e o trabalho não é
+descartável — reaproveita direto na stack final (ADR-002).
+
+**⚠️ Nota para não esquecer (o Diretor fez questão de registrar):** validar
+com amigos na mesma cidade **não é a mesma coisa** que estar pronto para a
+Steam, onde os jogadores vão estar espalhados geograficamente e a robustez
+de rede precisa ser bem maior. Antes do lançamento, revisitar com testes de
+latência real — forte candidata: **Steam Datagram Relay (SDR)**, tecnologia
+gratuita da Valve via Steamworks Networking Sockets, feita exatamente para
+esse problema (relay global, resolve NAT automaticamente, nunca expõe IP).
+Detalhes em `05-multiplayer/NETCODE.md` e `08-publicacao/PUBLICACAO.md`.
 
 ---
 

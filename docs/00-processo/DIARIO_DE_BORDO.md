@@ -32,6 +32,27 @@ para aguardar mais instruções antes de começar a construir):
 **Próximo passo:** aguardar o Diretor completar a lista de pedidos (ele
 avisou que tem mais coisas a dizer) antes de iniciar a implementação.
 
+### Atualização — multiplayer (mesmo dia, continuação)
+
+Discutimos como sincronizar ações em tempo real (ex.: pulo) entre até 4
+jogadores; dei prós/contras de WebSocket. **Decisão do Diretor (ADR-012):**
+usar **Colyseus (WebSocket)** já no protótipo de rede — ele vai testar com
+amigos da mesma cidade (latência baixa), e o trabalho não é descartável
+(mesma tech da stack final, ADR-002).
+
+⚠️ **Nota importante que o Diretor pediu para não esquecer:** testar com
+amigos na mesma cidade **não prova que o netcode está pronto para a Steam**
+— lá os jogadores estarão espalhados geograficamente e a robustez exigida é
+bem maior. Antes do lançamento, revisitar com testes de latência real.
+Documentei um forte candidato: **Steam Datagram Relay (SDR)**, tecnologia
+gratuita da Valve via Steamworks Networking Sockets, feita exatamente para
+esse problema (relay global, resolve NAT automaticamente, nunca expõe IP).
+Detalhes em `05-multiplayer/NETCODE.md`, `08-publicacao/PUBLICACAO.md` e
+`09-roadmap/BACKLOG_PROTOTIPO.md` (item 7).
+
+**Ainda nada implementado em código** — só documentação, aguardando o
+Diretor terminar de listar os pedidos.
+
 ---
 
 ## Sessão 1 — 2026-07-20 a 2026-07-23 (fundação do projeto)

@@ -27,6 +27,17 @@
 - [ ] Wrapper desktop: **Tauri** (leve) vs **Electron** (maduro) — testar cedo (Fase 4).
 - [ ] Steamworks SDK: achievements, cloud saves, rich presence, **Remote Play
       Together** (couch co-op online de graça — enorme para nós).
+- [ ] ⚠️ **Multiplayer robusto de produção (ADR-012):** os testes iniciais
+      (Colyseus/WebSocket, amigos na mesma cidade) validam a mecânica, mas
+      **não validam rede real** — jogadores da Steam estarão espalhados
+      geograficamente. Antes do lançamento, avaliar formalmente **Steam
+      Datagram Relay (SDR)** via Steamworks Networking Sockets: é grátis
+      para jogos publicados na Steam, resolve NAT traversal automaticamente,
+      roteia pela rede de relés global da Valve (otimiza latência sem
+      servidor próprio) e nunca expõe o IP dos jogadores — encaixa muito bem
+      com nosso caso (salas pequenas de até 4, PvE coop). Decidir se substitui
+      Colyseus no build de loja ou complementa (web continua Colyseus; Steam
+      usa SDR). Ver `05-multiplayer/NETCODE.md`.
 - [ ] **Steam Deck verified**: gamepad 100%, texto legível, sem teclado obrigatório.
 - [ ] Página da loja cedo (wishlists ≥ 6 meses antes; trailer + demo no Next Fest).
 - [ ] Multiplayer: lobby via Steam friends + crossplay com web (decidir se
