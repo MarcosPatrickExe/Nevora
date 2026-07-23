@@ -32,6 +32,18 @@ Epic, Play Store e App Store.
   (greybox descartável, vanilla JS); a stack definitiva será TypeScript +
   PixiJS + sim compartilhada + Colyseus (ADR-002), em monorepo conforme
   `docs/06-tecnologia/ARQUITETURA.md`.
+- **Branch por versão do protótipo, deploy só no merge para `main`** (regra
+  do Diretor, 2026-07-23 — detalhada em `docs/09-roadmap/BACKLOG_PROTOTIPO.md`):
+  1. Toda leva de mudanças do protótipo começa numa branch nova:
+     `prototype/vN-descricao-curta`.
+  2. Commits acontecem só nessa branch — o workflow do Pages **não** reage a
+     pushes fora de `main`, então nada é publicado ainda.
+  3. Só quando o Diretor aprovar, faz o merge dessa branch para `main` — é
+     esse merge que dispara o deploy automático no GitHub Pages.
+  4. Depois do merge, marcar a versão com uma tag (`git tag proto-vN`).
+  - Isso já é o comportamento nativo do workflow atual (`branches: [main]`
+    em `.github/workflows/pages.yml`) — não precisa mudar o YAML, só seguir
+    a disciplina de branch acima.
 
 ## Estrutura do repositório
 

@@ -7,6 +7,33 @@
 
 ---
 
+## Sessão 2 — 2026-07-23 (feedback do protótipo + backlog)
+
+Diretor testou o protótipo publicado e aprovou o resultado. Trouxe uma leva
+de ideias — **registradas como backlog, nada implementado ainda** (ele pediu
+para aguardar mais instruções antes de começar a construir):
+
+- Ver **`docs/09-roadmap/BACKLOG_PROTOTIPO.md`** (novo): tela de
+  nickname/identificação de jogador para testes com amigos (+ discussão sobre
+  limitação de site estático sem backend), loja do Tio Sebo com vitrine cara
+  desde cedo, Fragmentos de Coração como item mais caro, Artes com cargas
+  limitadas, áreas secretas com itens exclusivos, mais clima dinâmico em
+  todas as regiões (elogiou a neve/vento dos Picos Uivantes), áudio
+  confirmado como adiado.
+- **Decisão de processo 🟢:** branch por versão do protótipo
+  (`prototype/vN-descricao`), deploy só acontece no merge para `main` — já é
+  o comportamento nativo do workflow, só formalizamos a disciplina. Detalhes
+  em `CLAUDE.md` e `BACKLOG_PROTOTIPO.md`.
+- **Docs refinados:** `04-gameplay/PROGRESSAO.md` ganhou a seção "A Loja de
+  Tio Sebo" (filosofia de preços); `03-mundo/MAPA.md` explica por que o save
+  point é um **Lampião** (bronze + vidro) e não uma fogueira — não derrete o
+  Acendedor, e ecoa o tema central de "reacender faróis" em escala pessoal.
+
+**Próximo passo:** aguardar o Diretor completar a lista de pedidos (ele
+avisou que tem mais coisas a dizer) antes de iniciar a implementação.
+
+---
+
 ## Sessão 1 — 2026-07-20 a 2026-07-23 (fundação do projeto)
 
 ### O que foi feito (em ordem)

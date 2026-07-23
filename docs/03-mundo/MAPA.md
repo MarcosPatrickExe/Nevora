@@ -83,6 +83,13 @@ visitadas** (motivo real para backtracking).
   = save + respawn point + restaura vida + recoloca inimigos. Sentar em grupo
   ao redor do lampião dá um buff pequeno de partida ("Calor de Companhia" —
   só existe em co-op).
+  > 🟢 **Por que um lampião e não uma fogueira (diretriz do Diretor,
+  > 2026-07-23):** um Acendedor é feito de cera — uma fogueira aberta o
+  > derreteria. O Lampião é um suporte de bronze com **vidro protegendo uma
+  > chama contida**, como os postes que guiavam Cerélia antes do Apagão. O
+  > jogador não "acende uma fogueira": ele **reacende um posto antigo da
+  > própria ordem**, ecoando o gesto central do jogo (reacender faróis) em
+  > escala pequena — cada lampião é um farolzinho pessoal.
 - **Viagem rápida:** rede de **Correios-Besouro** (montarias-estação
   desbloqueáveis, uma por bioma; cena de viagem curta e pulável). Destravadas
   ao reacender o farol regional — amarra mecânica ↔ narrativa.

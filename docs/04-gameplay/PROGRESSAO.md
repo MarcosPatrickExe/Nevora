@@ -41,6 +41,32 @@ Medalhões de cera prensada equipáveis nos **Entalhes** do personagem
 - Meta: o jogador médio deve sentir **escassez leve nos Atos 1–2** (escolhas
   reais) e conforto no Ato 3.
 
+### A Loja de Tio Sebo — filosofia de preços 🟢 (diretriz do Diretor, 2026-07-23)
+
+O caracol-mercador **Tio Sebo** (ficha completa em `art/NPC_AND_BOSS_DESIGN.md`)
+é o vendedor natural do jogo — a concha-loja já é, por design, "chamativa":
+iluminada por dentro, cheia de potes e lamparinas balançando. Ele aparece na
+vila de Pavio e, mais raro, em pontos remotos do mapa (loja itinerante).
+
+- **Vitrine isca:** todo Tio Sebo mostra 1–2 itens de ponta na vitrine —
+  armas/ferramentas/magias avançadas — **visíveis desde muito cedo, mas com
+  preço alto o suficiente para exigir progresso real** antes de comprá-los.
+  O objetivo é gerar desejo declarado ("quero aquilo") que puxa o jogador a
+  explorar mais e lutar mais para juntar Sévia.
+- **Fragmentos de Coração (o +1 HP permanente) são o item mais caro da
+  loja**, de propósito: vida extra é poder puro e permanente, não deve ser
+  trivial de comprar. Preço sobe a cada fragmento já comprado (curva
+  crescente), e alguns fragmentos só existem em **áreas secretas** (nunca à
+  venda) — combinação de compra + exploração, nunca só uma ou só outra.
+- **Artes de Chama / magias com uso limitado:** cada Arte tem um número de
+  cargas que só recarrega em Lampiões (aprofunda o padrão já existente do
+  Fulgor). As Artes mais fortes têm **menos cargas e custam mais** — poder
+  em rajada, não em torneira aberta.
+- **Itens raros de área secreta nunca estão na loja.** Isso mantém a loja
+  como "caminho garantido, mas caro" e os segredos como "caminho grátis, mas
+  escondido" — dois trajetos válidos para o mesmo poder, coerente com o pilar
+  de exploração recompensada (`03-mundo/MAPA.md`).
+
 ## Morte — sistema **"Eco de Cera"**
 
 Queremos a tensão do corpse-run sem a dupla punição que atrapalha em co-op:
