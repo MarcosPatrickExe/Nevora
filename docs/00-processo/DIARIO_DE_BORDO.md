@@ -59,6 +59,13 @@
 
 ### Próximos passos combinados
 
+- [ ] ⚠️ **AÇÃO DO DIRETOR (1 clique):** ativar o GitHub Pages — no repositório
+      Nevora: **Settings → Pages → Build and deployment → Source: "GitHub
+      Actions"**. Depois, re-rodar o workflow "Deploy prototype to GitHub
+      Pages" (aba Actions → Re-run) ou pedir ao agente. O 1º run falhou com
+      "Resource not accessible by integration" porque o token do workflow não
+      pode ATIVAR o Pages — só o dono pode, uma única vez. URL final:
+      https://marcospatrickexe.github.io/Nevora/
 - [ ] Diretor testa o protótipo no GitHub Pages (PC e celular/PWA) e traz
       feedback de feel (velocidade, pulo, dash, combate).
 - [ ] Diretor gera imagens externas (Midjourney etc.) com os prompts de
