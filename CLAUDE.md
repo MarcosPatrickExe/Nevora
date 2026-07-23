@@ -6,10 +6,16 @@ Epic, Play Store e App Store.
 
 ## Como retomar o contexto (leia nesta ordem)
 
-1. **`docs/00-processo/DIARIO_DE_BORDO.md`** — onde paramos, o que foi feito
-   em cada sessão e os próximos passos combinados. **Comece sempre por aqui.**
-2. `docs/README.md` — índice geral, decisões tomadas (ADRs) e pendências.
-3. `docs/00-processo/DECISOES.md` — todas as decisões com contexto (ADR-001+).
+1. **`docs/00-processo/DIARIO_DE_BORDO.md` → seção "📍 Estado atual" (topo do
+   arquivo)** — onde paramos exatamente agora, links do protótipo no ar, e o
+   que está bloqueando o próximo passo. **Leia isso antes de qualquer outra
+   coisa, antes de agir ou responder ao Diretor.**
+2. `docs/09-roadmap/BACKLOG_PROTOTIPO.md` — pedidos de feature já coletados
+   e ainda não implementados (o Diretor costuma dar vários pedidos em
+   sequência antes de mandar começar a construir — confira se ele já disse
+   "pode implementar" antes de sair codando).
+3. `docs/README.md` — índice geral, decisões tomadas (ADRs) e pendências.
+4. `docs/00-processo/DECISOES.md` — todas as decisões com contexto (ADR-001+).
 
 ## Regras de trabalho combinadas com o Diretor (Marcos Patrick)
 
