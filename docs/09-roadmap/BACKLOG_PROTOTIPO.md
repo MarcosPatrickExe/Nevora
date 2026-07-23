@@ -80,6 +80,49 @@ versões (todas as 5 regiões, não só Picos), e considerar 1–2 efeitos novos
 (ex.: folhas caindo no Bosque já existe como chuva — adicionar vento
 visível balançando elementos do cenário).
 
+### 7. Comunicação multiplayer entre jogadores (sincronizar ações em tempo real)
+
+Pergunta do Diretor: com até 4 jogadores em salas (1–4 jogadores por sala,
+ADR-005), como transmitir rápido uma ação como "jogador 1 pulou" para que
+os outros vejam na hora? Cogitou usar **WebSocket**. Análise completa de
+arquitetura de rede do jogo final já existe em `05-multiplayer/NETCODE.md` —
+resumo da resposta dada ao Diretor:
+
+**WebSocket — prós:** nativo do navegador, sem lib obrigatória; confiável e
+ordenado (TCP — mensagem sempre chega, sempre em ordem); atravessa
+firewalls/NAT com facilidade (usa porta HTTPS padrão, sem STUN/TURN);
+fácil de debugar (texto/JSON numa conexão simples); modelo cliente-servidor
+autoritativo natural (servidor decide a verdade, dificulta trapaça);
+Socket.IO (lib popular sobre WebSocket) já dá "rooms", reconexão automática
+e fallback de transporte prontos.
+
+**WebSocket — contras:** head-of-line blocking do TCP (um pacote perdido
+trava tudo que vem depois — pode gerar soluço de latência perceptível em
+jogo de ação rápida); não é o ideal pra volume alto de dados de posição a
+60×/s em rede ruim (WebRTC DataChannel "não confiável/não ordenado" se
+comporta melhor nesse caso específico, porque um pacote de posição
+perdido não trava nada — o próximo já chega atualizado); precisa de
+servidor rodando o tempo todo (não é P2P puro).
+
+**Recomendação dada:** WebSocket é a escolha certa para esta fase de teste
+— a diferença de latência do TCP só costuma incomodar de verdade em
+cenários competitivos ou redes ruins; para testes com amigos em rede
+doméstica é imperceptível, e a simplicidade de implementação/debug vale
+mais agora. Detalhe importante: **Colyseus** (biblioteca já escolhida na
+stack final, ADR-002) *usa WebSocket por padrão* — ou seja, existe a opção
+de já montar o protótipo de rede com Colyseus desde já, o que faria esse
+trabalho **não ser descartável**: ele viraria o início de verdade do
+netcode do jogo final, em vez de algo jogado fora na Fase 1.
+
+**⚠️ Pergunta em aberto para o Diretor decidir (não decidido ainda):**
+1. **Colyseus (WebSocket) já** — reaproveita para o jogo final, mas puxa
+   parte do trabalho da "Fase 1: Protótipo de Game Feel" pra agora, fora
+   da ordem do roadmap original.
+2. **WebSocket/Socket.IO artesanal e descartável** — mais rápido de montar
+   agora, mas provavelmente reescrito do zero na Fase 1 de verdade.
+3. **Não decidir agora** — só manter registrado aqui até chegar a vez deste
+   item na fila de prioridades.
+
 ---
 
 ## Ordem sugerida (a confirmar com o Diretor no próximo prompt)
