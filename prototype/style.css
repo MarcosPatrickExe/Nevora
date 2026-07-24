@@ -47,6 +47,23 @@ table.keys td { padding:7px 16px; border-bottom:1px solid #3a3128; text-align:le
 table.keys td:first-child { color:#f5c96b; white-space:nowrap; font-weight:bold; }
 table.keys em { color:#9b8c76; font-size:14px; }
 .tip { color:#9b8c76; font-size:14px; margin:12px 0 18px; line-height:1.6; }
+.tip.small { margin:2px 0; font-size:12.5px; }
+
+/* ---------- nickname / resumo ---------- */
+.ninput { display:block; margin:14px auto; padding:11px 16px; width:100%;
+  max-width:320px; font-family:inherit; font-size:17px; color:#f0e2c8;
+  background:#1c1610; border:2px solid #7a5a2e; border-radius:8px; text-align:center; }
+.ninput:focus { outline:none; border-color:#f5c96b; }
+.summary-pre { text-align:left; white-space:pre-wrap; font-family:inherit;
+  color:#e8dcc8; font-size:14.5px; line-height:1.7; background:#1c160f;
+  border:1px solid #4a3a26; border-radius:8px; padding:16px 20px; margin:0 0 16px; }
+
+/* ---------- loja ---------- */
+.shop-sevia { color:#f5c96b; font-size:16px; margin-bottom:16px; }
+.shop-item { display:flex; align-items:center; justify-content:space-between;
+  gap:16px; text-align:left; padding:12px 14px; margin:10px 0;
+  background:rgba(120,90,40,.1); border:1px solid #4a3a26; border-radius:8px; }
+.shop-item .mbtn.small { margin:0; min-width:150px; }
 
 /* ---------- touch controls ---------- */
 #touch { position:absolute; inset:0; z-index:15; pointer-events:none; }
@@ -61,3 +78,5 @@ table.keys em { color:#9b8c76; font-size:14px; }
 .tbtn.act { background:rgba(80,50,28,.5); }
 .tbtn:active { background:rgba(245,168,60,.45); border-color:#f5c96b; }
 .t-left .tbtn { width:74px; height:74px; font-size:28px; }
+#tbtnInteract { position:absolute; left:50%; bottom:16vh; transform:translateX(-50%);
+  width:56px; height:56px; font-size:20px; }

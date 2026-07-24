@@ -14,6 +14,7 @@ NV.Input = (function () {
     KeyJ: 'attack', KeyX: 'attack',
     KeyK: 'dash', KeyC: 'dash',
     KeyL: 'heal', KeyV: 'heal',
+    KeyE: 'interact', KeyF: 'interact',
     Escape: 'pause', Enter: 'confirm',
   };
   // W/↑ também pulam (além de mirar para cima)
