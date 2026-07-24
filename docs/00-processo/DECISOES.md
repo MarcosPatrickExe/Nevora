@@ -176,3 +176,74 @@ Formato:
   testes de latência real e provável adoção de SDR). Não confundir uma com
   a outra: passar nos testes com amigos não significa estar pronto pra
   Steam.
+
+## ADR-013 — Sistema de vida em "Fulgores" 🟡 proposta — ⚠️ CONFLITO DE NOME, NÃO IMPLEMENTAR
+- Data: 2026-07-23 (proposto em outra sessão de trabalho) · Status: **🟡
+  proposta, bloqueada por conflito de terminologia — aguardando o Diretor
+  decidir o nome antes de virar 🟢 aceita**
+- Decisão proposta: vida do Acendedor = unidades discretas chamadas
+  **Fulgores** (gotas de cera com brasa interna). Início: 5. Expansão: (a)
+  grátis, encontradas em áreas secretas; (b) compradas na loja com
+  **Fagulhas**, moeda dropada exclusivamente por inimigos mortos.
+- Contexto dado pela proposta: o protótipo v1 exibia ícones de gota/"ovo" e
+  o rótulo FULGOR na HUD; a proposta queria formalizar esse vocabulário
+  visto no protótipo.
+- ⚠️ **CONFLITO DE NOME (motivo do bloqueio):** a documentação já em vigor
+  usa **"Fulgor" para outra coisa** — o recurso ativo de mana/energia que
+  enche com golpes e se gasta em cura (Sopro Restaurador) ou Artes de Chama
+  (`04-gameplay/GAMEPLAY_CORE.md`, `00-processo/GLOSSARIO.md`,
+  `04-gameplay/PROGRESSAO.md` — "Gotas de Fulgor" já existem como upgrade
+  desse medidor). Vida, por sua vez, já tem nome estabelecido: **"Corações
+  de Cera"** (5 iniciais, expansíveis por "Fragmentos de Coração"). A HUD do
+  protótipo v1 tem DOIS elementos: corações (vida, fileira de gotas) e um
+  medidor separado abaixo rotulado "FULGOR" (mana) — a proposta parece ter
+  confundido os dois ao olhar só a captura de tela, sem o contexto completo
+  da documentação.
+- **Este ADR fica em 🟡 proposta e não deve ser implementado** até o Diretor
+  escolher um caminho:
+  1. Manter "Fulgor" = mana (como já documentado) e dar **outro nome** à
+     vida discreta em unidades (ex.: manter "Corações de Cera", ou um nome
+     novo se quiser abandonar "corações" por "gotas de brasa" etc.);
+  2. Renomear o recurso de mana atual para outra coisa e liberar "Fulgor"
+     para significar vida (exigiria atualizar `GAMEPLAY_CORE.md`,
+     `GLOSSARIO.md`, `PROGRESSAO.md`, `ARMAS_E_FERRAMENTAS.md` e o código do
+     protótipo);
+  3. Descartar a mudança de vocabulário e manter "Corações de Cera" como
+     vida, incorporando só a mecânica nova (expansão paga com Fagulhas) sem
+     trocar o nome.
+- **Mecânica em si (independente do nome):** moeda **Fagulhas**, dropada
+  exclusivamente por inimigos, para compra de expansão de vida — isso é
+  novo e não conflita com nada; só o nome "Fulgor" para a vida é o problema.
+  Fica a analisar se "Fagulhas" também colide com "Sévia" (moeda geral já
+  estabelecida) — mesma economia dupla ou moeda paralela? Não decidido.
+- Detalhes: `04-gameplay/CLASSES_ACENDEDORES.md`, `art/ACENDEDORES_REDESIGN.md`.
+
+## ADR-014 — Sistema de 6 classes de Acendedores 🟡 proposta
+- Data: 2026-07-23 (proposto em outra sessão de trabalho) · Status: **🟡 proposta**
+- Decisão proposta: 6 classes jogáveis, **1 por save** (permanente no
+  arquivo), cada uma com 1 passiva + 2 ativas exclusivas + 1 técnica
+  exclusiva + item fixo da mão esquerda. Armas continuam universais
+  (ADR-008). Nenhuma área obrigatória é bloqueada por classe.
+- Classes: **Viandante** (âmbar/Breo), **Batedora** (ciano/Sílice),
+  **Vigia** (vermelho-brasa/Brasme — personagem novo, ficha de arte
+  pendente), **Ritualista** (magenta/Véspera), **Coletor**
+  (verde-lima/Turfo), **Funileiro** (azul-petróleo/Parafino — personagem
+  novo, ficha de arte pendente).
+- Motivação: rejogabilidade — cada classe muda combate, exploração e
+  economia, incentivando novo save por classe.
+- Consequências: precisa de aprovação de **2 cores de chama novas**
+  (vermelho-brasa, azul-petróleo) como emenda ao brief de arte (que hoje
+  define só 4 — ver `art/PLAYER_CHARACTER_DESIGN.md`); depende da resolução
+  do ADR-013 (nomenclatura de vida) já que o documento de classes referencia
+  "Fulgor" no sentido de vida; balanceamento é placeholder até playtest.
+  ⚠️ **Ponto a esclarecer com o ADR-005:** hoje a cor de chama identifica o
+  **slot do jogador** na sessão (jogador 1 = Âmbar, jogador 2 = Ciano etc.,
+  fixo, independente de escolha). Com 6 classes tendo cor própria, e classes
+  podendo se repetir na mesma sessão, a cor passaria a identificar **classe
+  escolhida**, não mais o slot — dois jogadores de classes diferentes na
+  mesma sessão poderiam colidir com as cores fixas de slot já
+  documentadas. Precisa decidir: a cor de chama do multiplayer continua
+  sendo por slot (e a classe usa outro indicador visual, tipo silhueta/item
+  da mão esquerda) ou passa a ser por classe (e o multiplayer precisa de um
+  indicador de slot totalmente separado da chama)?
+- Detalhes: `04-gameplay/CLASSES_ACENDEDORES.md`.

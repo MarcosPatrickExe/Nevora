@@ -74,6 +74,9 @@ Hollow Knight e Silksong nunca realizaram.
 | 009 | Geração de imagens: Canva MCP p/ menu/UI; personagens/cenários seguem externos | 🟢 |
 | 010 | Estilo visual: **desenhado à mão e digitalizado** (processo tipo Cuphead) | 🟢 |
 | 011 | Protótipo web greybox em `prototype/` (menu, combate, 5 regiões, touch/PWA) | 🟢 |
+| 012 | Multiplayer do protótipo: **Colyseus/WebSocket** agora; robustez Steam (SDR) antes do lançamento | 🟢 |
+| 013 | Vida em **Fulgores** (unidades discretas, 5 iniciais) + moeda **Fagulhas** | 🟡 bloqueada — conflito de nome com o Fulgor já existente (mana) |
+| 014 | **6 classes** de Acendedores, 1 por save, habilidades/técnicas exclusivas | 🟡 |
 
 ## Decisões em aberto
 
@@ -81,3 +84,6 @@ Hollow Knight e Silksong nunca realizaram.
 |---|---|---|
 | 1 | Modelo comercial da versão web (demo grátis × completo pago) | `08-publicacao/PUBLICACAO.md` |
 | 2 | Regra de progresso do visitante em co-op ("Expedição") | `05-multiplayer/MULTIPLAYER_DESIGN.md` |
+| 3 | **Conflito de nome "Fulgor"** — vida (proposta) vs. mana (já em vigor) | `00-processo/DECISOES.md` (ADR-013) |
+| 4 | Aprovação das 2 cores de chama novas (vermelho-brasa, azul-petróleo) e sua relação com a cor por slot do multiplayer (ADR-005) | `04-gameplay/CLASSES_ACENDEDORES.md` |
+| 5 | Fichas de arte completas de Brasme (Vigia) e Parafino (Funileiro), padrão de 24 itens da Etapa 3 | `art/ACENDEDORES_REDESIGN.md` |

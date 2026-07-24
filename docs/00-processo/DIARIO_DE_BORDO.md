@@ -33,6 +33,20 @@ essa ordem explicitamente numa mensagem mais recente.
 (nickname/identificação de jogador, loja do Tio Sebo, upgrades, áreas
 secretas, mais clima dinâmico, multiplayer/Colyseus, áudio adiado).
 
+### 🔴 Bloqueio ativo — resolver antes de tocar em vida/mana ou classes
+
+Um pacote de design (feito pelo Diretor numa **outra sessão/projeto** que
+não tinha acesso de escrita a este repo) foi aplicado aqui em 2026-07-24:
+sistema de **6 classes de Acendedores** (ADR-014, 🟡 proposta) e redesenho
+visual completo de Breo/Sílice/Véspera/Turfo (`art/ACENDEDORES_REDESIGN.md`).
+Isso revelou um **conflito de nome não resolvido**: o pacote usa "Fulgor"
+para *vida* (ADR-013), mas a documentação já em vigor usa "Fulgor" para o
+recurso de *mana* (`GAMEPLAY_CORE.md`, `GLOSSARIO.md`). **Não implementar
+nada de ADR-013/ADR-014 até o Diretor escolher um nome** — as 3 opções estão
+detalhadas em `00-processo/DECISOES.md` (ADR-013). Também ficou pendente
+decidir se a cor de chama das 6 classes substitui ou convive com a cor de
+chama por *slot* de jogador do multiplayer (ADR-005) — ver ADR-014.
+
 ### Fatos operacionais que uma sessão nova precisa saber
 
 - **Identidade dos commits:** rodar sempre antes de commitar —
@@ -60,6 +74,53 @@ secretas, mais clima dinâmico, multiplayer/Colyseus, áudio adiado).
 - Modelo comercial da versão web (demo grátis × pago).
 - Regra de progresso do visitante em co-op ("Expedição").
 - Fichas detalhadas dos 8 bosses principais (template pronto em `BOSSES.md`).
+
+---
+
+## Sessão 3 — 2026-07-24 (importação de pacote de design: classes + redesenho visual)
+
+O Diretor trabalhou em **outro projeto/sessão** (sem acesso de escrita a
+este repo) e preparou um pacote de documentação (zip) para ser aplicado
+aqui. Conteúdo aplicado nesta sessão:
+
+- **`docs/04-gameplay/CLASSES_ACENDEDORES.md`** (novo): sistema de 6 classes
+  jogáveis — Viandante, Batedora, Vigia, Ritualista, Coletor, Funileiro —
+  1 por save, cada uma com passiva + 2 ativas + 1 técnica exclusiva + item
+  de mão esquerda fixo. Armas continuam universais (ADR-008). Vira
+  **ADR-014** (🟡 proposta).
+- **`docs/art/ACENDEDORES_REDESIGN.md`** (novo): fichas de arte completas
+  (24 itens cada, padrão "Etapa 3") de Breo (Âmbar), Sílice (Ciano), Véspera
+  (Magenta) e Turfo (Verde-lima) — silhueta, materiais, paleta, poses,
+  expressões, camadas de sprite e prompts de concept art/sprite/animação.
+- **Dois personagens novos anunciados, fichas de arte ainda pendentes**:
+  Brasme (Vigia, chama vermelho-brasa) e Parafino (Funileiro, chama
+  azul-petróleo) — próximo passo natural sugerido pelo próprio pacote.
+- **Renumeração de ADR:** o pacote propunha "ADR 012" e "ADR 013", mas
+  ADR-012 já estava em uso neste repo (decisão de multiplayer/Colyseus da
+  Sessão 2). Renumerado para **ADR-013** (Fulgores como vida — 🟡 bloqueada
+  por conflito de nome) e **ADR-014** (6 classes — 🟡 proposta). Referências
+  internas dos dois arquivos novos corrigidas para a numeração certa.
+- **⚠️ Conflito de nome identificado e sinalizado (não resolvido, não
+  implementado):** o pacote define "Fulgor" = vida (5 unidades discretas,
+  expansíveis com a moeda nova "Fagulhas"). A documentação já em vigor usa
+  "Fulgor" = recurso de mana (gasto em cura/Artes). A HUD do protótipo v1
+  tem os dois elementos separados (corações = vida, medidor "FULGOR" =
+  mana) — o pacote parece ter confundido os dois ao trabalhar só a partir
+  de uma captura de tela, sem o contexto completo da documentação. Aviso
+  detalhado com 3 opções de resolução em `DECISOES.md` (ADR-013). **Nenhum
+  código foi alterado** — só documentação, com o conflito bem sinalizado em
+  `DECISOES.md`, `GLOSSARIO.md`, `README.md` e nos dois arquivos novos.
+- **Outro ponto sinalizado (não resolvido):** a cor de chama por classe (6
+  cores, incluindo 2 novas) pode colidir com a cor de chama por *slot* de
+  jogador do multiplayer (ADR-005, 4 cores fixas Âmbar/Ciano/Magenta/
+  Verde-lima). Precisa decidir se a chama identifica classe ou slot — os
+  dois ao mesmo tempo não funcionam com só 4 cores de slot fixas e 6 de
+  classe. Detalhado em `DECISOES.md` (ADR-014).
+
+**Estado ao final:** documentação consolidada e publicada; três pendências
+de decisão do Diretor adicionadas à tabela "Decisões em aberto" do
+`docs/README.md` (nome de Fulgor, cores de chama × slot, fichas de Brasme e
+Parafino). Nada implementado em código.
 
 ---
 

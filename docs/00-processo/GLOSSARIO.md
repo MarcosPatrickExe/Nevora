@@ -25,7 +25,7 @@
 |---|---|
 | **Atiçador** | Arma inicial (utensílio de bronze para acender pavios) |
 | **Faísca** | Ferramenta inicial (isqueiro de sílex) |
-| **Fulgor** | Recurso ativo (medidor da chama): cura ou Artes |
+| **Fulgor** | Recurso ativo (medidor da chama): cura ou Artes. ⚠️ Nome em disputa — ADR-013 (🟡 proposta, bloqueada) propõe usar "Fulgor" para *vida* em vez de mana; não implementar até resolver, ver `00-processo/DECISOES.md` |
 | **Arte de Chama** | Golpe especial de cada arma (consome Fulgor) |
 | **Selos de Cera** | Sistema de build (charms) equipados em Entalhes |
 | **Entalhes** | Slots de Selos (3→6) |
