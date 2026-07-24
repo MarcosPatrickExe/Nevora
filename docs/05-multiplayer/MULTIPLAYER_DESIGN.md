@@ -23,15 +23,17 @@
 | Sessão | Online via servidor; **sem MMO, sem matchmaking público** na v1.0 |
 | Local | Couch co-op (mesma tela) — desejável, decidir na Fase 2 (impacta câmera) |
 
-### Regra de progresso do visitante (proposta "Expedição")
-Para evitar o problema clássico de "joguei na sessão do amigo e não valeu nada":
-- **Sempre valem para o visitante:** Sévia, itens consumíveis, XP de forja,
-  Selos/armas coletados que ele ainda não tinha, fragmentos de coração.
-- **Valem se o visitante ainda não passou daquele ponto:** bosses derrotados e
-  faróis acesos são registrados como "testemunhado" — ao chegar lá no próprio
-  mundo, o jogador pode **relutar ou reivindicar** (reivindicar exige ter
-  estado presente na vitória). A discutir — alternativa mais simples: só conta
-  no mundo do anfitrião, como Elden Ring.
+### Regra de progresso do visitante ("Expedição") — 🟢 decidida (ADR-015)
+Palavra do Diretor: o visitante **surge no ponto onde o anfitrião está**,
+independente do próprio progresso; ao voltar ao próprio mundo, retoma o
+próprio progresso intocado.
+- A sessão sempre roda no **mundo e ponto do anfitrião** (spawn junto dele).
+- **Sempre valem para o visitante:** Sévia, Fagulhas, itens consumíveis, XP
+  de forja, Selos/armas coletados que ele ainda não tinha.
+- **Eventos de mundo** (bosses derrotados, faróis acesos) contam **apenas no
+  mundo do anfitrião** — o visitante refaz no próprio mundo quando chegar lá.
+- Spoilers de história são responsabilidade do grupo; o prompt de
+  consentimento para eventos-chave (abaixo) continua valendo.
 
 ## Câmera — parametrizável 🟢 (ADR-006)
 

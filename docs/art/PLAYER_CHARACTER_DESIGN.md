@@ -158,8 +158,18 @@ Resumo da leitura dupla: **chama = "quem ele é" (classe)** · **borda/ícone/
 demais canais = "qual jogador é" (slot)**. Isso garante leitura mesmo em
 áreas muito claras, biomas de neve, ou em meio a efeitos de chefe — e é a
 base do requisito de acessibilidade cromática do teste de cor
-(`CHARACTER_ART_BIBLE.md`). Paleta exata das 4 cores de slot: a definir
-(pendência de arte, não bloqueante).
+(`CHARACTER_ART_BIBLE.md`).
+
+### Paleta de slot 🟢 definida (ADR-016)
+
+- **Canal primário = forma:** o indicador de cada jogador carrega **1 a 4
+  pips em forma de gota** (J1 = 1 pip … J4 = 4 pips) — contagem é legível
+  para qualquer pessoa, em qualquer bioma, mesmo com classes repetidas.
+- **Canal secundário = 4 tons pálidos** (deliberadamente dessaturados para
+  nunca competir com as 6 cores vivas de chama):
+  J1 Marfim `#F5EFDC` · J2 Rosado pálido `#F0D9E2` · J3 Azulado pálido
+  `#D9E4F0` · J4 Esverdeado pálido `#DDEEDC`.
+- Sujeita a ajuste após o primeiro playtest co-op com 4 jogadores.
 
 ---
 

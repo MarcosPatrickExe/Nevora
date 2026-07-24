@@ -77,11 +77,13 @@ Hollow Knight e Silksong nunca realizaram.
 | 012 | Multiplayer do protótipo: **Colyseus/WebSocket** agora; robustez Steam (SDR) antes do lançamento | 🟢 |
 | 013 | Vida continua **Corações de Cera**; nova moeda **Fagulhas** (só de inimigos) compra expansão | 🟢 |
 | 014 | **6 classes** de Acendedores, 1 por save; chama identifica **classe** (slot usa outros canais) | 🟢 |
+| 015 | Co-op "Expedição": visitante **surge no ponto do anfitrião**; volta ao próprio progresso depois | 🟢 |
+| 016 | Identidade de slot: **pips (1–4) + 4 tons pálidos** (decisão delegada, ajustável em playtest) | 🟢 |
 
 ## Decisões em aberto
 
 | # | Decisão | Onde discutir |
 |---|---|---|
-| 1 | Modelo comercial da versão web (demo grátis × completo pago) | `08-publicacao/PUBLICACAO.md` |
-| 2 | Regra de progresso do visitante em co-op ("Expedição") | `05-multiplayer/MULTIPLAYER_DESIGN.md` |
-| 3 | Paleta exata das 4 cores de slot do multiplayer (agora separada das 6 cores de classe, ADR-014) | `art/PLAYER_CHARACTER_DESIGN.md` |
+| 1 | Modelo comercial da versão web (demo grátis × completo pago) — Diretor: "depois vemos" | `08-publicacao/PUBLICACAO.md` |
+| 2 | Revisão do Diretor: fichas dos 8 bosses (criadas pelo agente, ver `04-gameplay/bosses/`) | `04-gameplay/bosses/` |
+| 3 | Revisão do Diretor: arte das 6 classes gerada pelo agente (galeria + Drive) | `art/GENERATED_ASSETS.md` |

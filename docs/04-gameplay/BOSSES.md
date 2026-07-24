@@ -42,11 +42,13 @@ Guardiões de atalhos/segredos: Sargento Encinzado, Casulo Errante, Enxame-de-Um
 (mosca que se multiplica), Carrasco do Mel, Sonâmbula (mariposa gigante que não
 pode acordar — luta furtiva!), Broto do Pavio-Rei (prenúncio do final), etc.
 
-## Estrutura de ficha de boss (padrão p/ documentação futura)
+## Fichas completas dos 8 bosses principais 🟡 (aguardando revisão do Diretor)
 
-Cada boss ganhará um arquivo `bosses/NOME.md` com: fases e HP%, moveset
-(startup/active/recovery em frames), padrões por nº de jogadores, arena
-(diagrama), trilha (motivo musical), drops, lore e checklist anti-cópia.
+Todos os 8 bosses principais têm ficha completa em
+[`bosses/`](./bosses/README.md): identidade/lore, arena, moveset por fase,
+escala co-op explícita (1–4 jogadores), recompensas, trilha e checklist
+anti-cópia. Criadas pelo agente em 2026-07-24 — cada arquivo marcado 🟡 até
+o Diretor revisar e aprovar (🟢).
 
 ## Sugestões em aberto
 

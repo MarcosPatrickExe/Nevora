@@ -247,3 +247,48 @@ Formato:
   1 ativa por classe (fatia vertical). Fichas de arte de Brasme e Parafino
   concluídas em 2026-07-24 (`art/ACENDEDORES_REDESIGN.md`, seções 3.5–3.6).
 - Detalhes: `04-gameplay/CLASSES_ACENDEDORES.md`, `art/ACENDEDORES_REDESIGN.md`.
+
+## ADR-015 — Regra do visitante em co-op ("Expedição"): visitante surge no ponto do anfitrião
+- Data: 2026-07-24 · Status: **🟢 aceita** (decisão do Diretor)
+- Decisão (palavra do Diretor): *"ele volta pra onde eu estou no meu
+  progresso. Se eu estiver à frente dele, ele vai surgir no mesmo ponto que
+  estou."* Formalizando:
+  1. A sessão co-op sempre roda no **mundo e no ponto de progresso do
+     anfitrião** — o visitante surge onde o anfitrião está, mesmo que o
+     próprio progresso dele seja anterior (ou posterior) àquele ponto.
+  2. Ao voltar ao próprio mundo, o visitante retoma **o próprio progresso**,
+     intocado — visitar não avança nem retrocede o mundo pessoal dele.
+  3. Ganhos pessoais portáveis (Sévia, Fagulhas, itens que ele ainda não
+     tinha, materiais) continuam valendo para o visitante, conforme a
+     proposta "Expedição" já registrada em
+     `05-multiplayer/MULTIPLAYER_DESIGN.md`; eventos de mundo (bosses,
+     faróis) contam apenas no mundo do anfitrião.
+- Consequências: sem "puxar" o visitante para trás nem exigir paridade de
+  progresso para jogar junto; spoilers são responsabilidade social do grupo
+  (o prompt de consentimento para eventos-chave de história do anfitrião,
+  já proposto no MULTIPLAYER_DESIGN, continua valendo).
+
+## ADR-016 — Paleta e canal de identidade dos 4 slots de jogador
+- Data: 2026-07-24 · Status: **🟢 aceita** (decisão delegada pelo Diretor ao
+  agente; sujeita a ajuste em playtest)
+- Contexto: com a chama identificando a CLASSE (ADR-014), o slot do jogador
+  (1–4) precisa de um canal próprio, legível ao lado de qualquer combinação
+  das 6 cores de chama e seguro para daltonismo.
+- Decisão em duas camadas:
+  1. **Canal primário = FORMA, não cor:** o aro/indicador de cada jogador
+     carrega **1 a 4 marcas (pips em forma de gota)** — jogador 1 tem 1 pip,
+     jogador 4 tem 4. Contagem é legível para todo mundo, em qualquer bioma,
+     com qualquer classe repetida.
+  2. **Canal secundário = 4 tons pálidos e dessaturados**, deliberadamente
+     distantes das 6 cores vivas de chama para nunca competir com elas:
+     | Slot | Tom | Hex |
+     |---|---|---|
+     | J1 | Marfim | `#F5EFDC` |
+     | J2 | Rosado pálido | `#F0D9E2` |
+     | J3 | Azulado pálido | `#D9E4F0` |
+     | J4 | Esverdeado pálido | `#DDEEDC` |
+  Aplicação: borda luminosa, partículas de aliado, ícone de HUD, marca de
+  chão, indicador de reviver e nome usam o tom do slot + os pips.
+- Consequências: `art/PLAYER_CHARACTER_DESIGN.md` atualizado; teste de cor
+  da `CHARACTER_ART_BIBLE.md` passa a validar tom de slot × 6 chamas ×
+  biomas; revisitar após o primeiro playtest co-op com 4 jogadores.
