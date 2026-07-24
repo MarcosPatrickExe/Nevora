@@ -21,17 +21,26 @@ abaixo).
 
 ### ⏸️ Onde paramos exatamente
 
-O Diretor testou o protótipo, aprovou, trouxe uma leva de pedidos novos
-(nickname, loja, áreas secretas, mais clima dinâmico, multiplayer) e avisou
-explicitamente: **"tenho mais coisas pra dizer, aguarde minhas ordens."**
-Tudo foi **documentado como backlog — nada foi implementado em código**.
-**A próxima sessão deve aguardar o Diretor completar a lista antes de
-começar a construir qualquer coisa nova**, a menos que ele já tenha dado
-essa ordem explicitamente numa mensagem mais recente.
+O Diretor deu a ordem explícita para implementar o backlog do protótipo
+("3- Sim, pode implementar. 4- perfeito 5-perfeito 6-showww 7- ok...") e
+delegou duas decisões de design (regra de progresso do visitante em co-op;
+paleta das 4 cores de slot). **Tudo foi implementado nesta sessão** na
+branch `prototype/v2-loja-audio-nickname` (áudio sintetizado, loja do Tio
+Sebo, upgrades, Sévia, áreas secretas, novo clima, nickname local, tela de
+resumo) — commitado, testado via smoke test headless (sem erros) e
+**pushado para a branch, mas NÃO mergeado em `main`** (regra de branch:
+deploy só acontece quando o Diretor aprovar o merge). Ver "Continuação 3"
+na Sessão 3 abaixo para o detalhamento completo.
 
-📋 **Lista completa de pedidos pendentes:** `docs/09-roadmap/BACKLOG_PROTOTIPO.md`
-(nickname/identificação de jogador, loja do Tio Sebo, upgrades, áreas
-secretas, mais clima dinâmico, multiplayer/Colyseus, áudio adiado).
+**Próxima ação:** o Diretor precisa (a) jogar o protótipo v2 localmente ou
+via preview da branch, (b) revisar os 8 fichas de boss em
+`docs/04-gameplay/bosses/` e os 6 retratos de personagem em
+`prototype/art/png/personagem-*.png`, e (c) aprovar o merge de
+`prototype/v2-loja-audio-nickname` → `main` quando estiver satisfeito.
+
+📋 **Lista completa de pedidos do backlog:** `docs/09-roadmap/BACKLOG_PROTOTIPO.md`
+(agora todos implementados no protótipo v2, exceto multiplayer/Colyseus —
+esse item o próprio Diretor adiou: "a) depois vemos isso").
 
 ### ✅ Bloqueio resolvido — classes e nomenclatura de vida fechados
 
@@ -82,8 +91,23 @@ abaixo.
 
 ### Decisões em aberto (sem resposta ainda)
 - Modelo comercial da versão web (demo grátis × pago).
-- Regra de progresso do visitante em co-op ("Expedição").
-- Fichas detalhadas dos 8 bosses principais (template pronto em `BOSSES.md`).
+- Revisão do Diretor: 8 fichas de boss (`docs/04-gameplay/bosses/`) e os 6
+  retratos de personagem gerados (`prototype/art/png/personagem-*.png`).
+- Duelo de Fase 2 do Pavio-Rei em co-op: sequencial ou simultâneo entre os
+  jogadores (nota de playtest em
+  `docs/04-gameplay/bosses/08-pavio-rei.md`).
+- Upload dos 6 retratos de personagem para o Google Drive do Diretor —
+  conector caiu no meio da sessão (ver nota abaixo); pendente retry.
+
+### Nota operacional — Google Drive desconectado
+
+Em algum ponto desta sessão o conector `mcp__Google_Drive__*` parou de
+responder (funcionava antes, no início da mesma sessão). Os 6 retratos de
+personagem foram commitados normalmente no GitHub (`prototype/art/svg/` e
+`prototype/art/png/`), mas **não** foram copiados para a pasta "Névora —
+Arte Conceitual" do Drive como de costume. Marcado como `⏳ pendente (Drive
+offline)` em `docs/art/GENERATED_ASSETS.md`. Uma sessão futura deve tentar
+reconectar e replicar esses 6 arquivos para o Drive.
 
 ---
 
@@ -190,6 +214,87 @@ aprovadas (nenhuma descumpre mais de 2 critérios). Todas as pendências de
 (ADR-014) e `docs/README.md`. **Única pendência restante do pacote de
 classes:** a paleta exata das 4 cores de slot do multiplayer (não
 bloqueante). Nada implementado em código.
+
+### Continuação 3 — ADR-015/016, fichas de boss, arte dos 6 Acendedores e Protótipo v2 (mesmo dia)
+
+O Diretor respondeu a uma leva de pendências e autorizou implementação:
+
+1. **Regra de progresso do visitante em co-op → ADR-015 🟢 aceita.** Texto
+   literal do Diretor: *"ele volta pra onde eu estou no meu progresso. Se eu
+   estiver afrente dele, ele vai surgir no mesmo ponto que estou."* O
+   visitante spawna sempre no ponto de progresso do anfitrião; ao retornar,
+   seu próprio progresso continua intacto. Ganhos portáteis (Sévia,
+   Fagulhas, consumíveis, XP de forja, itens novos para ele) sempre contam;
+   eventos de mundo (bosses, faróis) só contam no mundo do anfitrião. Escrito
+   em `05-multiplayer/MULTIPLAYER_DESIGN.md`.
+2. **Paleta de slot do multiplayer → ADR-016 🟢 aceita (decisão delegada:
+   "c) você decide").** Identidade de slot (1-4) passa a usar dois canais
+   não relacionados à cor de chama: "pips" em formato de gota (1 a 4) +
+   4 tons pálidos dessaturados (J1 `#F5EFDC`, J2 `#F0D9E2`, J3 `#D9E4F0`,
+   J4 `#DDEEDC`), deliberadamente distintos das 6 cores vivas de classe.
+   Ajustável após playtest real com 4 jogadores. Escrito em
+   `art/PLAYER_CHARACTER_DESIGN.md`.
+3. **8 fichas de boss criadas** em `docs/04-gameplay/bosses/` (uma por
+   arquivo + README de índice): Besouro-Sineiro, Ceifadeira-Murmúria,
+   Broca-Mãe, Vidraceiro, Barqueiro Afogado, General Geada, Regente Oca,
+   Pavio-Rei (final, 3 fases, liga com os 3 finais). Cada ficha cobre
+   identidade/lore, arena, moveset por fase, escala 1-4 jogadores,
+   recompensas, trilha e checklist anti-cópia. Marcadas 🟡 aguardando
+   revisão do Diretor. `docs/04-gameplay/BOSSES.md` atualizado para apontar
+   para a pasta nova.
+4. **6 retratos de personagem gerados** (um por classe: Breo, Sílice,
+   Véspera, Turfo, Brasme, Parafino) em SVG (`prototype/art/svg/`) →
+   renderizados em PNG via Playwright/Chromium headless, seguindo o
+   processo aprovado "Cuphead" (filtro de traço line-boil + textura de
+   papel + gradiente radial de chama, ADR-010). A primeira versão de
+   `personagem-vespera.svg` saiu quebrada (dois paths sobrepostos de capa
+   assimétrica geraram um vão branco feio e uma "corrente" flutuante em vez
+   de diadema) — reconstruída com um único path de corpo sólido + capa como
+   overlay + diadema em pontos ancorados na curva da cabeça; padrão a
+   reutilizar em capas assimétricas futuras. Galeria em `prototype/art/`
+   reorganizada em duas seções ("As 6 Classes" / "Mundo e UI"). Marcados 🟡
+   aguardando revisão do Diretor; **upload pro Google Drive pendente** — o
+   conector caiu no meio da sessão (ver nota operacional acima).
+5. **Protótipo v2 implementado por completo** na branch
+   `prototype/v2-loja-audio-nickname` (criada a partir de `main`, **não
+   mergeada**), cobrindo o backlog aprovado (*"3- Sim, pode implementar.
+   4- perfeito 5-perfeito 6-showww"* + pedido de áudio próprio sem
+   downloads):
+   - `js/audio.js` (novo): SFX e trilha 100% sintetizados via Web Audio API
+     (osciladores + ruído filtrado), zero arquivos externos.
+   - `js/save.js` (novo): progresso local em `localStorage`
+     (`nv-progress-v2`) — nickname, região mais distante, mortes, inimigos
+     derrotados, Sévia coletada, segredos, upgrades, tempo jogado — com
+     `summaryText()` gerando um resumo em texto puro copiável (rota simples
+     sem backend; backend real fica para uma v3 futura, per o próprio
+     Diretor: *"vamos fazer um backend no futuro, na outra versão do
+     protótipo"*).
+   - Economia de **Sévia**: inimigos derrotados soltam a moeda
+     (`SeviaPickup`, ímã até o jogador); HUD ganhou contador no canto
+     superior direito.
+   - **Loja do Tio Sebo**: NPC no Vale das Velas, interação com **E**
+     (tecla ou botão touch), congela a simulação do mundo enquanto aberta,
+     vende Fragmento de Coração (+1 vida máx.) e Frasco de Fulgor (+1 pip
+     máx.) com preço crescente a cada compra.
+   - **3 áreas secretas** atrás de plataformas escondidas (Vale das Velas,
+     Galerias Fúngicas, Picos Uivantes): 2 Fragmentos de Coração + 1 Bota de
+     Salto (pulo permanentemente mais alto).
+   - **Novo clima** `embers` (brasas subindo) no Vale das Velas.
+   - **Tela de nickname** obrigatória na primeira partida; **tela de
+     resumo** acessível do menu e da pausa, com botão "copiar resumo".
+   - Testado com smoke test headless (Playwright/Chromium): fluxo completo
+     menu → nickname → jogar → aproximar do NPC → abrir loja → tentar
+     comprar → fechar loja → pausar → ver resumo → voltar, **sem erros de
+     console**. Screenshots conferidos visualmente (NPC, loja, resumo).
+   - Commitado e **pushado para a branch** (`git push -u origin
+     prototype/v2-loja-audio-nickname`) — não mergeado em `main`, então o
+     GitHub Pages **não republicou** (disciplina de branch respeitada).
+
+**Estado ao final:** ADR-015 e ADR-016 fechadas; 8 fichas de boss e 6 artes
+de personagem prontas, aguardando revisão do Diretor; Protótipo v2
+implementado, testado e pushado — aguardando o Diretor jogar e aprovar o
+merge para `main`. Multiplayer real (Colyseus) e backend de progresso
+seguem adiados por decisão explícita do Diretor.
 
 ---
 
