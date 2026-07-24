@@ -1,7 +1,11 @@
-# ETAPA 3 — Redesenho dos Quatro Acendedores
+# ETAPA 3 — Redesenho dos Seis Acendedores
 > Documento de direção de arte — Névora · destino sugerido: `docs/art/ACENDEDORES_REDESIGN.md`
 > Baseado no brief "Cera e Penumbra" + referências desenhadas à mão (traço nanquim, espessura variável, hachuras).
 > Regras transversais: corpo-base de vela · olhos verticais escuros · mão direita = arma intercambiável · mão esquerda = item fixo · chama com glow real · linha manual, nunca vetor liso.
+> 🟢 **6 classes completas (ADR-014):** Breo/Sílice/Véspera/Turfo (3.1–3.4)
+> + **Brasme/Parafino (3.5–3.6, adicionados 2026-07-24)** — fichas de arte
+> completas dos dois personagens novos (Vigia e Funileiro), fechando o
+> conjunto das 6 classes com o padrão de 24 itens.
 
 ---
 
@@ -121,22 +125,80 @@
 
 ---
 
+## 3.5 ACENDEDOR VERMELHO-BRASA — "BRASME" (nome provisório)
+
+1. **Nome provisório:** Brasme (de "brasa" + sonoridade robusta, ecoando Breo).
+2. **Função narrativa:** ex-guarda de posto de farol nas fronteiras, acostumado a ficar horas parado vigiando a escuridão. É o escudo do grupo — o primeiro a se posicionar entre os aliados e o perigo.
+3. **Personalidade:** taciturno, leal até a teimosia, fala pouco e em frases curtas; mede o perigo pela distância, não pelo tamanho.
+4. **Silhueta:** a mais larga e baixa depois de Turfo — corpo em barril, ombros alargados por placas de bronze rebitadas, base assentada e estável (nunca parece prestes a cair).
+5. **Formato do corpo:** vela curta e maciça, cera vermelho-tijolo densa, sem escorridos longos — a cera "não teve tempo de escorrer", está sempre em posição de guarda.
+6. **Formato da cabeça:** domo levemente achatado no topo, coberto por um visor semicircular de bronze perfurado (fendas finas) que protege a chama sem apagá-la — vazamentos de luz vermelha entre as fendas.
+7. **Tipo de chama:** vermelho-brasa, baixa e constante, quase sem tremular; ganha um pulso breve e intenso quando a passiva "Cera Endurecida" ativa (ao perder um Coração de Cera).
+8. **Roupa:** nenhum tecido — o "traje" é inteiramente placas de bronze envelhecido moldadas à cera, encaixadas como uma carapaça segmentada (peitoral, ombreiras, cinta).
+9. **Acessórios:** rebites visíveis nas junções das placas; correia cruzada segurando o sino da mão esquerda; pequenas mossas e arranhões — histórico de golpes recebidos, "cicatrizes de guarda".
+10. **Arma (mão direita):** Atiçador padrão (ADR-008), encaixado num suporte de bronze no antebraço — permite golpear sem soltar o sino.
+11. **Item (mão esquerda):** sino de bronze embutido numa moldura presa ao pulso — não é carregado solto, é parte do braço, reforçando que Brasme nunca larga a guarda.
+12. **Materiais:** cera vermelho-tijolo densa, bronze envelhecido (placas rebitadas), pequenos elementos de quitina escura nas juntas (reforço flexível).
+13. **Paleta:** cera #8C3B2E · bronze das placas #7A5A2E · visor/fendas #4A3018 · vermelho de chama #FF5A3C · sombra #2A1712.
+14. **Vista frontal:** visor centralizado escondendo quase toda a chama (só as fendas brilham); placas simétricas no peito; sino visível no pulso esquerdo.
+15. **Vista lateral:** perfil "de escudo" — postura ligeiramente inclinada para frente, como se estivesse sempre pronto a bloquear; placas de ombro se sobrepõem como conchas.
+16. **Vista traseira:** placas menores, cera exposta lembrando as costas "desprotegidas de propósito" — a defesa é sempre voltada pra frente (reforça a passiva de dano frontal reduzido).
+17. **Poses de ação:** (a) postura de bloqueio, corpo baixo, visor virado para a ameaça; (b) tocar o sino com o braço esquerdo erguido, ondas de som saindo em anéis; (c) Postura de Farol — completamente imóvel, placas levemente abertas expondo mais luz vermelha, como uma torre acesa.
+18. **Expressões** (via fendas do visor + chama, já que o rosto fica coberto): vigilância (fendas estreitas, chama baixa constante); alerta (fendas se abrem mais, chama sobe rápido); resolução/dor absorvida (chama pulsa forte vermelho, pequena rachadura de luz aparece no visor).
+19. **Pose neutra:** parado, peso equilibrado nas duas pernas, sino encostado no corpo, visor voltado pra frente — a postura "de sentinela" que nunca relaxa de verdade.
+20. **Camadas:** chama (atrás do visor) / visor de bronze / cabeça-corpo / placas peitorais / ombreiras / braço E + sino / braço D / Atiçador / cinta+rebites / pernas / pés.
+21. **Prompt concept art:** "hand-drawn ink illustration, small stocky anthropomorphic candle guardian, dense brick-red wax body encased in riveted bronze armor plates, semicircular perforated bronze visor covering the head with thin glowing red slits instead of visible eyes, no cloth clothing, a bronze bell built into the left forearm, short low steady red flame glimpsed through visor slits, variable line weight, crosshatch shading, muted palette, stoic sentinel atmosphere, character concept sheet, NOT vector, NOT 3D".
+22. **Prompt sprite:** base comum + "clean silhouette readable at 64px, flat illustrated colors with subtle texture, separated layers for visor/plates/body, side view, guard pose, transparent background".
+23. **Prompt animação:** "2D cutout animation reference, heavy guard character idle with minimal sway, bell arm swing with metallic follow-through, visor slit flame flicker independent loop, subtle armor plate jostle on landing".
+24. **Restrições negativas:** sem rosto visível (as fendas do visor substituem os olhos — nunca desenhar olhos por baixo); sem escudo separado empunhado (o corpo/placas SÃO o escudo); sem elmo humano reconhecível; sem metal prateado polido (só bronze envelhecido); sem capa ou tecido.
+
+---
+
+## 3.6 ACENDEDOR AZUL-PETRÓLEO — "PARAFINO" (nome provisório)
+
+1. **Nome provisório:** Parafino (de "parafina" + sonoridade mecânica, ecoando Turfo).
+2. **Função narrativa:** ex-reparador do maquinário dos faróis — engrenagens, roldanas, o sistema que erguia as torres antes do Apagão. Encontra utilidade em tudo, inclusive nos próprios inimigos.
+3. **Personalidade:** curioso e tagarela quando está mexendo em algo; nervoso e monossilábico quando não tem uma ferramenta na mão; adora explicar como as coisas funcionam mesmo sem ninguém pedir.
+4. **Silhueta:** assimétrica e "remendada" — um ombro visivelmente mais equipado que o outro (o direito carrega ferramentas extras); pequenos tubos de cobre saindo do corpo em ângulos; silhueta "ocupada" mas ainda legível.
+5. **Formato do corpo:** vela média, cera azul-acinzentada manchada de fuligem, remendada com placas de bronze e pequenas válvulas de latão **aparafusadas** (não rebitadas como Brasme — mais "gambiarra" que armadura).
+6. **Formato da cabeça:** domo irregular com uma lente de aumento de vidro presa por uma tira de couro sobre um dos "olhos" — assimetria funcional, ele usa a lente pra examinar mecanismos de perto.
+7. **Tipo de chama:** azul-petróleo, com pequenas fagulhas de cobre saltando dela ocasionalmente (efeito de solda); acelera e chia quando ele está concentrado consertando algo.
+8. **Roupa:** avental de couro reforçado com bolsos de ferramentas; mangas curtas para não prender nas engrenagens.
+9. **Acessórios:** cinto com chaves de fenda, pinças e um rolo de arame de bronze; a lente de aumento; pequenos tubos de vapor saindo das costas que soltam baforadas leves.
+10. **Arma (mão direita):** Atiçador padrão (ADR-008), adaptado com um pequeno bocal de solda na ponta — o mesmo Atiçador universal, com um acessório visual de classe.
+11. **Item (mão esquerda):** chave-ferramenta multiuso — uma peça articulada de bronze que se dobra entre chave inglesa, chave de fenda e alicate, sempre girando levemente nos dedos quando ele está parado (tique/hábito).
+12. **Materiais:** cera azul-acinzentada fuliginosa, bronze aparafusado, latão das válvulas, couro do avental, vidro da lente, cobre dos tubos.
+13. **Paleta:** cera #5E6B72 · fuligem #2E2A24 · bronze aparafusado #8A6A34 · latão das válvulas #C9A227 · azul de chama #2FA8C9 · couro do avental #5A4530.
+14. **Vista frontal:** lente sobre um olho, avental central com bolsos visíveis, ombro direito "carregado" de ferramentas, tubos de vapor discretos atrás.
+15. **Vista lateral:** perfil mostra os tubos de vapor nas costas soltando baforada leve; chave-ferramenta girando na mão esquerda.
+16. **Vista traseira:** tubos de vapor dominam, válvulas piscando levemente, cinta de ferramentas cruzando as costas.
+17. **Poses de ação:** (a) implantar a mini-torreta Autômato-Vaga-lume, corpo agachado, mãos ajustando os parafusos finais; (b) Jato de Pressão — corpo impulsionado pra trás/lado, tubos de vapor expelindo com força, expressão de leve susto controlado; (c) usar o Gancho de Corda, braço esticado, corpo em diagonal de tração.
+18. **Expressões:** concentração (lente baixada sobre o olho, chama estável e fininha); entusiasmo técnico (chama sobe com fagulhas de cobre extras, postura inclinada pra frente); frustração momentânea (chama chia e pisca irregular, ombros caídos) — nunca dura mais que a animação de idle.
+19. **Pose neutra:** parado girando a chave-ferramenta na mão, peso apoiado numa perna, tubos de vapor soltando baforadas espaçadas — nunca completamente ocioso.
+20. **Camadas:** chama (com fagulhas de cobre) / cabeça / lente (camada própria, some se virar) / corpo / avental / tubos de vapor (trás) / braço E / chave-ferramenta / braço D / Atiçador-solda / cinto de ferramentas / pernas / pés.
+21. **Prompt concept art:** "hand-drawn ink illustration, small anthropomorphic candle tinkerer, sooty blue-grey wax body patched with bolted bronze plates and brass valves, magnifying lens strap over one eye, leather tool apron, small copper steam pipes on the back releasing light puffs, teal-blue flame occasionally sparking tiny copper embers, multi-tool wrench-pliers device in left hand, variable line weight, crosshatch shading, muted palette, curious inventive atmosphere, character concept sheet, NOT vector, NOT 3D".
+22. **Prompt sprite:** base comum + "clean silhouette readable at 64px, flat illustrated colors with subtle texture, lens as separate toggle layer, steam pipes as secondary animated layer, side view, transparent background".
+23. **Prompt animação:** "2D cutout animation reference, fidgety tinkerer idle spinning multi-tool, steam pipe puff loop every few seconds, flame sparks 2-frame copper ember burst, lens glint highlight on head turn".
+24. **Restrições negativas:** sem óculos humanos completos (só a lente única presa por tira); sem roupas modernas (nada de macacão industrial reconhecível); sem metal prateado brilhante (bronze/latão envelhecidos só); ferramentas nunca podem ser reconhecíveis como marcas/modelos reais; silhueta não pode ficar poluída demais a 64px (máx. 3 elementos "tecnológicos" visíveis por vez: lente, chave, tubos).
+
+---
+
 ## Validação (checklist do brief, Etapa 6 antecipada por personagem)
 
-| Critério | Breo | Sílice | Véspera | Turfo |
-|---|---|---|---|---|
-| Reconhecível como vela | ✅ | ✅ | ✅ | ✅ |
-| Braços e pernas funcionais | ✅ | ✅ | ✅ | ✅ |
-| Mão direita troca arma | ✅ | ✅ | ✅ | ✅ |
-| Mão esquerda comunica função | ✅ lanterna=guia | ✅ bússola=exploração | ✅ relicário=memória | ✅ frasco=coleta |
-| Silhueta reconhecível | ✅ cúpula+capa | ✅ gota+cachecol | ✅ assimetria+espiral | ✅ largo+mochila |
-| Pertence a Névora | ✅ | ✅ | ✅ | ✅ |
-| Aparência manual | ✅ (traço variável, hachura) | ✅ | ✅ | ✅ |
-| Viável p/ animação 2D | ✅ | ✅ | ⚠️ flip da capa exige flip lógico | ✅ |
-| Chama visualmente importante | ✅ | ✅ | ✅ | ✅ (piscar = mecânica) |
-| Legível em tamanho reduzido | ✅ | ✅ | ⚠️ testar assimetria a 64px | ⚠️ limitar tralha |
+| Critério | Breo | Sílice | Véspera | Turfo | Brasme | Parafino |
+|---|---|---|---|---|---|---|
+| Reconhecível como vela | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
+| Braços e pernas funcionais | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
+| Mão direita troca arma | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
+| Mão esquerda comunica função | ✅ lanterna=guia | ✅ bússola=exploração | ✅ relicário=memória | ✅ frasco=coleta | ✅ sino=alerta | ✅ chave=conserto |
+| Silhueta reconhecível | ✅ cúpula+capa | ✅ gota+cachecol | ✅ assimetria+espiral | ✅ largo+mochila | ✅ barril+placas | ✅ assimetria+tubos |
+| Pertence a Névora | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
+| Aparência manual | ✅ (traço variável, hachura) | ✅ | ✅ | ✅ | ✅ | ✅ |
+| Viável p/ animação 2D | ✅ | ✅ | ⚠️ flip da capa exige flip lógico | ✅ | ✅ | ✅ |
+| Chama visualmente importante | ✅ | ✅ | ✅ | ✅ (piscar = mecânica) | ✅ (pulso = passiva) | ✅ (fagulhas = concentração) |
+| Legível em tamanho reduzido | ✅ | ✅ | ⚠️ testar assimetria a 64px | ⚠️ limitar tralha | ✅ | ⚠️ limitar elementos técnicos (máx. 3) |
 
-Nenhum personagem descumpre mais de 2 critérios → todos aprovados para seguir a produção, com os 3 pontos de atenção (⚠️) marcados para teste em sprite real.
+Nenhum personagem descumpre mais de 2 critérios → todos os 6 aprovados para seguir a produção, com os pontos de atenção (⚠️) marcados para teste em sprite real. **Brasme** tem um cuidado extra fora da tabela: como o rosto fica coberto pelo visor, toda expressividade emocional migra para as fendas + chama — validar isso especificamente em teste de sprite (é a única classe sem "rosto" tradicional).
 
 ---
 
@@ -150,3 +212,8 @@ Nenhum personagem descumpre mais de 2 critérios → todos aprovados para seguir
 - **HUD:** ícones "ovo"/gota já usados no protótipo v1 continuam
   representando **Corações de Cera** (vida) — não precisam mudar de nome,
   só ganham a nova rota de expansão via Fagulhas.
+- **ADR-014 (🟢 aceito):** conjunto de 6 classes completo — Brasme (Vigia) e
+  Parafino (Funileiro) ganharam fichas de arte completas nesta atualização
+  (seções 3.5 e 3.6), fechando a pendência de arte do sistema de classes.
+  A chama de cada um identifica a classe; a identidade de slot do jogador no
+  multiplayer usa os outros canais visuais (ver `PLAYER_CHARACTER_DESIGN.md`).

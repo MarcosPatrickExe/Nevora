@@ -84,5 +84,4 @@ Hollow Knight e Silksong nunca realizaram.
 |---|---|---|
 | 1 | Modelo comercial da versão web (demo grátis × completo pago) | `08-publicacao/PUBLICACAO.md` |
 | 2 | Regra de progresso do visitante em co-op ("Expedição") | `05-multiplayer/MULTIPLAYER_DESIGN.md` |
-| 3 | Fichas de arte completas de Brasme (Vigia) e Parafino (Funileiro), padrão de 24 itens da Etapa 3 | `art/ACENDEDORES_REDESIGN.md` |
-| 4 | Paleta exata das 4 cores de slot do multiplayer (agora separada das 6 cores de classe, ADR-014) | `art/PLAYER_CHARACTER_DESIGN.md` |
+| 3 | Paleta exata das 4 cores de slot do multiplayer (agora separada das 6 cores de classe, ADR-014) | `art/PLAYER_CHARACTER_DESIGN.md` |

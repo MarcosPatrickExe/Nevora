@@ -92,7 +92,7 @@ Cada classe tem ao menos **uma forma exclusiva de travessia ou percepção** (re
 
 ## 4. Impactos e pendências
 
-1. **Arte:** duas fichas novas (Brasme e Parafino) ainda precisam ser criadas no padrão da Etapa 3 (24 itens); as linguagens de forma "defensivo" e "mecânico" do brief já dão a base. **Continua pendente** — ver `docs/README.md`.
+1. **Arte:** 🟢 concluído (2026-07-24) — fichas completas de Brasme e Parafino no padrão da Etapa 3 (24 itens) em `docs/art/ACENDEDORES_REDESIGN.md` (seções 3.5 e 3.6).
 2. **Cores de chama:** 🟢 aprovado (ADR-014) — o brief passa de 4 para **6 cores oficiais**, incluindo vermelho-brasa e azul-petróleo. A chama identifica a **classe**; a identidade de **slot do jogador** no multiplayer passa a usar os outros canais visuais já previstos (borda luminosa, partícula, ícone de HUD, nome sobre o personagem) — ver `art/PLAYER_CHARACTER_DESIGN.md`.
 3. **Balanceamento:** valores (durações, %s, custos) são placeholder para o protótipo v2 — calibrar em playtest.
 4. **Protótipo v2:** implementar primeiro a seleção de classe no save + 1 passiva e 1 ativa por classe (fatia vertical); técnicas exclusivas ficam para v3.

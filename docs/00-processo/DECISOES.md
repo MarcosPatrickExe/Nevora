@@ -219,10 +219,10 @@ Formato:
   da mão esquerda. Armas continuam universais (ADR-008). Nenhuma área
   obrigatória é bloqueada por classe.
 - Classes: **Viandante** (âmbar/Breo), **Batedora** (ciano/Sílice),
-  **Vigia** (vermelho-brasa/Brasme — personagem novo, ficha de arte
-  pendente), **Ritualista** (magenta/Véspera), **Coletor**
-  (verde-lima/Turfo), **Funileiro** (azul-petróleo/Parafino — personagem
-  novo, ficha de arte pendente).
+  **Vigia** (vermelho-brasa/Brasme), **Ritualista** (magenta/Véspera),
+  **Coletor** (verde-lima/Turfo), **Funileiro** (azul-petróleo/Parafino).
+  Fichas de arte completas (24 itens) das 6 em `art/ACENDEDORES_REDESIGN.md`
+  — Brasme e Parafino concluídos em 2026-07-24.
 - Motivação: rejogabilidade — cada classe muda combate, exploração e
   economia, incentivando novo save por classe.
 - **Cores de chama:** 🟢 aprovado — o brief de arte passa de 4 para **6
@@ -244,6 +244,6 @@ Formato:
   `art/PLAYER_CHARACTER_DESIGN.md` (a atualizar).
 - Consequências: balanceamento das 6 classes é placeholder até playtest;
   protótipo v2 implementa primeiro seleção de classe no save + 1 passiva +
-  1 ativa por classe (fatia vertical); fichas de arte de Brasme e Parafino
-  seguem pendentes.
+  1 ativa por classe (fatia vertical). Fichas de arte de Brasme e Parafino
+  concluídas em 2026-07-24 (`art/ACENDEDORES_REDESIGN.md`, seções 3.5–3.6).
 - Detalhes: `04-gameplay/CLASSES_ACENDEDORES.md`, `art/ACENDEDORES_REDESIGN.md`.

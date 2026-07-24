@@ -52,9 +52,10 @@ resolvidos pelo Diretor no mesmo dia:**
   cores de classe (paleta exata ainda não definida — pendência de arte, não
   bloqueante).
 
-Pendências que sobraram (não bloqueantes): fichas de arte completas de
-Brasme (Vigia) e Parafino (Funileiro), e a paleta exata das 4 cores de
-slot. Ver `docs/README.md` → "Decisões em aberto".
+Pendência que sobrou (não bloqueante): a paleta exata das 4 cores de slot.
+Ver `docs/README.md` → "Decisões em aberto". As fichas de arte de Brasme e
+Parafino **foram concluídas em seguida, no mesmo dia** — ver Sessão 3
+abaixo.
 
 ### Fatos operacionais que uma sessão nova precisa saber
 
@@ -164,6 +165,31 @@ restantes: fichas de Brasme/Parafino e paleta exata das 4 cores de slot).
 
 **Nada implementado em código** — só documentação, agora sem conflitos
 internos conhecidos.
+
+### Continuação 2 — fichas completas de Brasme e Parafino (mesmo dia)
+
+O Diretor confirmou: fazer as fichas de arte completas de Brasme (Vigia) e
+Parafino (Funileiro) no mesmo padrão de 24 itens dos outros 4. Feito e
+publicado em `art/ACENDEDORES_REDESIGN.md` (seções 3.5 e 3.6) — documento
+renomeado de "Redesenho dos Quatro Acendedores" para "Redesenho dos Seis
+Acendedores". Ambos seguem a linguagem de formas dos Acendedores (corpo-vela,
+proporção, olhos verticais) com os elementos de classe aplicados como
+material/acessório, não substituindo a base:
+- **Brasme** (Vigia): corpo em barril coberto por placas de bronze
+  rebitadas, visor semicircular perfurado no lugar do rosto (só as fendas +
+  a chama comunicam expressão — sinalizado como ponto de atenção único na
+  tabela de validação, já que ele não tem "rosto" tradicional), sino de
+  bronze embutido no pulso esquerdo.
+- **Parafino** (Funileiro): corpo remendado com placas aparafusadas e
+  válvulas de latão, lente de aumento sobre um olho, tubos de vapor nas
+  costas, chave-ferramenta multiuso articulada na mão esquerda.
+
+Tabela de validação do documento expandida para as 6 classes — todas
+aprovadas (nenhuma descumpre mais de 2 critérios). Todas as pendências de
+"ficha de arte" foram removidas de `CLASSES_ACENDEDORES.md`, `DECISOES.md`
+(ADR-014) e `docs/README.md`. **Única pendência restante do pacote de
+classes:** a paleta exata das 4 cores de slot do multiplayer (não
+bloqueante). Nada implementado em código.
 
 ---
 
