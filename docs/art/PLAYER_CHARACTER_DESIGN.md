@@ -89,10 +89,18 @@ identidade de Névora.
 
 ---
 
-## Os quatro Acendedores
+## Os quatro Acendedores *(base histórica — ver `04-gameplay/CLASSES_ACENDEDORES.md`)*
 
-Para o multiplayer, **não usamos quatro cópias idênticas com troca de cor.**
-Cada jogador tem uma silhueta própria — mas todos compartilham o mesmo
+> 🟢 **Superseded/estendido pelo ADR-014 (6 classes):** estes 4 perfis viraram
+> a base de 4 das 6 classes jogáveis — Âmbar → Viandante/Breo, Ciano →
+> Batedora/Sílice, Magenta → Ritualista/Véspera, Verde-lima → Coletor/Turfo.
+> As 2 classes novas (Vigia/Brasme, vermelho-brasa; Funileiro/Parafino,
+> azul-petróleo) somam ao brief. **Nomes, personalidades, silhuetas e
+> materiais completos** estão em `art/ACENDEDORES_REDESIGN.md` — este bloco
+> fica como referência rápida de papel visual e linguagem de forma.
+
+Para o multiplayer, **não usamos seis cópias idênticas com troca de cor.**
+Cada classe tem uma silhueta própria — mas todas compartilham o mesmo
 esqueleto de animação (requisito técnico: rigs compatíveis, ver
 `06-tecnologia/ARQUITETURA.md`).
 
@@ -122,10 +130,20 @@ esqueleto de animação (requisito técnico: rigs compatíveis, ver
 
 ---
 
-## Regra importante de multiplayer: a cor não pode depender só da chama
+## Regra de multiplayer: a chama identifica a CLASSE; o slot usa outros canais 🟢 (ADR-014)
 
-A cor do jogador precisa estar reforçada em **múltiplos canais** simultâneos,
-porque a chama sozinha pode ficar ilegível em telas cheias de efeito:
+A cor da chama passou a identificar **qual classe** o Acendedor é (6 cores —
+ver `04-gameplay/CLASSES_ACENDEDORES.md`), não mais qual posição de jogador
+(slot) na sessão. Como classes podem se repetir numa mesma sessão (dois
+jogadores de Viandante, por exemplo), **a identidade de slot precisa de um
+canal totalmente separado da chama.**
+
+A regra anterior de "a cor não pode aparecer só na chama" resolve isso: os
+mesmos canais que já existiam para reforçar legibilidade agora carregam,
+especificamente, a cor de **slot** (jogador 1/2/3/4), numa paleta pequena e
+deliberadamente distinta das 6 cores de classe (evita competir
+visualmente — ex.: aros/contornos neutros ou numerados, não tons que imitem
+as cores de chama):
 
 - borda luminosa;
 - partículas;
@@ -136,9 +154,12 @@ porque a chama sozinha pode ficar ilegível em telas cheias de efeito:
 - efeito do ataque;
 - nome sobre o personagem, quando necessário.
 
-Isso garante leitura mesmo em áreas muito claras, biomas de neve, ou em meio
-a efeitos de chefe — e é a base do requisito de acessibilidade cromática do
-teste de cor (`CHARACTER_ART_BIBLE.md`).
+Resumo da leitura dupla: **chama = "quem ele é" (classe)** · **borda/ícone/
+demais canais = "qual jogador é" (slot)**. Isso garante leitura mesmo em
+áreas muito claras, biomas de neve, ou em meio a efeitos de chefe — e é a
+base do requisito de acessibilidade cromática do teste de cor
+(`CHARACTER_ART_BIBLE.md`). Paleta exata das 4 cores de slot: a definir
+(pendência de arte, não bloqueante).
 
 ---
 

@@ -16,8 +16,8 @@
 7. **Tipo de chama:** âmbar, forma de lágrima estável, núcleo quase branco, borda laranja; fagulhas curtas ao correr.
 8. **Roupa:** capa curta vinho de tecido chamuscado, presa por broche de bronze; barra da capa com pontas irregulares queimadas.
 9. **Acessórios:** cinto de fibra de pavio com dois bolsinhos; broche circular de bronze com relevo de chama.
-10. **Arma (mão direita):** Atiçador (arma inicial oficial — ADR 008): haste de bronze com ponta em gancho achatado, comprimento ≈ altura do personagem.
-11. **Item (mão esquerda):** lanterna pequena de vidro fumê com moldura de bronze — apagada quando a chama do próprio Breo está forte; acende sozinha quando ele está com 1 Fulgor (sinal de perigo).
+10. **Arma (mão direita):** Atiçador (arma inicial oficial — ADR-008): haste de bronze com ponta em gancho achatado, comprimento ≈ altura do personagem.
+11. **Item (mão esquerda):** lanterna pequena de vidro fumê com moldura de bronze — apagada quando a chama do próprio Breo está forte; acende sozinha quando ele está com 1 Coração de Cera (sinal de perigo).
 12. **Materiais:** cera creme, bronze envelhecido, tecido chamuscado vinho, vidro fumê.
 13. **Paleta:** creme #EFE3C8 · vinho #7A2E3C · bronze #9C6B2F · âmbar de chama #FFB53C · sombra marrom-queimado #3E2A20.
 14. **Vista frontal:** olhos verticais médios, broche central visível, capa emoldura os ombros, lanterna à esquerda, Atiçador em riste à direita.
@@ -46,7 +46,7 @@
 8. **Roupa:** cachecol comprido de seda de casulo, cinza-claro com ponta rasgada; faixa na cintura.
 9. **Acessórios:** três pequenos fragmentos de vidro pendurados na faixa (tilintam — antecipam áudio).
 10. **Arma (mão direita):** agulha longa de vidro com cabo de bronze — estocadas rápidas, alcance fino.
-11. **Item (mão esquerda):** bússola de vidro com brasa flutuante dentro — a brasa aponta para o segredo/objetivo mais próximo (liga a mecânica de exploração por Fulgores grátis).
+11. **Item (mão esquerda):** bússola de vidro com brasa flutuante dentro — a brasa aponta para o segredo/objetivo mais próximo (liga a mecânica de exploração por Fragmentos de Coração grátis).
 12. **Materiais:** cera translúcida azulada, vidro, seda de casulo, bronze claro.
 13. **Paleta:** cinza-azulado #B9C7CE · seda #E8E6DC · vidro #9FD9E8 · ciano de chama #4FE3FF · sombra azul-petróleo #24404A.
 14. **Vista frontal:** olhos verticais finos e altos; cachecol cruzando o peito; bússola erguida à esquerda; agulha abaixada à direita.
@@ -142,8 +142,11 @@ Nenhum personagem descumpre mais de 2 critérios → todos aprovados para seguir
 
 ## Integração com decisões existentes
 - **ADR-008:** Atiçador mantido como arma inicial (equipada em Breo).
-- **Nova proposta ADR-013:** sistema de vida = **Fulgores** (unidades discretas, início 5; expansão grátis via segredos ou compra com **Fagulhas** dropadas por inimigos).
-  ⚠️ **Conflito de nome em aberto** — "Fulgor" já é usado na documentação
-  atual para o recurso de mana/energia (`GAMEPLAY_CORE.md`, `GLOSSARIO.md`).
-  Ver aviso completo em `00-processo/DECISOES.md` (ADR-013).
-- **HUD:** substituir ícones "ovo" por gotas de cera com brasa interna (Fulgores); remover qualquer leitura de "barra" contínua.
+- **ADR-013 (🟢 aceito, com nome corrigido pelo Diretor):** vida continua se
+  chamando **Corações de Cera** (nome já estabelecido — "Fulgor" fica
+  reservado só para o recurso de mana). Mecânica nova mantida: expansão
+  grátis via segredos (Fragmentos de Coração) ou compra na loja com
+  **Fagulhas**, moeda dropada exclusivamente por inimigos mortos.
+- **HUD:** ícones "ovo"/gota já usados no protótipo v1 continuam
+  representando **Corações de Cera** (vida) — não precisam mudar de nome,
+  só ganham a nova rota de expansão via Fagulhas.

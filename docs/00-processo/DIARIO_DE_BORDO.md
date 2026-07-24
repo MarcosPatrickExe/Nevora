@@ -33,19 +33,28 @@ essa ordem explicitamente numa mensagem mais recente.
 (nickname/identificação de jogador, loja do Tio Sebo, upgrades, áreas
 secretas, mais clima dinâmico, multiplayer/Colyseus, áudio adiado).
 
-### 🔴 Bloqueio ativo — resolver antes de tocar em vida/mana ou classes
+### ✅ Bloqueio resolvido — classes e nomenclatura de vida fechados
 
 Um pacote de design (feito pelo Diretor numa **outra sessão/projeto** que
-não tinha acesso de escrita a este repo) foi aplicado aqui em 2026-07-24:
-sistema de **6 classes de Acendedores** (ADR-014, 🟡 proposta) e redesenho
-visual completo de Breo/Sílice/Véspera/Turfo (`art/ACENDEDORES_REDESIGN.md`).
-Isso revelou um **conflito de nome não resolvido**: o pacote usa "Fulgor"
-para *vida* (ADR-013), mas a documentação já em vigor usa "Fulgor" para o
-recurso de *mana* (`GAMEPLAY_CORE.md`, `GLOSSARIO.md`). **Não implementar
-nada de ADR-013/ADR-014 até o Diretor escolher um nome** — as 3 opções estão
-detalhadas em `00-processo/DECISOES.md` (ADR-013). Também ficou pendente
-decidir se a cor de chama das 6 classes substitui ou convive com a cor de
-chama por *slot* de jogador do multiplayer (ADR-005) — ver ADR-014.
+não tinha acesso de escrita a este repo) foi aplicado em 2026-07-24: sistema
+de **6 classes de Acendedores** e redesenho visual completo de
+Breo/Sílice/Véspera/Turfo (`art/ACENDEDORES_REDESIGN.md`). Isso revelou um
+conflito de nome ("Fulgor" usado pra vida no pacote vs. mana na doc em
+vigor) e uma pergunta sobre cor de chama por classe × por slot — **ambos
+resolvidos pelo Diretor no mesmo dia:**
+- **ADR-013 🟢 aceita:** "Fulgor" continua sendo só mana; vida continua
+  **Corações de Cera**. Mecânica nova mantida: moeda **Fagulhas** (só de
+  inimigos mortos) compra expansão de vida na Loja de Tio Sebo.
+- **ADR-014 🟢 aceita:** 6 classes confirmadas. **A chama identifica a
+  classe** (não mais o slot do jogador) — a identidade de slot no
+  multiplayer passa a usar os outros canais visuais já previstos (borda,
+  partículas, ícone de HUD, nome), numa paleta de 4 cores separada das 6
+  cores de classe (paleta exata ainda não definida — pendência de arte, não
+  bloqueante).
+
+Pendências que sobraram (não bloqueantes): fichas de arte completas de
+Brasme (Vigia) e Parafino (Funileiro), e a paleta exata das 4 cores de
+slot. Ver `docs/README.md` → "Decisões em aberto".
 
 ### Fatos operacionais que uma sessão nova precisa saber
 
@@ -121,6 +130,40 @@ aqui. Conteúdo aplicado nesta sessão:
 de decisão do Diretor adicionadas à tabela "Decisões em aberto" do
 `docs/README.md` (nome de Fulgor, cores de chama × slot, fichas de Brasme e
 Parafino). Nada implementado em código.
+
+### Continuação — resolução das pendências (mesmo dia)
+
+O Diretor respondeu às 3 pendências:
+
+1. **Aprovou a renumeração de ADR** que eu já tinha feito automaticamente
+   (012/013 do pacote → 013/014 deste repo).
+2. **"Fulgor" continua mana; vida continua Corações de Cera"** — resolve
+   ADR-013 como 🟢 aceita (opção 3 das alternativas levantadas: descartar a
+   troca de nome, manter só a mecânica nova de compra de vida com a moeda
+   **Fagulhas**, exclusiva de inimigos mortos).
+3. **"6 classes confirmadas; cada chama identifica a classe"** — resolve
+   ADR-014 como 🟢 aceita. Consequência direta: a identidade de *slot* do
+   jogador no multiplayer não pode mais usar a cor da chama (agora ligada à
+   classe) — passa a usar os outros canais visuais já exigidos por
+   `art/PLAYER_CHARACTER_DESIGN.md` (borda, partículas, ícone de HUD, nome),
+   com uma paleta de 4 cores de slot separada das 6 cores de classe.
+
+**Trabalho de consistência feito:** corrigidas todas as menções a "Fulgor"
+no sentido de vida nos dois arquivos novos (`CLASSES_ACENDEDORES.md`,
+`ACENDEDORES_REDESIGN.md`) para "Coração de Cera" / "Fragmento de Coração";
+reescritos os ADR-013 e ADR-014 em `DECISOES.md` como 🟢 aceitos com o
+texto final; `art/PLAYER_CHARACTER_DESIGN.md` atualizado (seção "Os quatro
+Acendedores" redirecionada para o sistema de 6 classes; regra de
+multiplayer reescrita: chama = classe, slot = outros canais);
+`00-processo/GLOSSARIO.md` atualizado (Fulgor sem aviso de conflito,
+entradas novas para Corações de Cera, Fragmento de Coração, Fagulhas,
+Classes de Acendedor); `04-gameplay/PROGRESSAO.md` (Loja de Tio Sebo)
+integra a moeda Fagulhas à compra de Fragmentos de Coração;
+`docs/README.md` com as tabelas atualizadas (ADR-013/014 em 🟢; pendências
+restantes: fichas de Brasme/Parafino e paleta exata das 4 cores de slot).
+
+**Nada implementado em código** — só documentação, agora sem conflitos
+internos conhecidos.
 
 ---
 

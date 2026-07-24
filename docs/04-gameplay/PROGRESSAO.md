@@ -53,10 +53,14 @@ vila de Pavio e, mais raro, em pontos remotos do mapa (loja itinerante).
   preço alto o suficiente para exigir progresso real** antes de comprá-los.
   O objetivo é gerar desejo declarado ("quero aquilo") que puxa o jogador a
   explorar mais e lutar mais para juntar Sévia.
-- **Fragmentos de Coração (o +1 HP permanente) são o item mais caro da
-  loja**, de propósito: vida extra é poder puro e permanente, não deve ser
-  trivial de comprar. Preço sobe a cada fragmento já comprado (curva
-  crescente), e alguns fragmentos só existem em **áreas secretas** (nunca à
+- **Fragmentos de Coração (o +1 Coração de Cera permanente) são o item mais
+  caro da loja**, de propósito: vida extra é poder puro e permanente, não
+  deve ser trivial de comprar. 🟢 (ADR-013) Compram-se com **Fagulhas** — uma
+  moeda separada da Sévia, dropada **exclusivamente por inimigos mortos** —
+  o que amarra a compra de vida especificamente ao combate (farm de
+  combate obrigatório para essa rota), diferente do resto da loja que usa
+  Sévia normal. Preço sobe a cada fragmento já comprado (curva crescente), e
+  alguns fragmentos só existem em **áreas secretas** (grátis, nunca à
   venda) — combinação de compra + exploração, nunca só uma ou só outra.
 - **Artes de Chama / magias com uso limitado:** cada Arte tem um número de
   cargas que só recarrega em Lampiões (aprofunda o padrão já existente do
