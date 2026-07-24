@@ -11,15 +11,27 @@ papel. **Fontes SVG** em `prototype/art/svg/` · **PNGs renderizados** em
 
 | Asset | Conteúdo | Drive (SVG) |
 |---|---|---|
-| `acendedores` | Line-up dos 4 jogadores (Âmbar/Ciano/Magenta/Verde-lima) | pasta do Drive |
+| `acendedores` | Line-up dos 4 jogadores originais (Âmbar/Ciano/Magenta/Verde-lima) | pasta do Drive |
 | `inimigos` | Bestiário: os 5 inimigos do protótipo | pasta do Drive |
 | `cenario-vale-das-velas` | Farol de cera + trilha das velas ao entardecer | pasta do Drive |
 | `cenario-galerias-fungicas` | Escuridão + halo de luz do Acendedor | pasta do Drive |
 | `menu-fundo` | Fundo do menu com os 4 subindo a trilha | pasta do Drive |
 | `bolhinha` | Mascote vaga-lume | pasta do Drive |
+| `personagem-breo` | Retrato individual — Viandante, chama âmbar | ⏳ pendente (Drive offline) |
+| `personagem-silice` | Retrato individual — Batedora, chama ciano | ⏳ pendente (Drive offline) |
+| `personagem-vespera` | Retrato individual — Ritualista, chama magenta | ⏳ pendente (Drive offline) |
+| `personagem-turfo` | Retrato individual — Coletor, chama verde-lima | ⏳ pendente (Drive offline) |
+| `personagem-brasme` | Retrato individual — Vigia, chama vermelho-brasa | ⏳ pendente (Drive offline) |
+| `personagem-parafino` | Retrato individual — Funileiro, chama azul-petróleo | ⏳ pendente (Drive offline) |
 
 **Pasta no Google Drive do Diretor:** "Névora — Arte Conceitual"
 <https://drive.google.com/drive/folders/1qn3oRjAqUhWu9eRYCNlZ06X7p-aG4Op3>
+
+> ⚠️ 2026-07-24: o conector do Google Drive caiu no meio desta sessão. Os 6
+> retratos individuais (Breo/Sílice/Véspera/Turfo/Brasme/Parafino) já estão
+> no repositório (`prototype/art/svg/` e `/png/`, galeria em `/art/`), mas
+> ainda não foram copiados para o Drive — fica pendente para a próxima
+> sessão com o conector ativo.
 
 ## Gerações do Canva (ficam na conta Canva do Diretor)
 

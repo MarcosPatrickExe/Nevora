@@ -1,0 +1,49 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="1000" viewBox="0 0 800 1000">
+  <defs>
+    <filter id="ink" x="-8%" y="-8%" width="116%" height="116%">
+      <feTurbulence type="turbulence" baseFrequency="0.014" numOctaves="3" seed="41" result="n"/>
+      <feDisplacementMap in="SourceGraphic" in2="n" scale="7"/>
+    </filter>
+    <filter id="paper">
+      <feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="2" seed="4" result="n"/>
+      <feColorMatrix in="n" type="matrix" values="0 0 0 0 0.45 0 0 0 0 0.38 0 0 0 0 0.30 0 0 0 0.055 0"/>
+      <feComposite operator="over" in2="SourceGraphic"/>
+    </filter>
+    <radialGradient id="vig" cx="50%" cy="42%" r="72%">
+      <stop offset="0%" stop-color="#efe6d2"/><stop offset="100%" stop-color="#c9baa0"/>
+    </radialGradient>
+    <radialGradient id="flame" cx="50%" cy="72%" r="60%">
+      <stop offset="0%" stop-color="#fff3c4"/><stop offset="55%" stop-color="#ffb13b"/><stop offset="100%" stop-color="#d2691e" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="800" height="1000" fill="url(#vig)" filter="url(#paper)"/>
+  <text x="400" y="70" text-anchor="middle" font-family="serif" font-size="40" fill="#3a2c1e" font-style="italic">BREO</text>
+  <text x="400" y="102" text-anchor="middle" font-family="serif" font-size="18" fill="#7a684f" font-style="italic">Viandante · chama âmbar · classe equilibrada</text>
+
+  <g transform="translate(400,560)">
+    <ellipse cx="0" cy="270" rx="130" ry="20" fill="#3a2c1e" opacity="0.14"/>
+    <g filter="url(#ink)">
+      <path d="M0,-220 C86,-200 96,-58 88,60 C82,160 86,220 58,260 C28,278 -28,278 -58,260 C-86,220 -82,160 -88,60 C-96,-58 -84,-200 0,-220 Z"
+            fill="#efe3cb" stroke="#2a1c14" stroke-width="7"/>
+      <path d="M-88,88 C-102,126 -90,176 -76,202" fill="none" stroke="#2a1c14" stroke-width="6"/>
+      <path d="M-44,260 C-44,286 -26,290 -23,264" fill="#efe3cb" stroke="#2a1c14" stroke-width="5"/>
+      <path d="M-84,76 C-122,32 -136,-24 -114,-72" fill="none" stroke="#2a1c14" stroke-width="7"/>
+      <ellipse cx="-100" cy="-40" rx="26" ry="20" fill="#7a5a30" opacity="0.85" stroke="#2a1c14" stroke-width="5"/>
+      <path d="M-88,80 C-30,102 30,102 88,80" fill="none" stroke="#a97b32" stroke-width="16"/>
+      <path d="M-88,80 C-30,102 30,102 88,80" fill="none" stroke="#2a1c14" stroke-width="4" opacity="0.5"/>
+      <path d="M-80,10 C-118,34 -128,72 -112,98" fill="none" stroke="#2a1c14" stroke-width="8"/>
+      <path d="M80,10 C122,26 136,64 120,92" fill="none" stroke="#2a1c14" stroke-width="8"/>
+      <g transform="translate(130,88) rotate(-22)">
+        <rect x="-8" y="0" width="16" height="72" rx="6" fill="#3a2c22" stroke="#2a1c14" stroke-width="4"/>
+        <path d="M0,0 C6,-42 28,-62 54,-68 M54,-68 L40,-48 M54,-68 L68,-54" fill="none" stroke="#c89b52" stroke-width="10" stroke-linecap="round"/>
+        <circle cx="0" cy="0" r="11" fill="#ffb13b" stroke="#2a1c14" stroke-width="4"/>
+      </g>
+    </g>
+    <g filter="url(#ink)">
+      <circle cx="-20" cy="-90" r="9" fill="#ff9d3b"/><circle cx="24" cy="-90" r="9" fill="#ff9d3b"/>
+      <path d="M0,-220 L2,-256" stroke="#2a1c14" stroke-width="7" stroke-linecap="round"/>
+    </g>
+    <path d="M-20,-272 C-24,-312 0,-340 6,-346 C24,-322 30,-292 12,-262 C4,-252 -12,-254 -20,-272 Z" fill="url(#flame)"/>
+  </g>
+  <text x="400" y="960" text-anchor="middle" font-family="serif" font-size="17" fill="#8a785e" font-style="italic">desenhado à mão e digitalizado (ADR-010) · concept interno · Névora</text>
+</svg>

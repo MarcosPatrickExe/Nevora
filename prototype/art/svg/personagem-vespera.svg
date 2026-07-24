@@ -1,0 +1,71 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="1000" viewBox="0 0 800 1000">
+  <defs>
+    <filter id="ink" x="-8%" y="-8%" width="116%" height="116%">
+      <feTurbulence type="turbulence" baseFrequency="0.014" numOctaves="3" seed="63" result="n"/>
+      <feDisplacementMap in="SourceGraphic" in2="n" scale="8"/>
+    </filter>
+    <filter id="ink2" x="-8%" y="-8%" width="116%" height="116%">
+      <feTurbulence type="turbulence" baseFrequency="0.02" numOctaves="2" seed="64" result="n"/>
+      <feDisplacementMap in="SourceGraphic" in2="n" scale="9"/>
+    </filter>
+    <filter id="paper">
+      <feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="2" seed="6" result="n"/>
+      <feColorMatrix in="n" type="matrix" values="0 0 0 0 0.45 0 0 0 0 0.38 0 0 0 0 0.30 0 0 0 0.055 0"/>
+      <feComposite operator="over" in2="SourceGraphic"/>
+    </filter>
+    <radialGradient id="vig" cx="50%" cy="42%" r="72%">
+      <stop offset="0%" stop-color="#efe6d2"/><stop offset="100%" stop-color="#c9baa0"/>
+    </radialGradient>
+    <radialGradient id="flame" cx="50%" cy="72%" r="60%">
+      <stop offset="0%" stop-color="#ffe6f5"/><stop offset="55%" stop-color="#f14fd0"/><stop offset="100%" stop-color="#8c1f77" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="800" height="1000" fill="url(#vig)" filter="url(#paper)"/>
+  <text x="400" y="70" text-anchor="middle" font-family="serif" font-size="40" fill="#3a2c1e" font-style="italic">VÉSPERA</text>
+  <text x="400" y="102" text-anchor="middle" font-family="serif" font-size="18" fill="#7a684f" font-style="italic">Ritualista · chama magenta · controle e memória</text>
+
+  <g transform="translate(400,570)">
+    <ellipse cx="0" cy="250" rx="120" ry="20" fill="#3a2c1e" opacity="0.14"/>
+    <g filter="url(#ink)">
+      <!-- corpo base marfim -->
+      <path d="M-16,-190 C58,-206 88,-124 76,-2 C68,84 76,180 88,204 C78,238 26,254 -10,252 C-52,252 -94,234 -100,200 C-92,176 -84,80 -92,-2 C-102,-124 -80,-206 -16,-190 Z"
+            fill="#f2ead8" stroke="#361a26" stroke-width="7"/>
+      <!-- escorridos magenta sobre marfim -->
+      <path d="M-32,-70 L-14,-42 L-30,-16 M20,-84 L34,-52 M8,26 L28,56 L14,86" fill="none" stroke="#f14fd0" stroke-width="5"/>
+      <!-- capa assimétrica cobrindo o lado direito -->
+      <path d="M6,-186 C58,-166 88,-70 82,30 C78,120 90,190 74,222 C48,240 12,240 -4,224 C-14,204 -8,140 -10,60 C-14,-40 -30,-140 6,-186 Z"
+            fill="#4a2b52" stroke="#2a1826" stroke-width="6" opacity="0.92"/>
+      <!-- diadema de gotas apoiado no topo da cabeça -->
+      <path d="M-44,-198 C-24,-214 16,-214 38,-196" fill="none" stroke="#361a26" stroke-width="5"/>
+      <circle cx="-38" cy="-202" r="8" fill="#efe3cb" stroke="#361a26" stroke-width="4"/>
+      <circle cx="-14" cy="-210" r="9" fill="#efe3cb" stroke="#361a26" stroke-width="4"/>
+      <circle cx="12" cy="-208" r="8" fill="#efe3cb" stroke="#361a26" stroke-width="4"/>
+      <circle cx="34" cy="-196" r="7" fill="#efe3cb" stroke="#361a26" stroke-width="4"/>
+      <!-- selo de cera + pingentes na barra da capa -->
+      <circle cx="46" cy="-120" r="12" fill="#7a1f2e" stroke="#2a1826" stroke-width="4"/>
+      <circle cx="56" cy="150" r="6" fill="#6e4a22" stroke="#2a1826" stroke-width="3"/>
+      <circle cx="66" cy="172" r="5" fill="#6e4a22" stroke="#2a1826" stroke-width="3"/>
+      <circle cx="72" cy="196" r="7" fill="#6e4a22" stroke="#2a1826" stroke-width="3"/>
+      <!-- braço esquerdo + relicário -->
+      <path d="M-92,20 C-118,34 -128,58 -118,78" fill="none" stroke="#361a26" stroke-width="7"/>
+      <g transform="translate(-124,86)">
+        <circle cx="0" cy="0" r="24" fill="none" stroke="#8a6a34" stroke-width="6"/>
+        <circle cx="0" cy="0" r="24" fill="#f4dfe4" opacity="0.5"/>
+        <path d="M-4,4 C-6,-6 2,-14 6,-16 C10,-8 8,0 2,6 Z" fill="#f14fd0" opacity="0.9"/>
+      </g>
+      <!-- braço direito + incensário-mangual -->
+      <path d="M78,-4 C102,8 112,32 100,54" fill="none" stroke="#2a1826" stroke-width="7"/>
+      <g transform="translate(112,74) rotate(16)">
+        <path d="M0,-36 L0,0" stroke="#6e4a22" stroke-width="6"/>
+        <circle cx="0" cy="14" r="15" fill="none" stroke="#6e4a22" stroke-width="6"/>
+        <circle cx="0" cy="14" r="8" fill="#f14fd0" opacity="0.65"/>
+      </g>
+    </g>
+    <g filter="url(#ink2)">
+      <circle cx="-22" cy="-100" r="8" fill="#f14fd0"/><circle cx="4" cy="-104" r="8" fill="#f14fd0"/>
+      <path d="M-10,-190 L-4,-220" stroke="#361a26" stroke-width="6" stroke-linecap="round"/>
+    </g>
+    <path d="M-14,-230 C-20,-262 -2,-288 6,-296 C20,-278 24,-250 8,-224 C2,-216 -10,-218 -14,-230 Z" fill="url(#flame)"/>
+  </g>
+  <text x="400" y="960" text-anchor="middle" font-family="serif" font-size="17" fill="#8a785e" font-style="italic">desenhado à mão e digitalizado (ADR-010) · concept interno · Névora</text>
+</svg>

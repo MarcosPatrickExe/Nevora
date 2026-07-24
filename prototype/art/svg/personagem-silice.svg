@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="1000" viewBox="0 0 800 1000">
+  <defs>
+    <filter id="ink" x="-8%" y="-8%" width="116%" height="116%">
+      <feTurbulence type="turbulence" baseFrequency="0.014" numOctaves="3" seed="52" result="n"/>
+      <feDisplacementMap in="SourceGraphic" in2="n" scale="8"/>
+    </filter>
+    <filter id="paper">
+      <feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="2" seed="5" result="n"/>
+      <feColorMatrix in="n" type="matrix" values="0 0 0 0 0.45 0 0 0 0 0.38 0 0 0 0 0.30 0 0 0 0.055 0"/>
+      <feComposite operator="over" in2="SourceGraphic"/>
+    </filter>
+    <radialGradient id="vig" cx="50%" cy="42%" r="72%">
+      <stop offset="0%" stop-color="#efe6d2"/><stop offset="100%" stop-color="#c9baa0"/>
+    </radialGradient>
+    <radialGradient id="flame" cx="50%" cy="72%" r="60%">
+      <stop offset="0%" stop-color="#eaffff"/><stop offset="55%" stop-color="#39d9e8"/><stop offset="100%" stop-color="#1a7c9c" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="800" height="1000" fill="url(#vig)" filter="url(#paper)"/>
+  <text x="400" y="70" text-anchor="middle" font-family="serif" font-size="40" fill="#3a2c1e" font-style="italic">SÍLICE</text>
+  <text x="400" y="102" text-anchor="middle" font-family="serif" font-size="18" fill="#7a684f" font-style="italic">Batedora · chama ciano · mobilidade e descoberta</text>
+
+  <g transform="translate(400,560)">
+    <ellipse cx="0" cy="270" rx="100" ry="18" fill="#3a2c1e" opacity="0.14"/>
+    <g filter="url(#ink)">
+      <path d="M8,-232 C68,-206 66,-84 58,42 C52,150 60,214 40,254 C18,268 -20,268 -42,254 C-62,212 -56,144 -60,42 C-68,-78 -54,-208 8,-232 Z"
+            fill="#e8f0f2" stroke="#22303a" stroke-width="7" transform="rotate(-3)"/>
+      <path d="M-60,28 C-78,98 -68,182 -58,224" fill="none" stroke="#22303a" stroke-width="6"/>
+      <path d="M60,60 C72,132 62,204 54,236" fill="none" stroke="#22303a" stroke-width="5"/>
+      <path d="M-22,252 C-22,282 -8,286 -5,258" fill="#e8f0f2" stroke="#22303a" stroke-width="5"/>
+      <path d="M-54,-88 L-32,-114 L-16,-84 Z" fill="#bfe6ea" stroke="#22303a" stroke-width="5" opacity="0.9"/>
+      <path d="M46,-96 L62,-120 L74,-88 Z" fill="#bfe6ea" stroke="#22303a" stroke-width="5" opacity="0.9"/>
+      <path d="M-62,54 C-16,70 24,70 60,54" fill="none" stroke="#7fa8b0" stroke-width="14"/>
+      <path d="M-62,8 C-92,22 -100,50 -88,68" fill="none" stroke="#22303a" stroke-width="7"/>
+      <path d="M60,4 C90,14 100,42 88,64" fill="none" stroke="#22303a" stroke-width="7"/>
+      <path d="M-140,-190 C-70,-160 -20,-140 40,-160 C-30,-150 -100,-170 -140,-190 Z" fill="#e8e6dc" opacity="0.9" stroke="#22303a" stroke-width="5"/>
+      <g transform="translate(-118,80) rotate(8)">
+        <circle cx="0" cy="0" r="30" fill="none" stroke="#8a6a34" stroke-width="6"/>
+        <circle cx="0" cy="0" r="30" fill="#cfeaf0" opacity="0.5"/>
+        <circle cx="4" cy="-4" r="6" fill="#ffb13b"/>
+      </g>
+      <g transform="translate(120,110) rotate(-18)">
+        <rect x="-6" y="-6" width="12" height="90" rx="5" fill="#c89b52" stroke="#22303a" stroke-width="4"/>
+        <path d="M0,-6 L-4,-24 L4,-24 Z" fill="#9fd9e8" stroke="#22303a" stroke-width="3"/>
+      </g>
+    </g>
+    <g filter="url(#ink)">
+      <circle cx="-10" cy="-112" r="8" fill="#39d9e8"/><circle cx="24" cy="-118" r="8" fill="#39d9e8"/>
+      <path d="M10,-232 L18,-266" stroke="#22303a" stroke-width="7" stroke-linecap="round"/>
+    </g>
+    <path d="M2,-278 C-4,-318 18,-350 26,-358 C40,-332 44,-298 28,-270 C20,-260 8,-264 2,-278 Z" fill="url(#flame)"/>
+  </g>
+  <text x="400" y="960" text-anchor="middle" font-family="serif" font-size="17" fill="#8a785e" font-style="italic">desenhado à mão e digitalizado (ADR-010) · concept interno · Névora</text>
+</svg>
