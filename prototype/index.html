@@ -21,9 +21,32 @@
       <p class="subtitle">protótipo greybox — Fase 1</p>
       <button id="btnPlay" class="mbtn">Jogar</button>
       <button id="btnControls" class="mbtn">Controles</button>
+      <button id="btnSummary" class="mbtn small">Meu resumo</button>
       <button id="btnTouchMode" class="mbtn small">Botões na tela: <span id="touchModeLabel">Auto</span></button>
       <p class="foot">5 regiões interligadas · movimento · combate · inimigos<br>
       arte final será desenhada à mão (ver docs/art/)</p>
+    </div>
+  </div>
+
+  <!-- NICKNAME (primeira vez) -->
+  <div id="nicknameScreen" class="overlay hidden">
+    <div class="menu-inner">
+      <div class="flame-icon" aria-hidden="true"></div>
+      <h2>Como te chamamos?</h2>
+      <p class="tip">Seu nome de Acendedor fica salvo neste aparelho,<br>
+      só para identificar seu progresso no resumo do fim de jogo.</p>
+      <input id="nicknameInput" class="ninput" type="text" maxlength="24" placeholder="Acendedor Anônimo" autocomplete="off">
+      <button id="btnNicknameConfirm" class="mbtn">Confirmar</button>
+    </div>
+  </div>
+
+  <!-- RESUMO DE PROGRESSO -->
+  <div id="summaryScreen" class="overlay hidden">
+    <div class="menu-inner wide">
+      <h2>Seu resumo</h2>
+      <pre id="summaryText" class="summary-pre"></pre>
+      <button id="btnCopySummary" class="mbtn small">Copiar resumo</button>
+      <button id="btnBackFromSummary" class="mbtn">Voltar</button>
     </div>
   </div>
 
@@ -52,7 +75,32 @@
       <h2>Pausado</h2>
       <button id="btnResume" class="mbtn">Continuar</button>
       <button id="btnPauseControls" class="mbtn small">Controles</button>
+      <button id="btnPauseSummary" class="mbtn small">Meu resumo</button>
       <button id="btnQuit" class="mbtn small">Sair para o menu</button>
+    </div>
+  </div>
+
+  <!-- LOJA (Tio Sebo) -->
+  <div id="shopScreen" class="overlay hidden">
+    <div class="menu-inner wide">
+      <h2>Tio Sebo</h2>
+      <p class="tip">"Um pouco de cera extra nunca fez mal a ninguém."</p>
+      <p class="shop-sevia">Sévia: <span id="shopSevia">0</span></p>
+      <div class="shop-item">
+        <div>
+          <b>Fragmento de Coração</b>
+          <p class="tip small">+1 Coração de Cera (vida máxima)</p>
+        </div>
+        <button id="btnBuyHeart" class="mbtn small">Comprar (<span id="priceHeart">0</span>)</button>
+      </div>
+      <div class="shop-item">
+        <div>
+          <b>Frasco de Fulgor</b>
+          <p class="tip small">+1 pip de Fulgor máximo</p>
+        </div>
+        <button id="btnBuyFulgor" class="mbtn small">Comprar (<span id="priceFulgor">0</span>)</button>
+      </div>
+      <button id="btnCloseShop" class="mbtn">Sair da loja [E]</button>
     </div>
   </div>
 
@@ -62,6 +110,7 @@
       <button class="tbtn" data-action="left">◀</button>
       <button class="tbtn" data-action="right">▶</button>
     </div>
+    <button id="tbtnInteract" class="tbtn act hidden" data-action="interact">E</button>
     <div class="t-right">
       <button class="tbtn act" data-action="heal">✚</button>
       <button class="tbtn act" data-action="dash">⇢</button>
@@ -72,6 +121,8 @@
 </div>
 
 <script src="js/input.js"></script>
+<script src="js/audio.js"></script>
+<script src="js/save.js"></script>
 <script src="js/world.js"></script>
 <script src="js/entities.js"></script>
 <script src="js/render.js"></script>

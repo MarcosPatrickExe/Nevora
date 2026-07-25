@@ -297,6 +297,18 @@ NV.wind = 0;
         const ry = ((i * 83 + t * (80 + (i % 4) * 30)) % (VH + 20)) - 10;
         ctx.beginPath(); ctx.arc(rx, ry, 1.5 + (i % 3) * 0.7, 0, 7); ctx.fill();
       }
+    } else if (w === 'embers') {
+      // brasas quentes subindo — clima do Vale das Velas ao entardecer
+      ctx.fillStyle = 'rgba(255,177,59,0.55)';
+      for (let i = 0; i < 34; i++) {
+        const speed = 34 + (i % 5) * 10;
+        const rx = ((i * 191 + Math.sin(t * 0.6 + i) * 26) % (VW + 40)) - 20;
+        const ry = VH - ((i * 53 + t * speed) % (VH + 60)) + 20;
+        const flick = 0.4 + 0.6 * Math.abs(Math.sin(t * 4 + i * 3));
+        ctx.globalAlpha = flick;
+        ctx.beginPath(); ctx.arc(rx, ry, 1.6 + (i % 3) * 0.8, 0, 7); ctx.fill();
+      }
+      ctx.globalAlpha = 1;
     } else if (w === 'dark') {
       // escuridão com halo de luz ao redor do jogador (e do lampião)
       const p = g.player;
@@ -329,6 +341,77 @@ NV.wind = 0;
     }
   }
 
+  // ---------- NPC (Tio Sebo — caramujo lojista) ----------
+  function drawNpc(ctx, g, camX, camY, t) {
+    const npc = g.level.npc; if (!npc) return;
+    const x = npc.x - camX, y = npc.y - camY;
+    ctx.save(); ctx.translate(x, y);
+    const bob = Math.sin(t * 2.2) * 2;
+    // concha (espiral de bronze, brilha suave)
+    ctx.fillStyle = '#a97b32';
+    ctx.strokeStyle = 'rgba(20,15,12,0.9)'; ctx.lineWidth = 2.4;
+    ctx.beginPath(); ctx.arc(2, -12 + bob, 15 + boil(60, 0.8), 0, 7); ctx.fill(); ctx.stroke();
+    ctx.strokeStyle = 'rgba(60,40,20,0.6)'; ctx.lineWidth = 1.6;
+    ctx.beginPath(); ctx.arc(2, -12 + bob, 9, 0.3, 5.5); ctx.stroke();
+    ctx.beginPath(); ctx.arc(2, -12 + bob, 4, 0.6, 5.2); ctx.stroke();
+    const gr = ctx.createRadialGradient(2, -12 + bob, 2, 2, -12 + bob, 22);
+    gr.addColorStop(0, 'rgba(255,200,110,0.35)'); gr.addColorStop(1, 'rgba(255,200,110,0)');
+    ctx.fillStyle = gr; ctx.beginPath(); ctx.arc(2, -12 + bob, 22, 0, 7); ctx.fill();
+    // corpo (gosma marrom-clara)
+    ctx.fillStyle = '#c9a877';
+    ctx.strokeStyle = 'rgba(20,15,12,0.9)'; ctx.lineWidth = 2.2;
+    ctx.beginPath();
+    ctx.moveTo(-16, 14);
+    ctx.quadraticCurveTo(-18, 2 + bob * 0.4, -6, -4 + bob * 0.4);
+    ctx.quadraticCurveTo(6, -2, 14, 6);
+    ctx.quadraticCurveTo(18, 12, 14, 15);
+    ctx.quadraticCurveTo(0, 19, -16, 14);
+    ctx.closePath(); ctx.fill(); ctx.stroke();
+    // olhinhos em antenas
+    ctx.strokeStyle = '#8a6a44'; ctx.lineWidth = 2;
+    ctx.beginPath(); ctx.moveTo(10, 4); ctx.lineTo(15, -6 + bob * 0.5); ctx.stroke();
+    ctx.fillStyle = '#2a2018'; ctx.beginPath(); ctx.arc(15, -6 + bob * 0.5, 2, 0, 7); ctx.fill();
+    ctx.restore();
+
+    if (g.nearNpc && !g.shopOpen) {
+      ctx.save();
+      ctx.textAlign = 'center';
+      const bounce = Math.sin(t * 5) * 3;
+      ctx.fillStyle = 'rgba(20,15,12,0.55)';
+      ctx.fillRect(x - 46, y - 60 + bounce, 92, 24);
+      ctx.fillStyle = '#f5e9c8'; ctx.font = '13px Georgia';
+      ctx.fillText('Falar [E]', x, y - 43 + bounce);
+      ctx.textAlign = 'left';
+      ctx.restore();
+    }
+  }
+
+  // ---------- segredos (itens brilhantes escondidos) ----------
+  function drawSecrets(ctx, g, camX, camY, t) {
+    for (const s of g.level.secrets) {
+      if (s.taken) continue;
+      const x = s.x - camX, y = s.y - camY + Math.sin(t * 2.4 + s.x) * 4;
+      ctx.save();
+      const gr = ctx.createRadialGradient(x, y, 1, x, y, 22);
+      gr.addColorStop(0, 'rgba(255,230,160,0.6)'); gr.addColorStop(1, 'rgba(255,230,160,0)');
+      ctx.fillStyle = gr; ctx.beginPath(); ctx.arc(x, y, 22, 0, 7); ctx.fill();
+      ctx.strokeStyle = 'rgba(20,15,12,0.9)'; ctx.lineWidth = 2;
+      if (s.item === 'boot') {
+        ctx.fillStyle = '#c89b52';
+        ctx.beginPath();
+        ctx.moveTo(x - 8, y + 8); ctx.lineTo(x - 8, y - 4); ctx.quadraticCurveTo(x - 8, y - 9, x - 2, y - 9);
+        ctx.lineTo(x + 7, y - 9); ctx.quadraticCurveTo(x + 10, y - 9, x + 10, y - 4);
+        ctx.lineTo(x + 10, y + 8); ctx.closePath(); ctx.fill(); ctx.stroke();
+      } else { // fragment
+        ctx.fillStyle = '#ffb13b';
+        ctx.beginPath();
+        ctx.moveTo(x, y - 10); ctx.lineTo(x + 8, y); ctx.lineTo(x, y + 10); ctx.lineTo(x - 8, y);
+        ctx.closePath(); ctx.fill(); ctx.stroke();
+      }
+      ctx.restore();
+    }
+  }
+
   // ---------- HUD ----------
   function drawHUD(ctx, g, t) {
     const p = g.player;
@@ -357,6 +440,16 @@ NV.wind = 0;
     ctx.fillStyle = 'rgba(232,220,200,0.55)'; ctx.font = '12px Georgia';
     ctx.fillText('FULGOR', 30, 78);
 
+    // sévia (moeda) — canto superior direito
+    const sx = VW - 30, sy = 30;
+    ctx.fillStyle = '#e8c86b'; ctx.strokeStyle = 'rgba(20,15,12,0.9)'; ctx.lineWidth = 2;
+    ctx.beginPath(); ctx.arc(sx, sy, 9 + boil(50, 0.6), 0, 7); ctx.fill(); ctx.stroke();
+    ctx.strokeStyle = 'rgba(120,90,30,0.6)'; ctx.lineWidth = 1.4;
+    ctx.beginPath(); ctx.arc(sx, sy, 5, 0, 7); ctx.stroke();
+    ctx.fillStyle = '#f5e9c8'; ctx.font = '18px Georgia'; ctx.textAlign = 'right';
+    ctx.fillText(String(p.sevia), sx - 16, sy + 6);
+    ctx.textAlign = 'left';
+
     // toast (nome da região / avisos)
     if (g.toastT > 0) {
       const a = Math.min(1, g.toastT / 0.5);
@@ -384,6 +477,8 @@ NV.wind = 0;
       drawBackground(ctx, g, camX);
       drawTiles(ctx, g, camX, camY);
       drawLamp(ctx, g, camX, camY, t);
+      drawSecrets(ctx, g, camX, camY, t);
+      drawNpc(ctx, g, camX, camY, t);
       for (const e of g.enemies) drawEnemy(ctx, e, camX, camY, t, g.level.def.theme.accent);
       for (const pr of g.projectiles) drawProjectile(ctx, pr, camX, camY);
       // partículas

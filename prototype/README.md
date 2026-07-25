@@ -46,6 +46,30 @@ mesma rede (ou publicar via GitHub Pages) e usar "Adicionar à tela inicial".
 - **PWA:** manifest + service worker cache-first (funciona offline após o
   primeiro load).
 
+### Novidades da v2
+
+- **Áudio 100% sintetizado** (Web Audio API, sem nenhum arquivo externo):
+  pulo, dash, ataque, dano, morte de inimigo, cura, lampião aceso, segredo
+  encontrado, loja e uma trilha ambiente diferente por região.
+- **Nickname local:** antes da primeira partida o jogo pede um apelido
+  (salvo só neste aparelho) para identificar o resumo de progresso.
+- **Sévia:** inimigos derrotados soltam a moeda do protótipo, que voa até o
+  jogador (ímã) e some com um coletável se não for pega em 6s.
+- **Loja do Tio Sebo** (Vale das Velas): aproxime-se do NPC e aperte
+  **E** (ou o botão touch "E") para abrir/fechar. Vende Fragmento de
+  Coração (+1 vida máx.) e Frasco de Fulgor (+1 pip máx.), preço sobe a
+  cada compra. O mundo congela enquanto a loja está aberta.
+- **Áreas secretas:** 3 itens escondidos atrás de plataformas ocultas —
+  2 Fragmentos de Coração e 1 Bota de Salto (pulo mais alto, permanente).
+  Marcados com um brilho dourado; ficam salvos entre sessões.
+- **Clima novo:** brasas subindo no Vale das Velas (`weather: 'embers'`).
+- **Resumo de progresso** (menu e pausa → "Meu resumo"): região mais
+  distante, inimigos derrotados, Sévia coletada, segredos, upgrades,
+  mortes e tempo jogado — com botão para copiar como texto (rota simples
+  sem backend; o backend de verdade fica para uma v3 futura).
+- Progresso (nickname, segredos, upgrades, região alcançada, stats) fica em
+  `localStorage`, separado do save antigo.
+
 ## Controles (teclado)
 
 | Tecla | Ação |
@@ -62,6 +86,7 @@ mesma rede (ou publicar via GitHub Pages) e usar "Adicionar à tela inicial".
 - Sem multiplayer ainda (Fase 3 do roadmap) — mas as entidades já usam
   estrutura compatível com "4 slots".
 - Arte procedural: os desenhos finais serão feitos à mão e digitalizados.
-- Sem áudio nesta versão.
+- Sem backend: nickname e progresso ficam só no aparelho (localStorage);
+  um backend real para armazenar isso entre dispositivos é uma v3 futura.
 - Código vanilla JS sem build para iteração rápida — a stack definitiva
   (TypeScript + PixiJS + Colyseus) entra na Fase 1 real (ADR-002).

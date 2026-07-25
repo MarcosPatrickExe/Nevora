@@ -7,22 +7,25 @@ NV.Game = (function () {
 
   const g = {
     level: null, player: null,
-    enemies: [], projectiles: [], particles: [],
+    enemies: [], projectiles: [], particles: [], pickups: [],
     camX: 0, camY: 0, shake: 0, hitstop: 0, fade: 1,
     toast: '', toastSub: '', toastT: 0,
     lampLit: false, lampCd: 0,
     respawn: { level: 0, useLamp: false }, // ponto de retorno
     finished: false,
     onPlayerDeath: null,
+    collectedSecrets: new Set(),
+    shopOpen: false, nearNpc: false, interactCd: 0,
+    playAccum: 0,
   };
 
   function loadLevel(idx, enter) {
-    const lv = NV.World.buildLevel(idx);
+    const lv = NV.World.buildLevel(idx, g.collectedSecrets);
     g.level = lv;
     g.enemies = lv.enemies.map((s) => NV.Entities.makeEnemy(s));
-    g.projectiles = []; g.particles = [];
+    g.projectiles = []; g.particles = []; g.pickups = [];
     g.lampLit = (g.respawn.level === idx && g.respawn.useLamp);
-    g.lampCd = 0;
+    g.lampCd = 0; g.shopOpen = false; g.nearNpc = false;
 
     let pos;
     if (enter === 'left') pos = lv.entryLeft;
@@ -37,6 +40,8 @@ NV.Game = (function () {
     g.camY = Math.max(0, lv.pxH - VH);
     g.fade = 1;
     showToast(lv.def.name, lv.def.sub);
+    NV.Audio.playMusicForRegion(idx);
+    NV.Save.noteRegion(idx, lv.def.name);
   }
 
   function showToast(msg, sub) { g.toast = msg; g.toastSub = sub || ''; g.toastT = 2.4; }
@@ -45,16 +50,19 @@ NV.Game = (function () {
     g.respawn = { level: 0, useLamp: false };
     g.finished = false;
     g.player = null;
+    g.collectedSecrets = new Set(NV.Save.state.secretsFound || []);
     loadLevel(0, 'spawn');
-    g.player.hp = 5; g.player.fulgor = 0;
+    g.player.hp = g.player.maxHp; g.player.fulgor = 0;
   }
 
   g.onPlayerDeath = function () {
+    NV.Audio.play('gameOver');
+    NV.Save.noteDeath();
     // Eco de Cera simplificado: volta ao último lampião com vida cheia
     setTimeout(() => {
       const idx = g.respawn.level;
       loadLevel(idx, g.respawn.useLamp ? 'lamp' : 'spawn');
-      g.player.hp = 5;
+      g.player.hp = g.player.maxHp;
       g.player.dead = false;
       showToast('Você derreteu…', 'de volta ao último lampião');
     }, 650);
@@ -64,17 +72,37 @@ NV.Game = (function () {
     if (g.fade > 0) g.fade -= dt * 3;
     if (g.toastT > 0) g.toastT -= dt;
     if (g.shake > 0) g.shake *= Math.pow(0.001, dt);
-    g.lampCd -= dt;
+    g.lampCd -= dt; if (g.interactCd > 0) g.interactCd -= dt;
+    g.playAccum += dt;
+    if (g.playAccum >= 5) { NV.Save.addPlaySeconds(5); g.playAccum -= 5; }
 
     if (g.hitstop > 0) { g.hitstop -= dt; return; } // congela a ação (impacto)
     if (g.player.dead) return;
+
+    // ----- NPC / loja: interagir pausa a simulação do mundo -----
+    const npc = g.level.npc;
+    g.nearNpc = !!(npc && Math.abs(g.player.x - npc.x) < 46 && Math.abs(g.player.y - npc.y) < 50);
+    if (g.nearNpc && NV.Input.justPressed('interact') && g.interactCd <= 0) {
+      g.shopOpen = !g.shopOpen; g.interactCd = 0.3;
+      NV.Audio.play('interact');
+    }
+    if (g.shopOpen) return; // mundo congela enquanto a loja está aberta
 
     g.player.update(g, dt);
     for (const e of g.enemies) if (!e.dead) e.update(g, dt);
     g.enemies = g.enemies.filter((e) => !e.dead);
     for (const pr of g.projectiles) pr.update(g, dt);
     g.projectiles = g.projectiles.filter((p) => !p.dead);
+    for (const pk of g.pickups) pk.update(g, dt);
+    g.pickups = g.pickups.filter((p) => !p.dead);
     NV.FX.update(g, dt);
+
+    // ----- segredos: coletar por proximidade -----
+    for (const s of g.level.secrets) {
+      if (!s.taken && Math.abs(g.player.x - s.x) < 26 && Math.abs(g.player.y - s.y) < 30) {
+        g.player.collectSecret(g, s);
+      }
+    }
 
     // ----- lampião: acender = ponto de retorno + cura -----
     const lp = g.level.lamp;
@@ -83,10 +111,12 @@ NV.Game = (function () {
       if (!g.lampLit) {
         g.lampLit = true;
         g.respawn = { level: g.level.index, useLamp: true };
-        g.player.hp = 5;
+        g.player.hp = g.player.maxHp;
         NV.FX.burst(g, lp.x, lp.y - 40, '#ffd98a', 20);
+        NV.Audio.play('lampLight');
         if (g.level.index === NV.World.count - 1 && !g.finished) {
           g.finished = true;
+          NV.Save.noteFinished();
           showToast('Fim do protótipo!', 'as 5 regiões foram atravessadas — obrigado por jogar');
         } else showToast('Lampião aceso', 'ponto de retorno salvo · vida restaurada');
       }

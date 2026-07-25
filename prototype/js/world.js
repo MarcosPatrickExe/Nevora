@@ -20,7 +20,9 @@ NV.World = (function () {
     {
       name: 'Vale das Velas', sub: 'região inicial',
       theme: { skyTop: '#3a2436', skyBot: '#8a4b2e', ground: '#4a3627', top: '#6b4d33', far: '#2a1c26', accent: '#ffb13b' },
-      weather: null, enemy: 'beetle', bgShape: 'candles',
+      weather: 'embers', enemy: 'beetle', bgShape: 'candles',
+      npc: { x: 9, y: 14, type: 'tio_sebo' },
+      secrets: [{ x: 52, y: 6, item: 'fragment', id: 'vale-fragmento' }],
       build() {
         const w = 60, g = grid(w);
         fill(g, 0, 0, 0, H - 1, '#');            // parede esquerda (início do mundo)
@@ -29,6 +31,8 @@ NV.World = (function () {
         fill(g, 18, 9, 22, 9, '=');              // plataforma vazada
         fill(g, 26, 13, 29, 13, '#');            // degrau
         fill(g, 38, 11, 43, 11, '#');            // plataforma alta
+        fill(g, 47, 9, 48, 9, '#');              // trampolim escondido p/ o segredo
+        fill(g, 51, 7, 53, 7, '#');               // ledge do segredo
         put(g, 3, 14, 'P');
         put(g, 6, 14, 'L');
         put(g, 21, 14, 'e'); put(g, 34, 14, 'e'); put(g, 40, 10, 'e'); put(g, 50, 14, 'e');
@@ -56,6 +60,7 @@ NV.World = (function () {
       name: 'Galerias Fúngicas', sub: 'a luz é sua',
       theme: { skyTop: '#0b0d18', skyBot: '#1a2036', ground: '#242a3e', top: '#38405c', far: '#070810', accent: '#7f9fff' },
       weather: 'dark', enemy: 'spore', bgShape: 'stalactites',
+      secrets: [{ x: 26, y: 4, item: 'boot', id: 'galerias-bota' }],
       build() {
         const w = 60, g = grid(w);
         fill(g, 0, 0, w - 1, 1, '#');             // teto de caverna
@@ -67,6 +72,8 @@ NV.World = (function () {
         fill(g, 20, 12, 25, 12, '#');
         fill(g, 34, 10, 39, 10, '#');
         fill(g, 48, 12, 53, 12, '#');
+        fill(g, 24, 8, 24, 8, '#');                // trampolim escondido (só visível com luz)
+        fill(g, 26, 5, 27, 5, '#');                // ledge do segredo
         put(g, 4, 14, 'L');
         put(g, 10, 10, 'e'); put(g, 22, 11, 'e'); put(g, 36, 9, 'e'); put(g, 50, 11, 'e');
         return g;
@@ -94,6 +101,7 @@ NV.World = (function () {
       name: 'Picos Uivantes', sub: 'o vento empurra',
       theme: { skyTop: '#1c2a44', skyBot: '#7fa8c8', ground: '#8fa4b8', top: '#c8d8e8', far: '#152036', accent: '#aef0ff' },
       weather: 'snow', enemy: 'wasp', bgShape: 'peaks',
+      secrets: [{ x: 37, y: 5, item: 'fragment', id: 'picos-fragmento' }],
       build() {
         const w = 60, g = grid(w);
         fill(g, w - 1, 0, w - 1, H - 1, '#');     // parede direita (fim do protótipo)
@@ -105,6 +113,7 @@ NV.World = (function () {
         fill(g, 30, 11, 34, 11, '#');
         fill(g, 40, 8, 44, 8, '=');
         fill(g, 50, 12, 55, 12, '#');
+        fill(g, 36, 6, 38, 6, '#');                 // ledge escondida atrás do vento
         put(g, 56, 14, 'L');                       // lampião final
         put(g, 16, 6, 'e'); put(g, 32, 5, 'e'); put(g, 48, 7, 'e');
         return g;
@@ -113,7 +122,7 @@ NV.World = (function () {
   ];
 
   // ---------- parse de um nível para estruturas de jogo ----------
-  function buildLevel(i) {
+  function buildLevel(i, collectedSecrets) {
     const def = LEVELS[i];
     const g = def.build();
     const w = g[0].length;
@@ -144,10 +153,15 @@ NV.World = (function () {
     const entryLeft = groundAt(2);
     const entryRight = groundAt(w - 3);
 
+    const secrets = (def.secrets || [])
+      .filter((s) => !collectedSecrets || !collectedSecrets.has(s.id))
+      .map((s) => ({ ...s, x: s.x * TILE + 16, y: s.y * TILE + 16, taken: false }));
+    const npc = def.npc ? { ...def.npc, x: def.npc.x * TILE + 16, y: def.npc.y * TILE + 16 } : null;
+
     return {
       index: i, def, w, h: H, solids,
       pxW: w * TILE, pxH: H * TILE,
-      enemies, spawn: spawn || entryLeft, lamp,
+      enemies, spawn: spawn || entryLeft, lamp, secrets, npc,
       entryLeft, entryRight,
       cell(tx, ty) {
         if (tx < 0 || tx >= w || ty < 0 || ty >= H) return 0;

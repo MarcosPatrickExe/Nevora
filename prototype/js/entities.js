@@ -67,6 +67,7 @@ window.NV = window.NV || {};
     DASH_V: 520, DASH_T: 0.16, DASH_CD: 0.45,
     ATK_T: 0.12, ATK_CD: 0.30,
     MAX_HP: 5, MAX_FULGOR: 6,
+    BOOT_JUMP_MULT: 1.16, // upgrade "Bota de Salto"
   };
 
   class Player {
@@ -76,9 +77,32 @@ window.NV = window.NV || {};
       this.grounded = false; this.coyote = 0; this.jumpBuf = 0;
       this.dashT = 0; this.dashCd = 0; this.dashAvail = true; this.dropTimer = 0;
       this.atkT = 0; this.atkCd = 0; this.atkDir = 'side'; this.atkHit = new Set();
-      this.hp = P.MAX_HP; this.fulgor = 0; this.invuln = 0;
+      this.maxHp = P.MAX_HP; this.maxFulgor = P.MAX_FULGOR;
+      this.hp = this.maxHp; this.fulgor = 0; this.invuln = 0;
+      this.sevia = 0; this.hasBoot = false;
+      this.heartsBought = 0; this.fulgorBought = 0;
       this.dead = false; this.flameSeed = Math.random() * 10;
     }
+
+    shopPrice(itemId) {
+      if (itemId === 'heart') return 40 + this.heartsBought * 30;
+      if (itemId === 'fulgorFlask') return 35 + this.fulgorBought * 25;
+      return Infinity;
+    }
+
+    buyItem(g, itemId) {
+      const price = this.shopPrice(itemId);
+      if (this.sevia < price) { NV.Audio.play('shopDeny'); return false; }
+      this.sevia -= price;
+      if (itemId === 'heart') { this.maxHp++; this.hp = this.maxHp; this.heartsBought++; }
+      else if (itemId === 'fulgorFlask') { this.maxFulgor++; this.fulgorBought++; }
+      NV.Save.noteUpgrade(itemId + '-' + (itemId === 'heart' ? this.heartsBought : this.fulgorBought));
+      NV.Audio.play('shopBuy');
+      NV.FX.burst(g, this.x, this.y, '#ffd98a', 18);
+      return true;
+    }
+
+    get jumpForce() { return P.JUMP * (this.hasBoot ? P.BOOT_JUMP_MULT : 1); }
 
     get dashing() { return this.dashT > 0; }
 
@@ -109,8 +133,9 @@ window.NV = window.NV || {};
         if (In.pressed('down')) this.dropTimer = 0.22; // desce de plataforma vazada
       }
       if (this.jumpBuf > 0 && (this.grounded || this.coyote > 0)) {
-        this.vy = P.JUMP; this.jumpBuf = 0; this.coyote = 0; this.grounded = false;
+        this.vy = this.jumpForce; this.jumpBuf = 0; this.coyote = 0; this.grounded = false;
         NV.FX.dust(g, this.x, this.y + this.h / 2, 5);
+        NV.Audio.play('jump');
       }
       if (!In.pressed('jump') && this.vy < 0) this.vy *= Math.pow(0.03, dt * 6); // corte de pulo
 
@@ -119,6 +144,7 @@ window.NV = window.NV || {};
         this.dashT = P.DASH_T; this.dashCd = P.DASH_CD; this.dashAvail = this.grounded;
         this.vx = this.facing * P.DASH_V; this.vy = 0;
         NV.FX.dashTrail(g, this);
+        NV.Audio.play('dash');
       }
       if (this.dashing) {
         this.dashT -= dt; this.vy = 0;
@@ -141,13 +167,15 @@ window.NV = window.NV || {};
         this.atkCd = P.ATK_CD; this.atkT = P.ATK_T; this.atkHit.clear();
         this.atkDir = (!this.grounded && In.pressed('down')) ? 'down'
           : In.pressed('up') ? 'up' : 'side';
+        NV.Audio.play('attackSwing');
       }
       if (this.atkT > 0) { this.atkT -= dt; this.checkAttack(g); }
 
       // ----- cura (Sopro Restaurador simplificado) -----
-      if (In.justPressed('heal') && this.fulgor >= 3 && this.hp < P.MAX_HP) {
+      if (In.justPressed('heal') && this.fulgor >= 3 && this.hp < this.maxHp) {
         this.fulgor -= 3; this.hp++;
         NV.FX.burst(g, this.x, this.y, '#ffd98a', 14);
+        NV.Audio.play('heal');
       }
 
       // ----- espinhos -----
@@ -170,10 +198,11 @@ window.NV = window.NV || {};
         if (aabb(box, en)) {
           this.atkHit.add(en);
           en.hurt(g, 1, this.facing);
-          this.fulgor = Math.min(P.MAX_FULGOR, this.fulgor + 1);
+          this.fulgor = Math.min(this.maxFulgor, this.fulgor + 1);
           g.hitstop = Math.max(g.hitstop, 0.045);
           g.shake = 4;
           NV.FX.slash(g, en.x, en.y, g.level.def.theme.accent);
+          NV.Audio.play('attackHit');
           if (this.atkDir === 'down') { this.vy = -560; this.dashAvail = true; }
           else if (this.atkDir === 'side') this.vx -= this.facing * 40;
         }
@@ -193,7 +222,19 @@ window.NV = window.NV || {};
       this.hp -= dmg; this.invuln = 1.2;
       g.hitstop = Math.max(g.hitstop, 0.09); g.shake = 9;
       NV.FX.burst(g, this.x, this.y, '#ff8f5a', 16);
+      NV.Audio.play('takeDamage');
       if (this.hp <= 0) { this.dead = true; g.onPlayerDeath(); }
+    }
+
+    collectSecret(g, secret) {
+      secret.taken = true;
+      if (secret.item === 'fragment') { this.maxHp++; this.hp = Math.min(this.hp + 1, this.maxHp); }
+      else if (secret.item === 'boot') { this.hasBoot = true; }
+      NV.Save.noteSecret(secret.id);
+      NV.FX.burst(g, secret.x, secret.y, '#ffe9a8', 24);
+      NV.Audio.play('secretFound');
+      g.showToast(secret.item === 'boot' ? 'Bota de Salto encontrada!' : 'Fragmento de Coração encontrado!',
+        secret.item === 'boot' ? 'pulo mais alto, permanente' : '+1 Coração de Cera, permanente');
     }
   }
 
@@ -212,6 +253,10 @@ window.NV = window.NV || {};
         this.dead = true;
         NV.FX.burst(g, this.x, this.y, '#c9c9c9', 18);
         NV.FX.burst(g, this.x, this.y, g.level.def.theme.accent, 8);
+        NV.Audio.play('enemyDeath');
+        NV.Save.noteEnemyDefeated();
+        const n = 1 + Math.floor(Math.random() * 2);
+        for (let i = 0; i < n; i++) g.pickups.push(new SeviaPickup(this.x + (i - n / 2) * 10, this.y));
       }
     }
     contact(g) {
@@ -351,10 +396,42 @@ window.NV = window.NV || {};
     }
   }
 
+  // ---------- pickup de Sévia ----------
+  class SeviaPickup {
+    constructor(x, y) {
+      this.x = x; this.y = y; this.w = 12; this.h = 12;
+      this.vx = (Math.random() - 0.5) * 140; this.vy = -180 - Math.random() * 80;
+      this.dead = false; this.t = 0; this.value = 1; this.grounded = false;
+    }
+    update(g, dt) {
+      this.t += dt;
+      const p = g.player;
+      const d = Math.hypot(p.x - this.x, p.y - this.y);
+      if (this.t > 0.25 && d < 90) {
+        // atraído para o jogador
+        const ang = Math.atan2(p.y - this.y, p.x - this.x);
+        const speed = 420;
+        this.vx = Math.cos(ang) * speed; this.vy = Math.sin(ang) * speed;
+      } else if (!this.grounded) {
+        this.vy = Math.min(600, this.vy + 1400 * dt);
+        this.x += this.vx * dt; this.vx *= 0.98;
+      }
+      if (this.t <= 0.25 || d >= 90) { this.y += this.vy * dt; }
+      else { this.x += this.vx * dt; this.y += this.vy * dt; }
+      if (d < 20) {
+        this.dead = true; p.sevia += this.value;
+        NV.Save.noteSevia(this.value);
+        NV.Audio.play('pickupSevia');
+        NV.FX.burst(g, this.x, this.y, '#ffd98a', 6);
+      }
+      if (this.t > 6) this.dead = true;
+    }
+  }
+
   const TYPES = { beetle: Beetle, moth: Moth, spore: Spore, glass: GlassAnt, wasp: IceWasp };
 
   NV.Entities = {
-    Player,
+    Player, SeviaPickup,
     makeEnemy(spec) { return new TYPES[spec.type](spec.x, spec.y); },
   };
 })();
