@@ -21,25 +21,33 @@ abaixo).
 
 ### ⏸️ Onde paramos exatamente
 
-O Diretor deu a ordem explícita para implementar o backlog do protótipo
-("3- Sim, pode implementar. 4- perfeito 5-perfeito 6-showww 7- ok...") e
-delegou duas decisões de design (regra de progresso do visitante em co-op;
-paleta das 4 cores de slot). **Tudo foi implementado nesta sessão** na
-branch `prototype/v2-loja-audio-nickname` (áudio sintetizado, loja do Tio
-Sebo, upgrades, Sévia, áreas secretas, novo clima, nickname local, tela de
-resumo) — commitado, testado via smoke test headless (sem erros) e
-**pushado para a branch, mas NÃO mergeado em `main`** (regra de branch:
-deploy só acontece quando o Diretor aprovar o merge). Ver "Continuação 3"
-na Sessão 3 abaixo para o detalhamento completo.
+O protótipo v2 foi **aprovado e mergeado em `main`** (deploy no ar). O
+Diretor jogou e trouxe feedback de feel: o pulo (W e Espaço) respondia mal,
+e pediu para as teclas de habilidade ficarem no numpad (longe do
+movimento) com um diagrama de teclado ilustrado, além de um editor de
+layout dos botões touch para PWA/celular. **Tudo implementado nesta sessão**
+na branch `prototype/v3-controles-inputs` — commitado, testado via
+Playwright (sem erros, sem regressão na v2) e **pushado para a branch, mas
+NÃO mergeado em `main`** (regra de branch: deploy só acontece quando o
+Diretor aprovar o merge).
 
-**Próxima ação:** o Diretor precisa (a) jogar o protótipo v2 localmente ou
-via preview da branch, (b) revisar os 8 fichas de boss em
-`docs/04-gameplay/bosses/` e os 6 retratos de personagem em
-`prototype/art/png/personagem-*.png`, e (c) aprovar o merge de
-`prototype/v2-loja-audio-nickname` → `main` quando estiver satisfeito.
+O bug do pulo era real, não só sensação: `js/input.js` mapeava Espaço e
+W/↑ para a mesma ação "jump" através de uma variável auxiliar
+(`_spaceHeld`) que se contaminava entre as duas teclas — soltar Espaço
+enquanto W ainda estava pressionado cortava o pulo pela metade (a mecânica
+de pulo variável interpretava como "botão solto"). Reescrito para que cada
+ação seja o **OU lógico de todas as teclas físicas** que a controlam, sem
+uma tecla conseguir sobrescrever o estado criado por outra — confirmado
+via teste headless que o bug desapareceu e que o pulo responde em 1 frame.
+
+**Próxima ação:** o Diretor precisa jogar o protótipo v3 (local ou preview
+da branch) e aprovar o merge de `prototype/v3-controles-inputs` → `main`
+quando estiver satisfeito. Segue pendente também: revisão dos 8 fichas de
+boss em `docs/04-gameplay/bosses/` e dos 6 retratos de personagem em
+`prototype/art/png/personagem-*.png`.
 
 📋 **Lista completa de pedidos do backlog:** `docs/09-roadmap/BACKLOG_PROTOTIPO.md`
-(agora todos implementados no protótipo v2, exceto multiplayer/Colyseus —
+(todos implementados nos protótipos v2/v3, exceto multiplayer/Colyseus —
 esse item o próprio Diretor adiou: "a) depois vemos isso").
 
 ### ✅ Bloqueio resolvido — classes e nomenclatura de vida fechados
@@ -108,6 +116,66 @@ personagem foram commitados normalmente no GitHub (`prototype/art/svg/` e
 Arte Conceitual" do Drive como de costume. Marcado como `⏳ pendente (Drive
 offline)` em `docs/art/GENERATED_ASSETS.md`. Uma sessão futura deve tentar
 reconectar e replicar esses 6 arquivos para o Drive.
+
+---
+
+## Sessão 4 — 2026-07-25 (protótipo v2 mergeado + feedback de feel → v3)
+
+O Diretor perguntou como jogar e se o deploy já tinha saído — a v2 ainda
+estava só na branch. Autorizou o merge ("faça o merge"); mergeado em
+`main` sem conflitos (`git merge --no-ff`) e o GitHub Pages redeployou
+sozinho (workflow `pages.yml`, run concluído com sucesso). Protótipo v2 no
+ar em https://marcospatrickexe.github.io/Nevora/.
+
+Depois de jogar, o Diretor trouxe feedback de feel e um pedido de
+acessibilidade, tudo implementado na branch `prototype/v3-controles-inputs`:
+
+1. **Bug do pulo (W e Espaço "demoravam pra responder").** Investigado
+   primeiro com um teste de latência pura via Playwright (comparando
+   frames até `vx`/`vy` mudarem) — a física em si respondia em 1 frame,
+   até mais rápido que o movimento lateral. O bug real apareceu num
+   segundo teste, direcionado: `js/input.js` mapeava Espaço e W/↑ para a
+   mesma ação `jump` através de uma variável auxiliar `_spaceHeld` que
+   tentava reconciliar as duas teclas — soltar Espaço enquanto W ainda
+   estava pressionado **cortava o pulo pela metade** (a mecânica de pulo
+   variável via `!pressed('jump')` interpretava isso como "o jogador
+   soltou o pulo"), e havia uma segunda inconsistência ao pressionar uma
+   tecla enquanto a outra já mantinha a ação ativa. Corrigido reescrevendo
+   o módulo do zero: cada ação agora é o **OU lógico de todas as teclas
+   físicas que a controlam** (registro por tecla física + recomputação por
+   ação), eliminando de vez a possibilidade de uma tecla sobrescrever o
+   estado criado pela outra. Confirmado via teste automatizado antes/depois
+   que ambos os bugs desapareceram.
+2. **Habilidades no numpad.** Atacar/dash/curar/interagir ganharam binding
+   padrão no teclado numérico (Numpad 5/6/8/2 — extremo direito, longe do
+   WASD/setas), mantendo J/X, K/C, L/V, E/F como alternativa para quem não
+   tem numpad (notebook).
+3. **Diagrama de teclado ilustrado.** A tela de Controles ganhou um
+   diagrama visual (HTML/CSS no estilo bronze/cera do jogo, não SVG
+   externo) mostrando fisicamente onde cada tecla fica e o que ela faz,
+   substituindo a tabela-só-texto que existia. Precisou de um ajuste de
+   CSS: os overlays (`.overlay`) passaram de `align-items:center` fixo
+   para `align-items:flex-start` + `overflow-y:auto` + `margin:auto` no
+   `.menu-inner`, porque o diagrama deixou a tela de Controles alta demais
+   para caber em telas menores sem cortar o topo/rodapé — agora rola
+   internamente sem cortar nada, e continua centralizado quando cabe.
+4. **Editor de layout dos botões touch** (novo módulo
+   `js/touch-layout.js`, acessível pelo menu → "Editar botões na tela"):
+   arrastar um botão reposiciona (`transform:translate`), arrastar uma
+   bolinha no canto redimensiona (`transform:scale`, 0.6×–1.9×), tudo
+   salvo em `localStorage` (`nv-touch-layout`) e reaplicado a cada load;
+   botão "Redefinir padrão" limpa o override. `input.js` ganhou um modo
+   `setEditingTouch()` para os botões não dispararem ações de jogo
+   enquanto estão sendo arrastados.
+
+Testado via Playwright: regressão completa da v2 sem erros (menu →
+nickname → jogar → NPC → loja → pausa → resumo), bindings de numpad
+funcionais, editor de layout com arrastar/redimensionar/reset confirmados
+e persistência validada após reload de página.
+
+**Estado ao final:** protótipo v3 implementado, testado e pushado para
+`prototype/v3-controles-inputs` — aguardando o Diretor jogar e aprovar o
+merge para `main`.
 
 ---
 
