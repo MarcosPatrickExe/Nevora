@@ -70,15 +70,42 @@ mesma rede (ou publicar via GitHub Pages) e usar "Adicionar à tela inicial".
 - Progresso (nickname, segredos, upgrades, região alcançada, stats) fica em
   `localStorage`, separado do save antigo.
 
+### Novidades da v3
+
+- **Correção de latência do pulo:** o pulo aceitava Espaço e W/↑ através de
+  um mapeamento frágil (uma variável `_spaceHeld` tentando reconciliar as
+  duas teclas). Isso causava dois bugs reais: soltar Espaço enquanto W
+  ainda estava pressionado cortava o pulo pela metade (a mecânica de "pulo
+  variável" interpretava como se o botão de pulo tivesse sido solto), e em
+  certas combinações o toque ficava "preso". Reescrito do zero
+  (`js/input.js`): cada ação agora é o **OU lógico de todas as teclas
+  físicas** que a controlam, sem uma tecla conseguir sobrescrever o estado
+  criado pela outra. Testado com Playwright: pulo responde em 1 frame
+  (~17ms), igual ou mais rápido que o movimento lateral.
+- **Habilidades no numpad:** por padrão, atacar/dash/curar/interagir agora
+  vivem no teclado numérico (extremo direito, longe do WASD/setas) —
+  Numpad 5 (atacar, tem o relevo tátil pra achar sem olhar), Numpad 6
+  (dash), Numpad 8 (curar), Numpad 2 (interagir). As teclas antigas (J/X,
+  K/C, L/V, E/F) continuam funcionando como alternativa para quem não tem
+  numpad (notebook).
+- **Diagrama de teclado ilustrado:** a tela de Controles agora mostra um
+  desenho do teclado, no estilo visual do jogo, destacando fisicamente onde
+  cada tecla fica e o que ela faz — ao invés de só uma tabela de texto.
+- **Editor de layout dos botões touch** (menu → "Editar botões na tela"):
+  arraste qualquer botão para reposicionar, arraste a bolinha do canto para
+  redimensionar. Fica salvo em `localStorage` (sobrevive a fechar o
+  navegador/app); botão "Redefinir padrão" volta ao layout original.
+
 ## Controles (teclado)
 
 | Tecla | Ação |
 |---|---|
 | ← → / A D | mover |
 | Espaço / W / ↑ | pular (segure p/ mais altura) |
-| J / X | atacar (com ↑ para cima; no ar com ↓ = pogo) |
-| K / C | dash |
-| L / V | curar (gasta 3 Fulgor) |
+| Numpad 5 *(ou J / X)* | atacar (com ↑ para cima; no ar com ↓ = pogo) |
+| Numpad 6 *(ou K / C)* | dash |
+| Numpad 8 *(ou L / V)* | curar (gasta 3 Fulgor) |
+| Numpad 2 *(ou E / F)* | interagir / falar com NPCs |
 | Esc | pausar |
 
 ## Limitações conhecidas (de propósito)

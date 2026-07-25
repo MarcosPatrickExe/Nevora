@@ -23,6 +23,7 @@
       <button id="btnControls" class="mbtn">Controles</button>
       <button id="btnSummary" class="mbtn small">Meu resumo</button>
       <button id="btnTouchMode" class="mbtn small">Botões na tela: <span id="touchModeLabel">Auto</span></button>
+      <button id="btnEditTouch" class="mbtn small">Editar botões na tela</button>
       <p class="foot">5 regiões interligadas · movimento · combate · inimigos<br>
       arte final será desenhada à mão (ver docs/art/)</p>
     </div>
@@ -54,16 +55,49 @@
   <div id="controlsScreen" class="overlay hidden">
     <div class="menu-inner wide">
       <h2>Controles</h2>
+
+      <div class="kbd-diagram" aria-hidden="true">
+        <div class="kbd-cluster">
+          <div class="kbd-cluster-title">Movimento <span class="kbd-hint">— mão esquerda</span></div>
+          <div class="kbd-grid">
+            <span class="kcap kcap-off"></span><span class="kcap kcap-on">W</span><span class="kcap kcap-off"></span>
+            <span class="kcap kcap-on">A</span><span class="kcap kcap-on">S</span><span class="kcap kcap-on">D</span>
+          </div>
+          <div class="kbd-grid kbd-arrows">
+            <span class="kcap kcap-off"></span><span class="kcap kcap-on">↑</span><span class="kcap kcap-off"></span>
+            <span class="kcap kcap-on">←</span><span class="kcap kcap-on">↓</span><span class="kcap kcap-on">→</span>
+          </div>
+          <span class="kcap kcap-on kcap-wide">ESPAÇO — pular</span>
+        </div>
+        <div class="kbd-cluster">
+          <div class="kbd-cluster-title">Habilidades <span class="kbd-hint">— numpad, mão direita</span></div>
+          <div class="kbd-grid">
+            <span class="kcap kcap-off">7</span><span class="kcap kcap-heal">8</span><span class="kcap kcap-off">9</span>
+            <span class="kcap kcap-off">4</span><span class="kcap kcap-atk kcap-nub">5</span><span class="kcap kcap-dash">6</span>
+            <span class="kcap kcap-off">1</span><span class="kcap kcap-int">2</span><span class="kcap kcap-off">3</span>
+          </div>
+        </div>
+      </div>
+      <ul class="kbd-legend">
+        <li><span class="dot dot-atk"></span><b>Numpad 5</b> — atacar <em>(a tecla com o relevo — sente sem olhar)</em></li>
+        <li><span class="dot dot-dash"></span><b>Numpad 6</b> — dash</li>
+        <li><span class="dot dot-heal"></span><b>Numpad 8</b> — curar <em>(gasta 3 de Fulgor)</em></li>
+        <li><span class="dot dot-int"></span><b>Numpad 2</b> — interagir / falar</li>
+      </ul>
+
       <table class="keys">
         <tr><td>← → &nbsp;/&nbsp; A D</td><td>Mover</td></tr>
         <tr><td>Espaço / W / ↑</td><td>Pular <em>(segure para subir mais)</em></td></tr>
-        <tr><td>J / X</td><td>Atacar &nbsp;<em>(com ↑: para cima · no ar com ↓: pogo)</em></td></tr>
-        <tr><td>K / C</td><td>Dash</td></tr>
-        <tr><td>L / V</td><td>Curar <em>(gasta 3 de Fulgor)</em></td></tr>
+        <tr><td>Numpad 5 <em>(ou J / X)</em></td><td>Atacar &nbsp;<em>(com ↑: para cima · no ar com ↓: pogo)</em></td></tr>
+        <tr><td>Numpad 6 <em>(ou K / C)</em></td><td>Dash</td></tr>
+        <tr><td>Numpad 8 <em>(ou L / V)</em></td><td>Curar <em>(gasta 3 de Fulgor)</em></td></tr>
+        <tr><td>Numpad 2 <em>(ou E / F)</em></td><td>Interagir / falar com NPCs</td></tr>
         <tr><td>Esc</td><td>Pausar</td></tr>
       </table>
       <p class="tip">Acenda os <b>Lampiões</b> para salvar seu ponto de retorno.<br>
-      Golpes acertados enchem o <b>Fulgor</b> (a chama no canto da tela).</p>
+      Golpes acertados enchem o <b>Fulgor</b> (a chama no canto da tela). As
+      habilidades ficam no numpad de propósito — longe do movimento, sem
+      dedos se atrapalhando.</p>
       <button id="btnStartFromControls" class="mbtn">Começar</button>
       <button id="btnBackFromControls" class="mbtn small">Voltar ao menu</button>
     </div>
@@ -118,11 +152,21 @@
       <button class="tbtn act big" data-action="jump">▲</button>
     </div>
   </div>
+
+  <!-- BARRA DO EDITOR DE LAYOUT TOUCH -->
+  <div id="touchEditBar" class="hidden">
+    <p class="touch-edit-hint">Arraste um botão para mover · arraste a bolinha do canto para redimensionar</p>
+    <div class="touch-edit-buttons">
+      <button id="btnResetTouchLayout" class="mbtn small">Redefinir padrão</button>
+      <button id="btnDoneTouchLayout" class="mbtn small">Concluir edição</button>
+    </div>
+  </div>
 </div>
 
 <script src="js/input.js"></script>
 <script src="js/audio.js"></script>
 <script src="js/save.js"></script>
+<script src="js/touch-layout.js"></script>
 <script src="js/world.js"></script>
 <script src="js/entities.js"></script>
 <script src="js/render.js"></script>
