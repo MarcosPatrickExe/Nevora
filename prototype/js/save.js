@@ -49,6 +49,7 @@ NV.Save = (function () {
     const mins = Math.round(state.playSeconds / 60);
     return [
       `Névora — resumo de ${state.nickname || 'jogador'}`,
+      `Versão testada: ${NV.VERSION || '?'}`,
       `Região mais distante: ${state.furthestRegionName} (${state.furthestRegion + 1}/5)`,
       `Inimigos derrotados: ${state.enemiesDefeated}`,
       `Sévia coletada: ${state.seviaCollected}`,
