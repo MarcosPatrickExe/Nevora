@@ -1,10 +1,14 @@
 /* Névora protótipo — boot, estados (menu/jogo/pausa), loop e PWA */
+window.NV = window.NV || {};
+NV.VERSION = 'v3'; // acompanha o nome da branch prototype/vN-* que originou o build
+
 (function () {
   const canvas = document.getElementById('game');
   const ctx = canvas.getContext('2d');
 
   const el = {
     menu: document.getElementById('menu'),
+    protoVersion: document.getElementById('protoVersion'),
     controls: document.getElementById('controlsScreen'),
     pause: document.getElementById('pauseScreen'),
     nickname: document.getElementById('nicknameScreen'),
@@ -232,6 +236,7 @@
     navigator.serviceWorker.register('sw.js').catch(() => {});
   }
 
+  el.protoVersion.textContent = `Protótipo ${NV.VERSION}`;
   updateTouchLabel();
   show('menu');
   requestAnimationFrame(loop);
