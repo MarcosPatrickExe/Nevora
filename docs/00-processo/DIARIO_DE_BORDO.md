@@ -22,27 +22,46 @@ abaixo).
 ### ⏸️ Onde paramos exatamente
 
 O protótipo v2 foi **aprovado e mergeado em `main`** (deploy no ar). O
-Diretor jogou e trouxe feedback de feel: o pulo (W e Espaço) respondia mal,
-e pediu para as teclas de habilidade ficarem no numpad (longe do
-movimento) com um diagrama de teclado ilustrado, além de um editor de
-layout dos botões touch para PWA/celular. **Tudo implementado nesta sessão**
-na branch `prototype/v3-controles-inputs` — commitado, testado via
-Playwright (sem erros, sem regressão na v2) e **pushado para a branch, mas
-NÃO mergeado em `main`** (regra de branch: deploy só acontece quando o
-Diretor aprovar o merge).
+Diretor testou a v2 (a v3 ainda não tinha sido mergeada) e voltou com dois
+pedidos: (1) registrar a versão do protótipo na tela de menu, pra sempre
+saber o que está testando; (2) no celular, o D-pad touch só tinha ◀▶ —
+faltavam ▲▼ para mirar ataque pra cima/pogo e descer de plataforma vazada
+(o botão de pular em si não tinha o bug do W/Espaço, que era só de
+teclado). **Ambos implementados nesta sessão**, ainda na branch
+`prototype/v3-controles-inputs` (5 commits: markup, CSS, `NV.VERSION`,
+resumo de progresso, README) — testado via Playwright (menu mostra
+"Protótipo v3", D-pad com as 4 ações reconhecidas por `NV.Input`, sem
+erros de console) e **pushado para a branch, ainda NÃO mergeado em
+`main`**.
 
-O bug do pulo era real, não só sensação: `js/input.js` mapeava Espaço e
-W/↑ para a mesma ação "jump" através de uma variável auxiliar
-(`_spaceHeld`) que se contaminava entre as duas teclas — soltar Espaço
-enquanto W ainda estava pressionado cortava o pulo pela metade (a mecânica
-de pulo variável interpretava como "botão solto"). Reescrito para que cada
-ação seja o **OU lógico de todas as teclas físicas** que a controlam, sem
-uma tecla conseguir sobrescrever o estado criado por outra — confirmado
-via teste headless que o bug desapareceu e que o pulo responde em 1 frame.
+O Diretor também pediu um item bem maior, ainda **não implementado**:
+redesenho de navegação em cada região do protótipo com **3+ opções de
+caminho** (inspirado em Hollow Knight Silksong) — entradas por oeste/leste
+podendo levar a cima/baixo/outra região, incentivando exploração e achado
+de segredos — e uma mecânica de **cipó/corda** pra subir rápido em regiões
+de bioma florestal, sendo cada região com um recurso de traversal próprio
+(dinâmico, não universal). Isso não foi feito porque é mudança de
+arquitetura (hoje as 5 regiões são uma corrente linear ligada só por
+esquerda/direita, sem bifurcação nenhuma dentro de cada uma), não um
+ajuste pontual — registrado com 3 perguntas de escopo pro Diretor em
+`docs/09-roadmap/BACKLOG_PROTOTIPO.md` (seção "Pendências da v3"), aguardando
+resposta antes de começar.
 
-**Próxima ação:** o Diretor precisa jogar o protótipo v3 (local ou preview
-da branch) e aprovar o merge de `prototype/v3-controles-inputs` → `main`
-quando estiver satisfeito. Segue pendente também: revisão dos 8 fichas de
+O bug do pulo (sessão anterior) era real, não só sensação: `js/input.js`
+mapeava Espaço e W/↑ para a mesma ação "jump" através de uma variável
+auxiliar (`_spaceHeld`) que se contaminava entre as duas teclas — soltar
+Espaço enquanto W ainda estava pressionado cortava o pulo pela metade (a
+mecânica de pulo variável interpretava como "botão solto"). Reescrito para
+que cada ação seja o **OU lógico de todas as teclas físicas** que a
+controlam, sem uma tecla conseguir sobrescrever o estado criado por outra —
+confirmado via teste headless que o bug desapareceu e que o pulo responde
+em 1 frame.
+
+**Próxima ação:** o Diretor precisa (a) jogar o protótipo v3 (local ou
+preview da branch) e aprovar o merge de `prototype/v3-controles-inputs` →
+`main`, e (b) responder as 3 perguntas de escopo sobre navegação
+multi-caminho/cipós antes dessa parte começar (ver backlog). Segue
+pendente também: revisão dos 8 fichas de
 boss em `docs/04-gameplay/bosses/` e dos 6 retratos de personagem em
 `prototype/art/png/personagem-*.png`.
 
@@ -116,6 +135,59 @@ personagem foram commitados normalmente no GitHub (`prototype/art/svg/` e
 Arte Conceitual" do Drive como de costume. Marcado como `⏳ pendente (Drive
 offline)` em `docs/art/GENERATED_ASSETS.md`. Uma sessão futura deve tentar
 reconectar e replicar esses 6 arquivos para o Drive.
+
+---
+
+## Sessão 5 — 2026-07-29 (v3 ainda em teste: versão no menu, D-pad de 4 direções, pedido de navegação multi-caminho)
+
+O Diretor jogou a v2 (a v3 ainda não tinha ido pra `main`) e trouxe dois
+pedidos pontuais mais um pedido grande de design de nível, com uma
+screenshot mostrando o problema do D-pad no celular (só ◀▶ visíveis).
+
+**Implementado nesta sessão, ainda na branch `prototype/v3-controles-inputs`
+(5 commits — um por arquivo, como pedido):**
+
+1. **Número da versão no menu.** `NV.VERSION = 'v3'` centralizado em
+   `js/main.js`, exibido na tela inicial ("Protótipo v3") e incluído no
+   texto do resumo de progresso (`js/save.js`) — assim o Diretor (e quem
+   mais testar) sempre sabe qual build está rodando.
+2. **D-pad de 4 direções no touch.** A screenshot mostrou só ◀▶ nos
+   controles de celular. Ao investigar, o botão de pular touch **não**
+   tinha o bug do W/Espaço (aquele era só de teclado — já corrigido na
+   Sessão 4); o problema real era falta de **direção**: sem ▲/▼ touch não
+   dava pra mirar ataque pra cima, fazer pogo (ataque pra baixo, que já
+   exigia estar no ar — `entities.js` linha do `atkDir`) ou descer de
+   plataforma vazada (↓ + pulo) no celular. A lógica de ataque já era
+   genérica por ação (`In.pressed('up')`/`In.pressed('down')`, sem
+   nenhuma referência hardcoded a teclado), então bastou adicionar os 2
+   botões (`.dpad` em grid 3×3 substituindo o flex antigo de `.t-left`) —
+   zero mudança de gameplay, só de input. O editor de layout de botões
+   touch (`touch-layout.js`) já era genérico o bastante para reconhecer os
+   2 novos botões automaticamente (nenhuma mudança nele foi necessária).
+
+Testado via Playwright (viewport touch): rótulo "Protótipo v3" confirmado,
+os 4 data-action do D-pad (`up`/`left`/`right`/`down`) presentes e
+reconhecidos por `NV.Input.pressed()` ao simular toque, sem erros de
+console. Screenshot conferida visualmente (menu e D-pad em jogo).
+
+**Pedido grande, registrado mas NÃO implementado ainda — redesenho de
+navegação estilo Silksong.** Cada região deveria ter 3+ opções de caminho
+(ex.: entrada oeste → sobe por plataformas até outra área OU segue direto
+pelo leste; variações por região), incentivando exploração/segredos, mais
+uma mecânica de cipó/corda pra subir rápido em biomas florestais — **não
+universal**, cada região com seu próprio recurso de traversal (o protótipo
+já faz isso parcialmente via clima: vento em Picos, escuridão em Galerias,
+areia em Vidraçal). Não implementado nesta sessão porque é mudança de
+arquitetura, não ajuste de UI: hoje `js/world.js`/`js/game.js` modelam as 5
+regiões como uma **corrente linear** (só entrada esquerda/direita, sem
+bifurcação dentro de cada região). Registradas 3 perguntas de escopo pro
+Diretor em `docs/09-roadmap/BACKLOG_PROTOTIPO.md` (seção "Pendências da
+v3") antes de começar esse trabalho — não implementar às cegas um
+redesenho desse tamanho.
+
+**Estado ao final:** branch `prototype/v3-controles-inputs` com os 2 itens
+pontuais prontos e pushados (ainda sem merge); item grande de navegação
+aguardando resposta do Diretor às perguntas de escopo.
 
 ---
 
