@@ -33,7 +33,7 @@ window.NV = window.NV || {};
       const x0 = Math.floor((e.x - hw + 2) / T), x1 = Math.floor((e.x + hw - 2) / T);
       for (let tx = x0; tx <= x1; tx++) {
         const c = lv.cell(tx, ty);
-        const solid = c === 1 ||
+        const solid = c === 1 || c === 5 ||
           (c === 2 && dirY > 0 && (e.y + hh) <= ty * T + 1 && !(e.dropTimer > 0));
         if (solid) {
           ny = ty * T + (dirY > 0 ? -hh - 0.01 : T + hh + 0.01);
@@ -55,6 +55,27 @@ window.NV = window.NV || {};
     return false;
   }
 
+  // ---------- recursos de travessia por região ----------
+  function onVine(lv, e) { // cipó (Bosque/Copas do Bosque) — código 4
+    const tx = Math.floor(e.x / T);
+    const y0 = Math.floor((e.y - e.h / 2 + 4) / T), y1 = Math.floor((e.y + e.h / 2 - 4) / T);
+    for (let ty = y0; ty <= y1; ty++) if (lv.cell(tx, ty) === 4) return true;
+    return false;
+  }
+  function findUpdraft(lv, e) { // zona de empuxo (brasas do Vale, vórtice do Vidraçal)
+    for (const z of lv.updrafts) {
+      if (e.x < z.x1 || e.x > z.x2) continue;
+      if (z.y1 !== undefined && e.y < z.y1) continue;
+      if (z.y2 !== undefined && e.y > z.y2) continue;
+      return z;
+    }
+    return null;
+  }
+  function tileUnder(lv, e) {
+    const tx = Math.floor(e.x / T), ty = Math.floor((e.y + e.h / 2 + 2) / T);
+    return lv.cell(tx, ty);
+  }
+
   function aabb(a, b) {
     return Math.abs(a.x - b.x) < (a.w + b.w) / 2 && Math.abs(a.y - b.y) < (a.h + b.h) / 2;
   }
@@ -68,6 +89,9 @@ window.NV = window.NV || {};
     ATK_T: 0.12, ATK_CD: 0.30,
     MAX_HP: 5, MAX_FULGOR: 6,
     BOOT_JUMP_MULT: 1.16, // upgrade "Bota de Salto"
+    CLIMB_SPEED: 190,               // cipó (só Bosque/Copas do Bosque)
+    UPDRAFT_ACCEL: 2600, UPDRAFT_MAXVY: -260, // brasas do Vale / vórtice do Vidraçal
+    BOUNCE_FORCE: -820,             // cogumelo-mola de Galerias
   };
 
   class Player {
@@ -146,9 +170,23 @@ window.NV = window.NV || {};
         NV.FX.dashTrail(g, this);
         NV.Audio.play('dash');
       }
+      // ----- cipó (Bosque/Copas do Bosque) -----
+      const climbing = !this.dashing && onVine(lv, this) && (In.pressed('up') || In.pressed('down'));
+      if (climbing) {
+        this.vy = In.pressed('up') ? -P.CLIMB_SPEED : P.CLIMB_SPEED;
+        this.vx *= 0.5;
+        this.coyote = P.COYOTE; // permite pular pra sair do cipó
+      }
+      const updraft = !climbing ? findUpdraft(lv, this) : null;
+
       if (this.dashing) {
         this.dashT -= dt; this.vy = 0;
         NV.FX.dashTrail(g, this);
+      } else if (climbing) {
+        // vy já definido acima; sem gravidade enquanto sobe/desce o cipó
+      } else if (updraft) {
+        // brasas do Vale / vórtice de areia do Vidraçal empurram pra cima
+        this.vy = Math.max(this.vy - P.UPDRAFT_ACCEL * dt, P.UPDRAFT_MAXVY);
       } else {
         // ----- gravidade -----
         const mult = this.vy > 0 ? P.FALL_MULT : 1;
@@ -161,6 +199,13 @@ window.NV = window.NV || {};
       else if (wasGrounded) this.coyote = P.COYOTE;
       if (this.grounded && !wasGrounded && this.vyLand > 300) NV.FX.dust(g, this.x, this.y + this.h / 2, 6);
       this.vyLand = this.vy;
+
+      // ----- cogumelo-mola (Galerias) -----
+      if (this.grounded && tileUnder(lv, this) === 5) {
+        this.vy = P.BOUNCE_FORCE; this.grounded = false; this.dashAvail = true;
+        NV.FX.dust(g, this.x, this.y + this.h / 2, 8);
+        NV.Audio.play('bounce');
+      }
 
       // ----- ataque -----
       if (In.justPressed('attack') && this.atkCd <= 0) {
