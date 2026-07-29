@@ -24,15 +24,20 @@ mesma rede (ou publicar via GitHub Pages) e usar "Adicionar à tela inicial".
 ## O que tem dentro
 
 - **Menu principal** com fundo animado, tela de controles e pausa (Esc).
-- **5 regiões interligadas** (ande até a borda da tela para trocar):
-  1. Vale das Velas — Besourito Sineiro (patrulha + investida)
+- **8 regiões em grafo** (não mais uma corrente única — ver "Navegação
+  multi-caminho" abaixo), a cadeia principal de 5 mais 3 regiões-atalho:
+  1. Vale das Velas — Besourito Sineiro (patrulha + investida) · hub com
+     3 saídas (leste, e as 2 verticais abaixo)
   2. Bosque Murmurante — Mariposa-Serra (voa e mergulha) · chuva
   3. Galerias Fúngicas — Esporão (torreta de esporos) · **escuridão com halo
      de luz do jogador** (o raio cresce com o Fulgor)
   4. Vidraçal — Formiga-Vidro (bote rápido, frágil) · tempestade de areia ·
      espinhos de vidro
   5. Picos Uivantes — Vespa-Geada (projétil de gelo) · neve e **vento que
-     empurra no ar**
+     empurra no ar** · região final
+  6. Sótão do Sineiro — atalho vertical a partir do Vale (brasas)
+  7. Adega de Cera — atalho vertical a partir do Vale (alçapão)
+  8. Copas do Bosque — atalho vertical a partir do Bosque (cipó)
 - **Combate:** golpe em 3 direções (frente/cima/baixo), **pogo** no ataque
   para baixo, hit stop, hit flash, partículas, knockback.
 - **Movimentação:** aceleração curta, pulo variável, coyote time, input
@@ -102,6 +107,41 @@ mesma rede (ou publicar via GitHub Pages) e usar "Adicionar à tela inicial".
   ◀/▶. Adicionados ▲/▼ — necessários porque ataque pra cima, pogo (ataque
   pra baixo no ar) e descer de plataforma vazada (↓ + pulo) dependiam de
   segurar uma direção, algo que só o teclado conseguia fazer antes.
+- **Navegação multi-caminho (inspirada em Silksong):** as regiões deixaram
+  de ser uma corrente única — o Vale das Velas e o Bosque Murmurante agora
+  têm saídas verticais escondidas, cada uma levando a uma região-atalho
+  pequena com um segredo próprio, que reconecta à cadeia principal num
+  ponto diferente. Ver "Navegação multi-caminho" abaixo.
+
+## Navegação multi-caminho
+
+```
+                Sótão do Sineiro (brasas)      Copas do Bosque (cipó)
+               /                        \     /                      \
+Vale das Velas — Bosque Murmurante — Galerias Fúngicas — Vidraçal — Picos Uivantes
+               \                                                      /
+                Adega de Cera (alçapão) ————————————————————————————
+```
+
+- **Vale das Velas** é o hub: além de seguir reto pro Bosque, dá pra subir
+  (coluna de brasas quentes, empurram o Acendedor pra cima — segure
+  qualquer direção, é só ficar na coluna) até o **Sótão do Sineiro**, ou
+  descer por um alçapão no chão até a **Adega de Cera**. As duas regiões
+  levam de volta à cadeia principal (Galerias e Vidraçal, respectivamente)
+  por um caminho diferente do óbvio.
+- **Bosque Murmurante** tem um **cipó** (segure ↑ ou ↓ perto dele pra
+  subir/descer, pule pra soltar) que leva até a **Copa do Bosque**, um
+  atalho que pula direto pra Picos Uivantes — ignorando Galerias e
+  Vidraçal por completo, se o jogador preferir essa rota.
+- Cada região-atalho tem **1 segredo exclusivo** (Fragmento de Coração),
+  recompensando quem sai da rota óbvia.
+- Recurso de travessia próprio por região (nenhum se repete igual):
+  Vale = brasas ascendentes · Bosque = cipó · Galerias = cogumelo-mola
+  (bounce pad, usado no caminho principal) · Vidraçal = vórtice de areia
+  (leva a um segredo próprio, novo nesta versão) · Picos = vento uivante
+  (já existia, usado pro segredo escondido "atrás do vento").
+- As regiões-atalho são **mão única** (não dá pra voltar por elas) — a
+  cadeia principal continua com ida e volta normal (ex.: Bosque ↔ Vale).
 
 ## Controles (teclado)
 
