@@ -95,6 +95,13 @@ mesma rede (ou publicar via GitHub Pages) e usar "Adicionar à tela inicial".
   arraste qualquer botão para reposicionar, arraste a bolinha do canto para
   redimensionar. Fica salvo em `localStorage` (sobrevive a fechar o
   navegador/app); botão "Redefinir padrão" volta ao layout original.
+- **Número da versão no menu:** a tela inicial mostra "Protótipo v3" (fonte
+  única `NV.VERSION` em `js/main.js`) para saber sempre qual build está em
+  teste; o resumo de progresso também registra a versão jogada.
+- **D-pad de 4 direções no touch:** os controles de celular/PWA tinham só
+  ◀/▶. Adicionados ▲/▼ — necessários porque ataque pra cima, pogo (ataque
+  pra baixo no ar) e descer de plataforma vazada (↓ + pulo) dependiam de
+  segurar uma direção, algo que só o teclado conseguia fazer antes.
 
 ## Controles (teclado)
 
@@ -107,6 +114,13 @@ mesma rede (ou publicar via GitHub Pages) e usar "Adicionar à tela inicial".
 | Numpad 8 *(ou L / V)* | curar (gasta 3 Fulgor) |
 | Numpad 2 *(ou E / F)* | interagir / falar com NPCs |
 | Esc | pausar |
+
+## Controles (touch/PWA)
+
+D-pad (◀▶▲▼) para movimento/direção + botões de ação (✚ curar, ⇢ dash,
+✦ atacar, ▲ pular). Segurar ▲ ou ▼ enquanto aperta ✦ mira o ataque pra
+cima/baixo (pogo pra baixo exige estar no ar, igual ao teclado); segurar ▼
+e apertar pular desce de plataforma vazada.
 
 ## Limitações conhecidas (de propósito)
 
