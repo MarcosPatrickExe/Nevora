@@ -25,7 +25,8 @@ canvas#game { background:#141013; max-width:100vw; max-height:100vh;
 .title { font-size:clamp(48px, 9vw, 84px); letter-spacing:.35em;
   text-indent:.35em; color:#f5c96b;
   text-shadow:0 0 18px rgba(245,168,60,.55), 0 2px 0 #5a3b16; }
-.subtitle { color:#a89880; margin:4px 0 26px; font-style:italic; }
+.subtitle { color:#a89880; margin:4px 0 4px; font-style:italic; }
+.proto-version { color:#7a6c56; margin:0 0 22px; font-size:12.5px; letter-spacing:.08em; }
 .foot { color:#6f6354; font-size:13px; margin-top:26px; line-height:1.5; }
 
 h2 { color:#f5c96b; letter-spacing:.15em; margin-bottom:18px; }
@@ -109,7 +110,7 @@ table.keys em { color:#9b8c76; font-size:14px; }
 
 /* ---------- touch controls ---------- */
 #touch { position:absolute; inset:0; z-index:15; pointer-events:none; }
-.t-left { position:absolute; left:3vw; bottom:5vh; display:flex; gap:14px; }
+.t-left { position:absolute; left:3vw; bottom:5vh; }
 .t-right { position:absolute; right:3vw; bottom:5vh; display:flex; gap:12px;
   align-items:flex-end; }
 .tbtn { pointer-events:auto; width:64px; height:64px; border-radius:50%;
@@ -119,7 +120,17 @@ table.keys em { color:#9b8c76; font-size:14px; }
 .tbtn.big { width:78px; height:78px; font-size:28px; }
 .tbtn.act { background:rgba(80,50,28,.5); }
 .tbtn:active { background:rgba(245,168,60,.45); border-color:#f5c96b; }
-.t-left .tbtn { width:74px; height:74px; font-size:28px; }
+
+/* d-pad de 4 direções (esquerda/direita já existiam; cima/baixo habilitam
+   ataque pra cima, pogo pra baixo no ar e descida de plataforma vazada
+   também no touch — a lógica em entities.js já era genérica por ação). */
+.dpad { display:grid; grid-template-columns:56px 56px 56px;
+  grid-template-rows:56px 56px 56px; gap:4px; }
+.dpad-btn { width:56px; height:56px; font-size:22px; }
+.dpad-up { grid-column:2; grid-row:1; }
+.dpad-left { grid-column:1; grid-row:2; }
+.dpad-right { grid-column:3; grid-row:2; }
+.dpad-down { grid-column:2; grid-row:3; }
 #tbtnInteract { position:absolute; left:50%; bottom:16vh; transform:translateX(-50%);
   width:56px; height:56px; font-size:20px; }
 
