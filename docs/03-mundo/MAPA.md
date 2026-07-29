@@ -2,6 +2,35 @@
 
 > Status: 🟡 Proposta (topologia atualizada para as 18 regiões do ADR-007)
 
+## Protótipo web (🟢 implementado) — 8 regiões em grafo
+
+O protótipo (`prototype/`) não tem as 18 regiões do jogo final — é uma
+amostra de 8, mas já **não é mais uma corrente linear** desde a v3: o Vale
+das Velas (hub) e o Bosque Murmurante ganharam saídas verticais escondidas
+que levam a 3 regiões-atalho pequenas, cada uma com 1 segredo exclusivo,
+reconectando à cadeia principal em outro ponto — o mesmo princípio de "2–3
+destinos possíveis" descrito na seção de gating abaixo, só que provado em
+escala pequena antes de valer pras 18 regiões de verdade.
+
+```
+                Sótão do Sineiro (brasas)      Copas do Bosque (cipó)
+               /                        \     /                      \
+Vale das Velas — Bosque Murmurante — Galerias Fúngicas — Vidraçal — Picos Uivantes
+               \                                                      /
+                Adega de Cera (alçapão) ————————————————————————————
+```
+
+- Vale das Velas = hub com 3 saídas (leste normal + 2 atalhos verticais).
+- Sótão do Sineiro e Adega de Cera reconectam em Galerias e Vidraçal.
+- Copa do Bosque (via cipó, só nessa região) pula direto pra Picos Uivantes
+  — ignora Galerias e Vidraçal por completo, se o jogador preferir.
+- Recurso de travessia próprio por região, nenhum repetido igual: brasas
+  ascendentes (Vale), cipó (Bosque), cogumelo-mola (Galerias), vórtice de
+  areia (Vidraçal), vento uivante (Picos, já existia antes da v3).
+- Atalhos são mão única (não dá pra voltar); a cadeia principal continua
+  bidirecional, como sempre foi. Detalhes de implementação e teste em
+  `prototype/README.md` e `docs/00-processo/DIARIO_DE_BORDO.md` (Sessão 6).
+
 ## Topologia geral (diagrama conceitual, por camadas)
 
 ```
