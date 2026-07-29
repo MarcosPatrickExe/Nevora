@@ -19,6 +19,7 @@
       <div class="flame-icon" aria-hidden="true"></div>
       <h1 class="title">NÉVORA</h1>
       <p class="subtitle">protótipo greybox — Fase 1</p>
+      <p class="proto-version" id="protoVersion"></p>
       <button id="btnPlay" class="mbtn">Jogar</button>
       <button id="btnControls" class="mbtn">Controles</button>
       <button id="btnSummary" class="mbtn small">Meu resumo</button>
@@ -141,8 +142,12 @@
   <!-- CONTROLES TOUCH -->
   <div id="touch" class="hidden">
     <div class="t-left">
-      <button class="tbtn" data-action="left">◀</button>
-      <button class="tbtn" data-action="right">▶</button>
+      <div class="dpad">
+        <button class="tbtn dpad-btn dpad-up" data-action="up">▲</button>
+        <button class="tbtn dpad-btn dpad-left" data-action="left">◀</button>
+        <button class="tbtn dpad-btn dpad-right" data-action="right">▶</button>
+        <button class="tbtn dpad-btn dpad-down" data-action="down">▼</button>
+      </div>
     </div>
     <button id="tbtnInteract" class="tbtn act hidden" data-action="interact">E</button>
     <div class="t-right">
