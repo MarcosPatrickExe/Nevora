@@ -162,49 +162,37 @@ fiel do que foi pedido nesta sessão, esperando a ordem final de ataque.
    (`In.pressed('up')`/`In.pressed('down')`), então só faltava o botão —
    nenhuma mudança de gameplay, só de input.
 
-### 🔴 Pendente — redesenho de navegação multi-caminho (Silksong-like) + cipós
+### ✅ Implementado — redesenho de navegação multi-caminho (Silksong-like) + cipós
 
-Pedido do Diretor: cada região deve ter **pelo menos 3 opções de caminho**
-ao ser explorada (ex.: entra pelo oeste → sobe por plataformas até outra
-área **ou** segue direto pelo leste; outras regiões variam: só pra cima,
-só pra baixo, cima+baixo, etc.), incentivando exploração e achado de áreas
-secretas. Regiões de bioma florestal podem ter **cipós/cordas** para subir
-mais rápido até o topo — mas isso é **por região, não universal**: cada
-área deve ter um recurso de traversal próprio (o protótipo já faz isso
-parcialmente com clima: vento que empurra em Picos Uivantes, escuridão com
-halo de luz em Galerias Fúngicas, tempestade de areia em Vidraçal).
+O Diretor respondeu as 3 perguntas de escopo (2026-07-29): (1) as rotas
+devem levar a **regiões diferentes**, mesmo que demore mais; (2) cipó só
+no Bosque Murmurante, e recurso de traversal próprio pras outras 4 regiões
+também; (3) juntar tudo na v3 e só mergear depois de tudo pronto e
+testado. Implementado por completo nesta mesma branch
+`prototype/v3-controles-inputs`:
 
-**Por que isso ainda não foi implementado junto com os itens acima:** é uma
-mudança de arquitetura, não um ajuste de UI. Hoje (ver `js/world.js` e
-`js/game.js`):
-- As 5 regiões do protótipo formam uma **corrente linear** (índice 0→4),
-  conectadas só por bordas esquerda/direita (`entryLeft`/`entryRight`,
-  `g.level.index ± 1`). Não existe conceito de saída por cima/por baixo,
-  nem de "voltar pra uma região por dois lugares diferentes".
-  Cada região hoje é um corredor único (largura 60 tiles, alguns degraus
-  de plataforma), sem bifurcação nenhuma.
-- Implementar o pedido do Diretor de verdade exige: (a) trocar a "corrente"
-  por um **grafo de regiões** (uma região pode ter múltiplas saídas, para
-  regiões diferentes ou pontos diferentes da mesma região); (b) redesenhar
-  o traçado de tiles das 5 regiões existentes para ter bifurcações reais
-  (não só decoração — rotas que levam a lugares diferentes); (c) uma
-  mecânica nova de escalada (tile "cipó", estado de personagem "agarrado
-  subindo", input dedicado) — nenhuma dessas três coisas existe hoje.
-
-**Perguntas antes de começar** (Diretor, por favor responda quando puder;
-não vou implementar isso às cegas):
-1. As **3+ rotas** devem levar a **regiões diferentes** (expandindo a
-   topologia de 5 regiões pra algo mais parecido com o grafo real do jogo
-   final em `03-mundo/MAPA.md`), ou são **desvios dentro da mesma região**
-   (a rota de cima e a de baixo convergem de volta ao mesmo corredor mais
-   à frente, só que uma tem um segredo e a outra é mais rápida)? A segunda
-   opção é bem mais rápida de fazer no protótipo atual; a primeira é
-   praticamente redesenhar o mapa do zero.
-2. Cipó/corda: confirma que é só no **Bosque Murmurante** (única região de
-   bioma florestal hoje) pra essa v3, ou quer o recurso de traversal único
-   também desenhado agora pras outras 4 regiões (ex.: vento ascendente nos
-   Picos, corrente subaquática em algum lugar etc.)? Pode ser feito aos
-   poucos, região por região.
-3. Isso é bloqueante pro merge da v3 pra `main`, ou pode entrar como uma
-   v4 separada depois que a v3 (correção do pulo + numpad + editor touch +
-   d-pad + versão no menu) for pro ar e testada?
+- **Grafo de regiões** (`js/world.js`/`js/game.js` reescritos): trocada a
+  corrente linear por id (`prev`/`next` na cadeia principal, `portals`
+  para saídas verticais topo/fundo). O protótipo foi de 5 pra **8
+  regiões**: as 5 originais + 3 regiões-atalho novas (Sótão do Sineiro,
+  Adega de Cera, Copa do Bosque), cada uma com 1 segredo exclusivo.
+  Topologia completa em `docs/03-mundo/MAPA.md` (seção "Protótipo web").
+- **Cipó** (só Bosque Murmurante → Copa do Bosque): tile climbável novo,
+  segurar ↑/↓ sobe/desce sem gravidade, pular solta.
+- **Recurso de travessia próprio por região** (nenhum repetido igual):
+  Vale = brasas ascendentes (leva ao Sótão) · Bosque = cipó · Galerias =
+  cogumelo-mola (bounce pad) · Vidraçal = vórtice de areia (leva a um
+  segredo novo) · Picos = vento uivante (já existia, reaproveitado).
+- Alçapão no chão do Vale (sem mecânica nova, só level design) leva à
+  Adega de Cera.
+- Testado via Playwright: cada portal/mecânica isoladamente (manipulação
+  direta de estado, determinístico), cadeia principal completa ida e
+  volta, os 7 segredos (4 novos + 3 antigos) coletáveis sem erro, resumo
+  de progresso mostrando "regiões visitadas X/8", e regressão completa da
+  UI (numpad, D-pad touch, editor de layout, loja, pausa, resumo) — zero
+  erros de console. **Bug real encontrado e corrigido nesse processo:**
+  `collectSecret` em `entities.js` chamava `g.showToast(...)`, que nunca
+  existiu no objeto de estado (só como `NV.Game.showToast`) — ou seja,
+  coletar **qualquer** segredo (inclusive os 3 que já existiam antes desta
+  sessão) quebrava o jogo com uma exceção não tratada. Corrigido expondo
+  `g.showToast` em `js/game.js`.
