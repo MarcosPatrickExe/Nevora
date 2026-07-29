@@ -135,3 +135,76 @@ Detalhes em `05-multiplayer/NETCODE.md` e `08-publicacao/PUBLICACAO.md`.
 Como o Diretor disse que tem mais itens a adicionar antes de começarmos,
 esta lista **não** define prioridade de execução ainda — é só o registro
 fiel do que foi pedido nesta sessão, esperando a ordem final de ataque.
+
+---
+
+## Pendências da v3 (branch `prototype/v3-controles-inputs`, ainda não mergeada)
+
+> Registro de implementado × pendente pedido pelo Diretor em 2026-07-29,
+> depois de testar a v2 publicada (a v3 ainda não tinha ido ao ar). Antes
+> de reabrir pedido de merge, comparar sempre esta lista com o que já
+> existe na branch para não duplicar trabalho.
+
+### ✅ Implementado nesta rodada (commits em `prototype/v3-controles-inputs`)
+1. Correção da latência/corte do pulo (W × Espaço) — já estava feito antes
+   deste pedido (ver seção "Novidades da v3" do README).
+2. Habilidades no numpad + diagrama de teclado ilustrado — idem, já feito.
+3. Editor de layout dos botões touch — idem, já feito.
+4. **Número da versão do protótipo na tela de menu** ("Protótipo v3"), para
+   o Diretor sempre saber qual build está testando; também aparece no
+   resumo de progresso.
+5. **D-pad de 4 direções no touch** (▲▼ além de ◀▶): o botão de pular no
+   celular já funcionava (não tinha o mesmo bug do W/Espaço, que era
+   exclusivo de teclado); o que faltava de verdade era **direção** —
+   sem ▲/▼ touch não dava pra mirar ataque pra cima, fazer pogo (ataque
+   pra baixo no ar) ou descer de plataforma vazada (↓ + pulo) no celular.
+   A lógica de `atkDir` em `entities.js` já era genérica por ação
+   (`In.pressed('up')`/`In.pressed('down')`), então só faltava o botão —
+   nenhuma mudança de gameplay, só de input.
+
+### 🔴 Pendente — redesenho de navegação multi-caminho (Silksong-like) + cipós
+
+Pedido do Diretor: cada região deve ter **pelo menos 3 opções de caminho**
+ao ser explorada (ex.: entra pelo oeste → sobe por plataformas até outra
+área **ou** segue direto pelo leste; outras regiões variam: só pra cima,
+só pra baixo, cima+baixo, etc.), incentivando exploração e achado de áreas
+secretas. Regiões de bioma florestal podem ter **cipós/cordas** para subir
+mais rápido até o topo — mas isso é **por região, não universal**: cada
+área deve ter um recurso de traversal próprio (o protótipo já faz isso
+parcialmente com clima: vento que empurra em Picos Uivantes, escuridão com
+halo de luz em Galerias Fúngicas, tempestade de areia em Vidraçal).
+
+**Por que isso ainda não foi implementado junto com os itens acima:** é uma
+mudança de arquitetura, não um ajuste de UI. Hoje (ver `js/world.js` e
+`js/game.js`):
+- As 5 regiões do protótipo formam uma **corrente linear** (índice 0→4),
+  conectadas só por bordas esquerda/direita (`entryLeft`/`entryRight`,
+  `g.level.index ± 1`). Não existe conceito de saída por cima/por baixo,
+  nem de "voltar pra uma região por dois lugares diferentes".
+  Cada região hoje é um corredor único (largura 60 tiles, alguns degraus
+  de plataforma), sem bifurcação nenhuma.
+- Implementar o pedido do Diretor de verdade exige: (a) trocar a "corrente"
+  por um **grafo de regiões** (uma região pode ter múltiplas saídas, para
+  regiões diferentes ou pontos diferentes da mesma região); (b) redesenhar
+  o traçado de tiles das 5 regiões existentes para ter bifurcações reais
+  (não só decoração — rotas que levam a lugares diferentes); (c) uma
+  mecânica nova de escalada (tile "cipó", estado de personagem "agarrado
+  subindo", input dedicado) — nenhuma dessas três coisas existe hoje.
+
+**Perguntas antes de começar** (Diretor, por favor responda quando puder;
+não vou implementar isso às cegas):
+1. As **3+ rotas** devem levar a **regiões diferentes** (expandindo a
+   topologia de 5 regiões pra algo mais parecido com o grafo real do jogo
+   final em `03-mundo/MAPA.md`), ou são **desvios dentro da mesma região**
+   (a rota de cima e a de baixo convergem de volta ao mesmo corredor mais
+   à frente, só que uma tem um segredo e a outra é mais rápida)? A segunda
+   opção é bem mais rápida de fazer no protótipo atual; a primeira é
+   praticamente redesenhar o mapa do zero.
+2. Cipó/corda: confirma que é só no **Bosque Murmurante** (única região de
+   bioma florestal hoje) pra essa v3, ou quer o recurso de traversal único
+   também desenhado agora pras outras 4 regiões (ex.: vento ascendente nos
+   Picos, corrente subaquática em algum lugar etc.)? Pode ser feito aos
+   poucos, região por região.
+3. Isso é bloqueante pro merge da v3 pra `main`, ou pode entrar como uma
+   v4 separada depois que a v3 (correção do pulo + numpad + editor touch +
+   d-pad + versão no menu) for pro ar e testada?
