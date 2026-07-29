@@ -21,31 +21,46 @@ abaixo).
 
 ### ⏸️ Onde paramos exatamente
 
-O protótipo v2 foi **aprovado e mergeado em `main`** (deploy no ar). O
-Diretor testou a v2 (a v3 ainda não tinha sido mergeada) e voltou com dois
-pedidos: (1) registrar a versão do protótipo na tela de menu, pra sempre
-saber o que está testando; (2) no celular, o D-pad touch só tinha ◀▶ —
-faltavam ▲▼ para mirar ataque pra cima/pogo e descer de plataforma vazada
-(o botão de pular em si não tinha o bug do W/Espaço, que era só de
-teclado). **Ambos implementados nesta sessão**, ainda na branch
-`prototype/v3-controles-inputs` (5 commits: markup, CSS, `NV.VERSION`,
-resumo de progresso, README) — testado via Playwright (menu mostra
-"Protótipo v3", D-pad com as 4 ações reconhecidas por `NV.Input`, sem
-erros de console) e **pushado para a branch, ainda NÃO mergeado em
-`main`**.
+O protótipo v2 está **no ar**; a v3 segue **pronta e testada, mas ainda NÃO
+mergeada em `main`** — o Diretor pediu explicitamente pra só mergear
+"quando acabar e testar tudo", depois de decidir tocar pra frente com o
+item grande de navegação multi-caminho em vez de mergear cedo.
 
-O Diretor também pediu um item bem maior, ainda **não implementado**:
-redesenho de navegação em cada região do protótipo com **3+ opções de
-caminho** (inspirado em Hollow Knight Silksong) — entradas por oeste/leste
-podendo levar a cima/baixo/outra região, incentivando exploração e achado
-de segredos — e uma mecânica de **cipó/corda** pra subir rápido em regiões
-de bioma florestal, sendo cada região com um recurso de traversal próprio
-(dinâmico, não universal). Isso não foi feito porque é mudança de
-arquitetura (hoje as 5 regiões são uma corrente linear ligada só por
-esquerda/direita, sem bifurcação nenhuma dentro de cada uma), não um
-ajuste pontual — registrado com 3 perguntas de escopo pro Diretor em
-`docs/09-roadmap/BACKLOG_PROTOTIPO.md` (seção "Pendências da v3"), aguardando
-resposta antes de começar.
+Sequência desta sessão: (1) versão no menu + D-pad de 4 direções touch
+implementados e registrados com 3 perguntas de escopo sobre o item grande
+(navegação); (2) o Diretor respondeu as 3 perguntas de uma vez — rotas
+devem levar a **regiões diferentes** mesmo que demore, cipó só no Bosque
+com recurso de traversal próprio pras outras 4 regiões também, e tudo
+junto na v3 antes do merge; (3) **implementado por completo**: o protótipo
+foi de 5 regiões em corrente linear pra **8 regiões em grafo** (`js/world.js`
+e `js/game.js` reescritos — `prev`/`next`/`portals` por id em vez de
+índice), com 3 regiões-atalho novas (Sótão do Sineiro, Adega de Cera, Copa
+do Bosque) cada uma com 1 segredo exclusivo, e um recurso de travessia
+próprio por região: brasas ascendentes (Vale), cipó (Bosque, único pedido
+específico do Diretor), cogumelo-mola/bounce pad (Galerias), vórtice de
+areia (Vidraçal, com segredo novo) e o vento uivante que já existia
+(Picos). Topologia completa em `docs/03-mundo/MAPA.md` (seção "Protótipo
+web").
+
+**Bug real encontrado e corrigido no processo de teste** (não introduzido
+nesta sessão, já existia desde antes): `Player.collectSecret` em
+`entities.js` chamava `g.showToast(...)`, mas isso nunca existiu no objeto
+de estado do jogo (só como `NV.Game.showToast`, um método do módulo) — ou
+seja, coletar **qualquer segredo do protótipo, em qualquer versão anterior
+já publicada**, lançava uma exceção não tratada e quebrava o jogo. Só não
+tinha aparecido porque nenhum teste automatizado anterior chegava a pisar
+exatamente em cima de um segredo. Corrigido expondo `g.showToast` em
+`js/game.js`.
+
+Testado via Playwright: cada mecânica nova isoladamente (updraft leva ao
+Sótão, alçapão leva à Adega, cipó leva à Copa do Bosque, bounce pad
+lança o jogador, vórtice de areia entrega o segredo novo do Vidraçal),
+a cadeia principal completa ida e volta, os 3 links das regiões-atalho de
+volta pra cadeia principal, os 7 segredos totais coletáveis sem erro,
+conclusão do protótipo (lampião final) disparando corretamente, resumo de
+progresso mostrando "regiões visitadas X/8", e regressão completa da UI já
+entregue (numpad, D-pad touch, editor de layout, loja, pausa, resumo) —
+zero erros de console em todos os cenários.
 
 O bug do pulo (sessão anterior) era real, não só sensação: `js/input.js`
 mapeava Espaço e W/↑ para a mesma ação "jump" através de uma variável
@@ -57,13 +72,12 @@ controlam, sem uma tecla conseguir sobrescrever o estado criado por outra —
 confirmado via teste headless que o bug desapareceu e que o pulo responde
 em 1 frame.
 
-**Próxima ação:** o Diretor precisa (a) jogar o protótipo v3 (local ou
-preview da branch) e aprovar o merge de `prototype/v3-controles-inputs` →
-`main`, e (b) responder as 3 perguntas de escopo sobre navegação
-multi-caminho/cipós antes dessa parte começar (ver backlog). Segue
-pendente também: revisão dos 8 fichas de
-boss em `docs/04-gameplay/bosses/` e dos 6 retratos de personagem em
-`prototype/art/png/personagem-*.png`.
+**Próxima ação:** com tudo implementado e testado, o merge de
+`prototype/v3-controles-inputs` → `main` já pode acontecer (segue a regra
+de branch: só publica quando o Diretor aprovar). Depois do merge, jogar a
+v3 no ar é o próximo passo natural. Segue pendente também: revisão dos 8
+fichas de boss em `docs/04-gameplay/bosses/` e dos 6 retratos de
+personagem em `prototype/art/png/personagem-*.png`.
 
 📋 **Lista completa de pedidos do backlog:** `docs/09-roadmap/BACKLOG_PROTOTIPO.md`
 (todos implementados nos protótipos v2/v3, exceto multiplayer/Colyseus —
@@ -135,6 +149,130 @@ personagem foram commitados normalmente no GitHub (`prototype/art/svg/` e
 Arte Conceitual" do Drive como de costume. Marcado como `⏳ pendente (Drive
 offline)` em `docs/art/GENERATED_ASSETS.md`. Uma sessão futura deve tentar
 reconectar e replicar esses 6 arquivos para o Drive.
+
+---
+
+## Sessão 6 — 2026-07-29 (navegação multi-caminho: protótipo vira grafo de 8 regiões)
+
+Continuação direta da Sessão 5, mesmo dia: o Diretor respondeu de uma vez
+as 3 perguntas de escopo que ficaram em aberto sobre o pedido de navegação
+estilo Silksong — "1- devem levar a regiões diferentes. Implemente mesmo
+que demore, eu posso aguardar. 2- sim, o cipó somente para o bosque. O
+recurso de traversal único para as outras 4 regiões também pode
+implementar! 3-junte todas as implementações na v3. Faça o Merge da v3
+somente quando acabar e testar tudo". O Diretor também sugeriu, antes
+disso, representar a topologia em texto usando barras/hífens (mesmo
+estilo do diagrama de camadas já existente em `03-mundo/MAPA.md`) — adotado
+na documentação desta sessão.
+
+**Arquitetura — de corrente linear pra grafo por id:**
+- `js/world.js` reescrito: cada região agora tem `id`, `prev`/`next`
+  (cadeia principal, mesmo comportamento esquerda/direita de sempre) e
+  `portals` (saídas verticais topo/fundo, com faixa de x em tiles e
+  região de destino). `buildLevel(id, ...)` troca a busca por índice por
+  busca em `LEVELS_BY_ID`. Todas as transições sempre pousam o jogador no
+  `entryLeft` padrão do destino — decisão consciente de simplificação
+  (várias rotas convergindo no mesmo ponto de entrada é um padrão normal
+  de metroidvania, e evita ter que inventar pontos de entrada
+  customizados pra cada portal).
+- `js/game.js`: a checagem de transição de região agora primeiro varre
+  `g.level.portals` (saída vertical, dispara quando o x do jogador está na
+  faixa do portal e y passa de um limiar acima/abaixo do mapa) antes de
+  cair na checagem padrão de esquerda/direita e no "caiu fora do mapa
+  morre e reaparece" — usando uma flag `transitioned` pra não processar os
+  três casos na mesma frame. `g.respawn`/`onPlayerDeath`/"fim do
+  protótipo" trocaram de índice numérico pra id (`def.final` marca a
+  região final em vez de comparar com `count-1`).
+- `js/audio.js`: `REGION_TONES` virou objeto por id (com entradas novas
+  pras 3 regiões-atalho, cada uma uma variação sutil do tom da região-mãe).
+- `js/save.js`: "região mais distante (índice/5)" virou "regiões
+  visitadas (Set de ids)/`NV.World.count`" — mais correto pra um grafo
+  onde não existe mais uma noção linear de "mais longe".
+
+**3 regiões novas, cada uma com 1 segredo exclusivo:** Sótão do Sineiro
+(acima do Vale, via brasas), Adega de Cera (abaixo do Vale, via alçapão no
+chão) e Copa do Bosque (acima do Bosque, via cipó) — as duas primeiras
+reconectam em Galerias e Vidraçal; a última pula direto pra Picos Uivantes,
+ignorando Galerias e Vidraçal por completo se o jogador preferir essa rota.
+
+**3 mecânicas novas de travessia, cada região com a sua (nenhuma repetida
+igual):**
+1. **Cipó** (`entities.js`, tile código 4, só no Bosque/Copa do Bosque):
+   segurar ↑/↓ encostado no cipó sobe/desce sem gravidade a
+   `P.CLIMB_SPEED`; pular solta normalmente (o cipó só concede coyote
+   time, não trava o input de pulo).
+2. **Zona de updraft** (empuxo constante pra cima, substitui a gravidade
+   enquanto o jogador está dentro da faixa de x — e opcionalmente de y,
+   ver Vidraçal abaixo): usada nas brasas do Vale (leva ao Sótão, sem
+   limite de altura — só precisa sair da tela por cima) e no vórtice de
+   areia do Vidraçal (com um **limite de altura** — o vórtice desliga
+   perto de uma ledge nova, deixando a gravidade assentar o jogador em
+   cima dela; sem esse limite o jogador simplesmente subiria pra sempre,
+   nunca pousando — bug pego e corrigido durante o teste, ver abaixo).
+3. **Cogumelo-mola / bounce pad** (`entities.js`, tile código 5, só em
+   Galerias): pisar nele lança o jogador pra cima com um impulso fixo,
+   mecânica de impulso instantâneo (diferente do updraft, que é força
+   contínua) — usado no caminho principal de Galerias como elemento de
+   flavor/atalho, não como gate obrigatório.
+
+Picos Uivantes manteve seu recurso já existente (vento que empurra no ar,
+usado pro segredo escondido "atrás do vento") — satisfaz o pedido do
+Diretor sem precisar de mecânica nova ali.
+
+**Dois bugs reais pegos e corrigidos durante o teste (nenhum dos dois era
+óbvio antes de testar de verdade):**
+1. **Vórtice de areia sem limite de altura fazia o jogador nunca pousar na
+   ledge do segredo do Vidraçal** — a ledge era um tile sólido comum
+   (`#`), então o jogador subindo por baixo esbarrava nela como um teto,
+   nunca conseguindo ficar em cima; e mesmo corrigindo isso, um updraft
+   sem limite de y faria o jogador subir pra sempre. Corrigido com dois
+   ajustes: a ledge virou plataforma vazada (`=`, atravessável de baixo
+   pra cima), e a zona de updraft ganhou um limite de altura (`y1`) que
+   desliga o empuxo perto da ledge, deixando a inércia residual + a
+   gravidade completarem um arco natural até pousar em cima.
+2. **`Player.collectSecret` chamava `g.showToast(...)`, que nunca existiu
+   no objeto de estado** (só como `NV.Game.showToast`, exposto
+   separadamente pelo módulo) — bug **pré-existente**, não introduzido
+   nesta sessão: coletar **qualquer segredo do protótipo, em qualquer
+   versão já publicada** (v1/v2/v3), lançava uma exceção não tratada e
+   quebrava o jogo. Só não tinha sido detectado porque nenhum teste
+   automatizado anterior chegava a pisar exatamente em cima de um
+   segredo. Corrigido expondo `g.showToast = showToast;` no estado do
+   jogo em `js/game.js`.
+
+**Testado via Playwright** (regressão + funcional, tudo com zero erros de
+console):
+- Cada mecânica nova isoladamente, por manipulação direta de estado
+  (determinístico — evita depender de timing de input simulado pra
+  platforming preciso): updraft do Vale leva ao Sótão, alçapão leva à
+  Adega, cipó do Bosque leva à Copa do Bosque, bounce pad de Galerias
+  lança o jogador (~-820 de impulso vertical), vórtice do Vidraçal entrega
+  o segredo novo.
+- Cadeia principal completa ida e volta (Vale↔Bosque↔Galerias↔Vidraçal↔
+  Picos), os 3 links de reconexão das regiões-atalho (Sótão→Galerias,
+  Adega→Vidraçal, Copa do Bosque→Picos).
+- Os 7 segredos totais (4 novos + 3 já existentes) coletáveis sem erro —
+  foi esse teste que revelou o bug do `g.showToast`.
+- Conclusão do protótipo (acender o lampião final em Picos) disparando
+  `finished`/`NV.Save.noteFinished()` corretamente via `def.final`.
+- Resumo de progresso mostrando "Regiões visitadas: X/8" corretamente.
+- Regressão completa da UI já entregue: menu → nickname → jogar, andar,
+  pulo, ataque via Numpad5, pausa, resumo, D-pad touch (4 ações
+  reconhecidas), editor de layout dos botões touch (entrar/sair sem
+  erro).
+- Inspeção visual (screenshot) das 8 regiões — confirmado visualmente
+  cipó, brilho do portal, cogumelo-mola e cada tema/clima renderizando
+  corretamente.
+
+**Documentação:** topologia completa registrada em `docs/03-mundo/MAPA.md`
+(nova seção "Protótipo web", com o diagrama em barras/hífens sugerido pelo
+Diretor) e `docs/09-roadmap/BACKLOG_PROTOTIPO.md` (pendência marcada como
+implementada); `prototype/README.md` com seção própria "Navegação
+multi-caminho".
+
+**Estado ao final:** tudo implementado, testado e commitado na branch
+`prototype/v3-controles-inputs` — pronta pro merge em `main`, que o
+Diretor já autorizou fazer assim que tudo estivesse pronto e testado.
 
 ---
 
