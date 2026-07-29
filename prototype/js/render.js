@@ -121,6 +121,75 @@ NV.wind = 0;
           ctx.lineTo(sx + T / 3, py + T);
           ctx.closePath(); ctx.fill(); ctx.stroke();
         }
+      } else if (c === 4) { // cipó (climbável — só Bosque/Copas do Bosque)
+        ctx.strokeStyle = '#3f6844'; ctx.lineWidth = 4;
+        ctx.beginPath();
+        ctx.moveTo(px + T / 2 + boil(tx, 2), py);
+        ctx.lineTo(px + T / 2 + boil(tx + 1, 2), py + T);
+        ctx.stroke();
+        ctx.fillStyle = '#7fd07f';
+        for (let s = 0; s < 2; s++) {
+          const ly = py + 6 + s * 16;
+          ctx.beginPath();
+          ctx.ellipse(px + T / 2 + (s ? 7 : -7), ly, 6, 3, s ? 0.6 : -0.6, 0, 7);
+          ctx.fill();
+        }
+      } else if (c === 5) { // cogumelo-mola (Galerias)
+        ctx.fillStyle = '#8a6a44';
+        ctx.fillRect(px + T / 2 - 3, py + T - 10, 6, 10);
+        ctx.fillStyle = th.accent;
+        ctx.strokeStyle = 'rgba(15,10,8,0.9)'; ctx.lineWidth = 1.8;
+        ctx.beginPath();
+        ctx.ellipse(px + T / 2, py + T - 12 + boil(tx, 1), 15, 9, 0, Math.PI, 0);
+        ctx.closePath(); ctx.fill(); ctx.stroke();
+        ctx.fillStyle = 'rgba(255,255,255,0.55)';
+        ctx.beginPath(); ctx.arc(px + T / 2 - 5, py + T - 16, 2, 0, 7); ctx.fill();
+      }
+    }
+  }
+
+  // ---------- zonas de empuxo (brasas do Vale, vórtice do Vidraçal) ----------
+  function drawUpdrafts(ctx, g, camX, camY, t) {
+    const lv = g.level, th = lv.def.theme;
+    for (const z of lv.updrafts) {
+      const x0 = z.x1 - camX, x1 = z.x2 - camX;
+      if (x1 < 0 || x0 > VW) continue;
+      const cx = (x0 + x1) / 2, w = x1 - x0;
+      ctx.fillStyle = th.accent;
+      for (let i = 0; i < 18; i++) {
+        const speed = 70 + (i % 5) * 22;
+        const px = cx + Math.sin(t * 1.6 + i * 2.1) * (w * 0.4);
+        const py = VH - ((i * 41 + t * speed) % (VH + 40));
+        const flick = 0.25 + 0.55 * Math.abs(Math.sin(t * 3 + i));
+        ctx.globalAlpha = flick;
+        ctx.beginPath(); ctx.arc(px, py, 2 + (i % 3), 0, 7); ctx.fill();
+      }
+      ctx.globalAlpha = 1;
+    }
+  }
+
+  // ---------- indício visual dos portais (saídas verticais escondidas) ----------
+  function drawPortals(ctx, g, camX, camY, t) {
+    for (const p of g.level.portals) {
+      const cx = (p.x1 + p.x2) / 2 - camX;
+      if (cx < -60 || cx > VW + 60) continue;
+      if (p.dir === 'bottom') {
+        const y = g.level.pxH - camY;
+        ctx.save();
+        const gr = ctx.createRadialGradient(cx, y, 2, cx, y, 46);
+        gr.addColorStop(0, 'rgba(5,4,4,0.9)'); gr.addColorStop(1, 'rgba(5,4,4,0)');
+        ctx.fillStyle = gr;
+        ctx.beginPath(); ctx.ellipse(cx, y, 46, 16, 0, 0, 7); ctx.fill();
+        ctx.restore();
+      } else if (p.dir === 'top') {
+        const y = 0 - camY;
+        ctx.save();
+        const glow = 0.35 + 0.15 * Math.sin(t * 2.4);
+        const gr = ctx.createRadialGradient(cx, y, 2, cx, y, 60);
+        gr.addColorStop(0, `rgba(255,220,160,${glow})`); gr.addColorStop(1, 'rgba(255,220,160,0)');
+        ctx.fillStyle = gr;
+        ctx.beginPath(); ctx.ellipse(cx, y, 60, 30, 0, 0, 7); ctx.fill();
+        ctx.restore();
       }
     }
   }
@@ -476,6 +545,8 @@ NV.wind = 0;
       }
       drawBackground(ctx, g, camX);
       drawTiles(ctx, g, camX, camY);
+      drawPortals(ctx, g, camX, camY, t);
+      drawUpdrafts(ctx, g, camX, camY, t);
       drawLamp(ctx, g, camX, camY, t);
       drawSecrets(ctx, g, camX, camY, t);
       drawNpc(ctx, g, camX, camY, t);
