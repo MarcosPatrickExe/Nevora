@@ -1,10 +1,14 @@
 /* Névora protótipo — boot, estados (menu/jogo/pausa), loop e PWA */
+window.NV = window.NV || {};
+NV.VERSION = 'v3'; // acompanha o nome da branch prototype/vN-* que originou o build
+
 (function () {
   const canvas = document.getElementById('game');
   const ctx = canvas.getContext('2d');
 
   const el = {
     menu: document.getElementById('menu'),
+    protoVersion: document.getElementById('protoVersion'),
     controls: document.getElementById('controlsScreen'),
     pause: document.getElementById('pauseScreen'),
     nickname: document.getElementById('nicknameScreen'),
@@ -18,6 +22,7 @@
     priceHeart: document.getElementById('priceHeart'),
     priceFulgor: document.getElementById('priceFulgor'),
     tbtnInteract: document.getElementById('tbtnInteract'),
+    touchEditBar: document.getElementById('touchEditBar'),
   };
 
   let state = 'menu';          // menu | controls | game | pause | nickname | summary
@@ -123,6 +128,27 @@
   });
   document.getElementById('btnQuit').addEventListener('click', () => show('menu'));
 
+  // ---------- editor de layout dos botões touch ----------
+  function enterTouchEdit() {
+    el.menu.classList.add('hidden');
+    el.touch.classList.remove('hidden');
+    el.tbtnInteract.classList.remove('hidden');
+    el.touchEditBar.classList.remove('hidden');
+    NV.TouchLayout.enterEdit();
+    state = 'editTouch';
+    NV.Input.clear();
+  }
+  function exitTouchEdit() {
+    NV.TouchLayout.exitEdit();
+    el.touch.classList.add('hidden');
+    el.tbtnInteract.classList.add('hidden');
+    el.touchEditBar.classList.add('hidden');
+    show('menu');
+  }
+  document.getElementById('btnEditTouch').addEventListener('click', enterTouchEdit);
+  document.getElementById('btnResetTouchLayout').addEventListener('click', () => NV.TouchLayout.reset());
+  document.getElementById('btnDoneTouchLayout').addEventListener('click', exitTouchEdit);
+
   // ---------- loja (Tio Sebo) ----------
   function updateShopUI() {
     const p = NV.Game.state.player;
@@ -149,6 +175,7 @@
   }
 
   NV.Input.bindTouchButtons(el.touch);
+  NV.TouchLayout.init(el.touch);
 
   // ---------- loop ----------
   let last = performance.now() / 1000, acc = 0, elapsed = 0;
@@ -209,6 +236,7 @@
     navigator.serviceWorker.register('sw.js').catch(() => {});
   }
 
+  el.protoVersion.textContent = `Protótipo ${NV.VERSION}`;
   updateTouchLabel();
   show('menu');
   requestAnimationFrame(loop);

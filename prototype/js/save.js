@@ -7,7 +7,7 @@ NV.Save = (function () {
   function empty() {
     return {
       nickname: '', createdAt: Date.now(),
-      furthestRegion: 0, furthestRegionName: 'Vale das Velas',
+      regionsVisited: ['vale'], lastRegionName: 'Vale das Velas',
       deaths: 0, enemiesDefeated: 0, seviaCollected: 0,
       secretsFound: [], upgradesBought: [], finishedRun: false,
       playSeconds: 0,
@@ -34,8 +34,10 @@ NV.Save = (function () {
     save(state);
   }
 
-  function noteRegion(idx, name) {
-    if (idx > state.furthestRegion) { state.furthestRegion = idx; state.furthestRegionName = name; save(state); }
+  function noteRegion(id, name) {
+    state.lastRegionName = name;
+    if (!state.regionsVisited.includes(id)) state.regionsVisited.push(id);
+    save(state);
   }
   function noteDeath() { state.deaths++; save(state); }
   function noteEnemyDefeated() { state.enemiesDefeated++; save(state); }
@@ -49,7 +51,8 @@ NV.Save = (function () {
     const mins = Math.round(state.playSeconds / 60);
     return [
       `Névora — resumo de ${state.nickname || 'jogador'}`,
-      `Região mais distante: ${state.furthestRegionName} (${state.furthestRegion + 1}/5)`,
+      `Versão testada: ${NV.VERSION || '?'}`,
+      `Regiões visitadas: ${state.regionsVisited.length}/${NV.World ? NV.World.count : '?'} (última: ${state.lastRegionName})`,
       `Inimigos derrotados: ${state.enemiesDefeated}`,
       `Sévia coletada: ${state.seviaCollected}`,
       `Segredos encontrados: ${state.secretsFound.length}`,

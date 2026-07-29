@@ -11,18 +11,22 @@ canvas#game { background:#141013; max-width:100vw; max-height:100vh;
   image-rendering:auto; display:block; }
 
 /* ---------- overlays ---------- */
-.overlay { position:absolute; inset:0; display:flex; align-items:center;
-  justify-content:center; background:radial-gradient(ellipse at 50% 40%,
+.overlay { position:absolute; inset:0; display:flex; align-items:flex-start;
+  justify-content:center; overflow-y:auto; background:radial-gradient(ellipse at 50% 40%,
   rgba(40,28,20,.92), rgba(10,8,10,.97)); z-index:20; }
 .overlay.hidden, .hidden { display:none !important; }
 
-.menu-inner { text-align:center; max-width:560px; padding:24px; }
+/* margin:auto num item flex centraliza quando cabe, e permite rolagem sem
+   cortar topo/rodapé quando o conteúdo é mais alto que a tela (ex.: tela de
+   Controles com o diagrama de teclado). */
+.menu-inner { text-align:center; max-width:560px; padding:24px; margin:auto; }
 .menu-inner.wide { max-width:680px; }
 
 .title { font-size:clamp(48px, 9vw, 84px); letter-spacing:.35em;
   text-indent:.35em; color:#f5c96b;
   text-shadow:0 0 18px rgba(245,168,60,.55), 0 2px 0 #5a3b16; }
-.subtitle { color:#a89880; margin:4px 0 26px; font-style:italic; }
+.subtitle { color:#a89880; margin:4px 0 4px; font-style:italic; }
+.proto-version { color:#7a6c56; margin:0 0 22px; font-size:12.5px; letter-spacing:.08em; }
 .foot { color:#6f6354; font-size:13px; margin-top:26px; line-height:1.5; }
 
 h2 { color:#f5c96b; letter-spacing:.15em; margin-bottom:18px; }
@@ -49,6 +53,45 @@ table.keys em { color:#9b8c76; font-size:14px; }
 .tip { color:#9b8c76; font-size:14px; margin:12px 0 18px; line-height:1.6; }
 .tip.small { margin:2px 0; font-size:12.5px; }
 
+/* ---------- ilustração de teclado (tela de Controles) ---------- */
+.kbd-diagram { display:flex; justify-content:center; gap:44px; flex-wrap:wrap;
+  margin:8px 0 18px; }
+.kbd-cluster { display:flex; flex-direction:column; align-items:center; gap:6px; }
+.kbd-cluster-title { color:#c9b896; font-size:13px; letter-spacing:.04em;
+  margin-bottom:4px; }
+.kbd-hint { color:#6f6354; font-style:italic; }
+.kbd-grid { display:grid; grid-template-columns:repeat(3, 34px); gap:4px; }
+.kbd-arrows { margin-top:2px; }
+.kcap { display:flex; align-items:center; justify-content:center;
+  width:34px; height:34px; border-radius:6px; font-size:13px; font-weight:bold;
+  background:linear-gradient(180deg,#4a3a26,#2a2018); border:1.5px solid #6b4d2e;
+  box-shadow:inset 0 1px 0 rgba(255,220,150,.12), 0 1px 2px rgba(0,0,0,.4);
+  color:#c9b896; }
+.kcap-off { visibility:hidden; }
+.kcap-on { color:#f0e2c8; border-color:#8a6a3e; }
+.kcap-wide { width:auto; padding:0 14px; margin-top:6px; letter-spacing:.05em; }
+.kcap-nub { position:relative; }
+.kcap-nub::after { content:''; position:absolute; bottom:5px; width:12px; height:2px;
+  border-radius:2px; background:currentColor; opacity:.6; }
+.kcap-atk { color:#ffb13b; border-color:#ffb13b;
+  box-shadow:0 0 8px rgba(255,177,59,.45), inset 0 1px 0 rgba(255,220,150,.2); }
+.kcap-dash { color:#7fd0ff; border-color:#7fd0ff;
+  box-shadow:0 0 8px rgba(127,208,255,.4), inset 0 1px 0 rgba(255,220,150,.2); }
+.kcap-heal { color:#9fe08a; border-color:#9fe08a;
+  box-shadow:0 0 8px rgba(159,224,138,.4), inset 0 1px 0 rgba(255,220,150,.2); }
+.kcap-int { color:#e8a8d8; border-color:#e8a8d8;
+  box-shadow:0 0 8px rgba(232,168,216,.4), inset 0 1px 0 rgba(255,220,150,.2); }
+
+.kbd-legend { list-style:none; font-size:13.5px; color:#c9b896; margin:0 0 18px;
+  display:inline-flex; flex-direction:column; gap:4px; text-align:left; }
+.kbd-legend em { color:#8a7c68; font-style:italic; }
+.kbd-legend .dot { display:inline-block; width:9px; height:9px; border-radius:50%;
+  margin-right:8px; }
+.dot-atk { background:#ffb13b; }
+.dot-dash { background:#7fd0ff; }
+.dot-heal { background:#9fe08a; }
+.dot-int { background:#e8a8d8; }
+
 /* ---------- nickname / resumo ---------- */
 .ninput { display:block; margin:14px auto; padding:11px 16px; width:100%;
   max-width:320px; font-family:inherit; font-size:17px; color:#f0e2c8;
@@ -67,7 +110,7 @@ table.keys em { color:#9b8c76; font-size:14px; }
 
 /* ---------- touch controls ---------- */
 #touch { position:absolute; inset:0; z-index:15; pointer-events:none; }
-.t-left { position:absolute; left:3vw; bottom:5vh; display:flex; gap:14px; }
+.t-left { position:absolute; left:3vw; bottom:5vh; }
 .t-right { position:absolute; right:3vw; bottom:5vh; display:flex; gap:12px;
   align-items:flex-end; }
 .tbtn { pointer-events:auto; width:64px; height:64px; border-radius:50%;
@@ -77,6 +120,30 @@ table.keys em { color:#9b8c76; font-size:14px; }
 .tbtn.big { width:78px; height:78px; font-size:28px; }
 .tbtn.act { background:rgba(80,50,28,.5); }
 .tbtn:active { background:rgba(245,168,60,.45); border-color:#f5c96b; }
-.t-left .tbtn { width:74px; height:74px; font-size:28px; }
+
+/* d-pad de 4 direções (esquerda/direita já existiam; cima/baixo habilitam
+   ataque pra cima, pogo pra baixo no ar e descida de plataforma vazada
+   também no touch — a lógica em entities.js já era genérica por ação). */
+.dpad { display:grid; grid-template-columns:56px 56px 56px;
+  grid-template-rows:56px 56px 56px; gap:4px; }
+.dpad-btn { width:56px; height:56px; font-size:22px; }
+.dpad-up { grid-column:2; grid-row:1; }
+.dpad-left { grid-column:1; grid-row:2; }
+.dpad-right { grid-column:3; grid-row:2; }
+.dpad-down { grid-column:2; grid-row:3; }
 #tbtnInteract { position:absolute; left:50%; bottom:16vh; transform:translateX(-50%);
   width:56px; height:56px; font-size:20px; }
+
+/* ---------- editor de layout dos botões touch ---------- */
+.tbtn-editable { position:relative; outline:2px dashed rgba(245,201,107,.85);
+  outline-offset:4px; }
+.tbtn-resize { position:absolute; right:-7px; bottom:-7px; width:18px; height:18px;
+  border-radius:50%; background:#f5c96b; border:2px solid #2a2018;
+  pointer-events:auto; touch-action:none; box-shadow:0 0 6px rgba(245,201,107,.6); }
+#touchEditBar { position:absolute; top:0; left:0; right:0; z-index:25;
+  display:flex; flex-direction:column; align-items:center; gap:8px;
+  padding:14px 16px; background:linear-gradient(180deg,rgba(10,8,10,.92),rgba(10,8,10,0));
+  pointer-events:none; }
+.touch-edit-hint { color:#e8dcc8; font-size:13px; text-align:center; max-width:420px; }
+.touch-edit-buttons { display:flex; gap:10px; pointer-events:auto; }
+.touch-edit-buttons .mbtn.small { margin:0; min-width:170px; }

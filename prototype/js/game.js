@@ -11,7 +11,7 @@ NV.Game = (function () {
     camX: 0, camY: 0, shake: 0, hitstop: 0, fade: 1,
     toast: '', toastSub: '', toastT: 0,
     lampLit: false, lampCd: 0,
-    respawn: { level: 0, useLamp: false }, // ponto de retorno
+    respawn: { id: 'vale', useLamp: false }, // ponto de retorno
     finished: false,
     onPlayerDeath: null,
     collectedSecrets: new Set(),
@@ -19,12 +19,12 @@ NV.Game = (function () {
     playAccum: 0,
   };
 
-  function loadLevel(idx, enter) {
-    const lv = NV.World.buildLevel(idx, g.collectedSecrets);
+  function loadLevel(id, enter) {
+    const lv = NV.World.buildLevel(id, g.collectedSecrets);
     g.level = lv;
     g.enemies = lv.enemies.map((s) => NV.Entities.makeEnemy(s));
     g.projectiles = []; g.particles = []; g.pickups = [];
-    g.lampLit = (g.respawn.level === idx && g.respawn.useLamp);
+    g.lampLit = (g.respawn.id === id && g.respawn.useLamp);
     g.lampCd = 0; g.shopOpen = false; g.nearNpc = false;
 
     let pos;
@@ -40,18 +40,19 @@ NV.Game = (function () {
     g.camY = Math.max(0, lv.pxH - VH);
     g.fade = 1;
     showToast(lv.def.name, lv.def.sub);
-    NV.Audio.playMusicForRegion(idx);
-    NV.Save.noteRegion(idx, lv.def.name);
+    NV.Audio.playMusicForRegion(id);
+    NV.Save.noteRegion(id, lv.def.name);
   }
 
   function showToast(msg, sub) { g.toast = msg; g.toastSub = sub || ''; g.toastT = 2.4; }
+  g.showToast = showToast; // entities.js chama g.showToast(...) ao coletar segredos
 
   function start() {
-    g.respawn = { level: 0, useLamp: false };
+    g.respawn = { id: 'vale', useLamp: false };
     g.finished = false;
     g.player = null;
     g.collectedSecrets = new Set(NV.Save.state.secretsFound || []);
-    loadLevel(0, 'spawn');
+    loadLevel('vale', 'spawn');
     g.player.hp = g.player.maxHp; g.player.fulgor = 0;
   }
 
@@ -60,8 +61,8 @@ NV.Game = (function () {
     NV.Save.noteDeath();
     // Eco de Cera simplificado: volta ao último lampião com vida cheia
     setTimeout(() => {
-      const idx = g.respawn.level;
-      loadLevel(idx, g.respawn.useLamp ? 'lamp' : 'spawn');
+      const id = g.respawn.id;
+      loadLevel(id, g.respawn.useLamp ? 'lamp' : 'spawn');
       g.player.hp = g.player.maxHp;
       g.player.dead = false;
       showToast('Você derreteu…', 'de volta ao último lampião');
@@ -110,26 +111,34 @@ NV.Game = (function () {
       g.lampCd = 2;
       if (!g.lampLit) {
         g.lampLit = true;
-        g.respawn = { level: g.level.index, useLamp: true };
+        g.respawn = { id: g.level.id, useLamp: true };
         g.player.hp = g.player.maxHp;
         NV.FX.burst(g, lp.x, lp.y - 40, '#ffd98a', 20);
         NV.Audio.play('lampLight');
-        if (g.level.index === NV.World.count - 1 && !g.finished) {
+        if (g.level.def.final && !g.finished) {
           g.finished = true;
           NV.Save.noteFinished();
-          showToast('Fim do protótipo!', 'as 5 regiões foram atravessadas — obrigado por jogar');
+          showToast('Fim do protótipo!', 'você atravessou até os Picos Uivantes — obrigado por jogar');
         } else showToast('Lampião aceso', 'ponto de retorno salvo · vida restaurada');
       }
     }
 
     // ----- transição entre regiões -----
-    if (g.player.x > g.level.pxW + 6 && g.level.index < NV.World.count - 1) {
-      loadLevel(g.level.index + 1, 'left');
-    } else if (g.player.x < -6 && g.level.index > 0) {
-      loadLevel(g.level.index - 1, 'right');
+    let transitioned = false;
+    for (const p of g.level.portals) {
+      if (g.player.x < p.x1 || g.player.x > p.x2) continue;
+      if (p.dir === 'top' && g.player.y < -20) { loadLevel(p.to, 'left'); transitioned = true; break; }
+      if (p.dir === 'bottom' && g.player.y > g.level.pxH - 4) { loadLevel(p.to, 'left'); transitioned = true; break; }
     }
-    // caiu para fora do mapa
-    if (g.player.y > g.level.pxH + 80) { g.player.hurt(g, 1); if (!g.player.dead) loadLevel(g.level.index, 'spawn'); }
+    if (!transitioned) {
+      const def = g.level.def;
+      if (g.player.x > g.level.pxW + 6 && def.next) { loadLevel(def.next.id, 'left'); transitioned = true; }
+      else if (g.player.x < -6 && def.prev) { loadLevel(def.prev.id, 'right'); transitioned = true; }
+    }
+    // caiu para fora do mapa (fora de qualquer portal válido)
+    if (!transitioned && g.player.y > g.level.pxH + 80) {
+      g.player.hurt(g, 1); if (!g.player.dead) loadLevel(g.level.id, 'spawn');
+    }
 
     // ----- câmera -----
     const tx = Math.max(0, Math.min(g.level.pxW - VW, g.player.x - VW / 2));

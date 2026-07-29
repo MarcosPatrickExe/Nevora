@@ -91,6 +91,7 @@ NV.Audio = (function () {
       chord([392, 523, 659], 0.8, { type: 'sine', gain: 0.16, attack: 0.08 });
       tone(1200, 0.6, { type: 'sine', gain: 0.05, attack: 0.1, slideTo: 1600 });
     },
+    bounce() { tone(260, 0.14, { type: 'sine', gain: 0.26, slideTo: 560, attack: 0.004 }); },
     shopBuy() { chord([523, 784], 0.25, { type: 'square', gain: 0.14, attack: 0.01 }); },
     shopDeny() { tone(180, 0.18, { type: 'square', gain: 0.2, slideTo: 120 }); },
     interact() { tone(880, 0.06, { type: 'sine', gain: 0.14 }); },
@@ -112,18 +113,21 @@ NV.Audio = (function () {
     musicNodes = null;
   }
 
-  const REGION_TONES = [
-    { base: 220, detune: 6, filt: 900, type: 'sine' },      // Vale
-    { base: 196, detune: 5, filt: 700, type: 'triangle' },  // Bosque
-    { base: 174, detune: 8, filt: 500, type: 'sine' },      // Galerias (escuro/grave)
-    { base: 246, detune: 4, filt: 1400, type: 'sawtooth' }, // Vidraçal
-    { base: 261, detune: 3, filt: 1200, type: 'triangle' }, // Picos
-  ];
+  const REGION_TONES = {
+    vale: { base: 220, detune: 6, filt: 900, type: 'sine' },
+    sotao: { base: 233, detune: 4, filt: 850, type: 'sine' },     // variação mais alta do Vale (mesmo sótão)
+    adega: { base: 185, detune: 5, filt: 600, type: 'sine' },     // mais grave/fria (cave de cera)
+    bosque: { base: 196, detune: 5, filt: 700, type: 'triangle' },
+    copas: { base: 220, detune: 3, filt: 950, type: 'triangle' }, // Bosque mais claro/alto
+    galerias: { base: 174, detune: 8, filt: 500, type: 'sine' },  // escuro/grave
+    vidracal: { base: 246, detune: 4, filt: 1400, type: 'sawtooth' },
+    picos: { base: 261, detune: 3, filt: 1200, type: 'triangle' },
+  };
 
-  function playMusicForRegion(idx) {
+  function playMusicForRegion(id) {
     if (!ctx || muted.music) return;
     stopMusic();
-    const cfg = REGION_TONES[idx] || REGION_TONES[0];
+    const cfg = REGION_TONES[id] || REGION_TONES.vale;
     const t0 = ctx.currentTime;
     const gain = ctx.createGain(); gain.gain.setValueAtTime(0.0001, t0);
     gain.gain.exponentialRampToValueAtTime(1, t0 + 1.5);
