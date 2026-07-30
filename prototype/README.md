@@ -113,6 +113,26 @@ mesma rede (ou publicar via GitHub Pages) e usar "Adicionar à tela inicial".
   pequena com um segredo próprio, que reconecta à cadeia principal num
   ponto diferente. Ver "Navegação multi-caminho" abaixo.
 
+### Novidades da v3.2
+
+- **Botão de pausa touch** (canto superior esquerdo): antes só dava pra
+  pausar pelo Esc do teclado — no celular/PWA não existia forma nenhuma de
+  pausar o jogo.
+- **Correção de posição nas transições de região:** os portais verticais
+  (brasas, alçapão, cipó) jogavam o jogador sempre no canto inferior
+  esquerdo da região de destino, ignorando de onde ele veio. Agora a
+  posição **X é preservada proporcionalmente** (ex.: caiu num ponto a 1/4
+  da largura da região de origem → chega a 1/4 da largura da região de
+  destino) e o **Y fica livre pra gravidade** — cai a partir do teto do
+  destino (se saiu pelo chão) ou emerge do chão do destino (se saiu pelo
+  teto), em vez de sempre "teleportar" pra uma posição fixa seguro.
+  Transições **laterais** (esquerda/direita) agora também preservam a
+  **altura Y** do jogador quando existe chão ou plataforma correspondente
+  na região vizinha — antes sempre resetava pro chão principal. Para essa
+  preservação ter efeito de verdade, Vale, Bosque e Vidraçal ganharam
+  plataformas extras perto das bordas laterais (variando a altura em que
+  dá pra atravessar pra região vizinha).
+
 ## Navegação multi-caminho
 
 ```
@@ -158,9 +178,10 @@ Vale das Velas — Bosque Murmurante — Galerias Fúngicas — Vidraçal — Pi
 ## Controles (touch/PWA)
 
 D-pad (◀▶▲▼) para movimento/direção + botões de ação (✚ curar, ⇢ dash,
-✦ atacar, ▲ pular). Segurar ▲ ou ▼ enquanto aperta ✦ mira o ataque pra
-cima/baixo (pogo pra baixo exige estar no ar, igual ao teclado); segurar ▼
-e apertar pular desce de plataforma vazada.
+✦ atacar, ▲ pular) + ⏸ pausar (canto superior esquerdo). Segurar ▲ ou ▼
+enquanto aperta ✦ mira o ataque pra cima/baixo (pogo pra baixo exige estar
+no ar, igual ao teclado); segurar ▼ e apertar pular desce de plataforma
+vazada.
 
 ## Limitações conhecidas (de propósito)
 

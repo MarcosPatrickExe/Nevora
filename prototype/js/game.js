@@ -27,9 +27,16 @@ NV.Game = (function () {
     g.lampLit = (g.respawn.id === id && g.respawn.useLamp);
     g.lampCd = 0; g.shopOpen = false; g.nearNpc = false;
 
+    // enter: 'spawn' | 'lamp' | { mode:'left'|'right', y } (preserva a altura
+    // Y ao atravessar pelas laterais, se houver chão/plataforma nessa altura)
+    // | { mode:'fallTop'|'riseFloor', xFrac } (preserva a posição X
+    // proporcional ao atravessar por um portal vertical; Y fica livre pra
+    // gravidade — cai do teto ou emerge do chão, conforme a direção)
     let pos;
-    if (enter === 'left') pos = lv.entryLeft;
-    else if (enter === 'right') pos = lv.entryRight;
+    if (enter && enter.mode === 'left') pos = lv.groundBelow(2, Math.floor((enter.y ?? lv.entryLeft.y) / T));
+    else if (enter && enter.mode === 'right') pos = lv.groundBelow(lv.w - 3, Math.floor((enter.y ?? lv.entryRight.y) / T));
+    else if (enter && enter.mode === 'fallTop') pos = lv.airTop(Math.round(enter.xFrac * lv.w));
+    else if (enter && enter.mode === 'riseFloor') pos = lv.groundBelow(Math.round(enter.xFrac * lv.w), 0);
     else if (enter === 'lamp' && lv.lamp) pos = { x: lv.lamp.x, y: lv.lamp.y - 12 };
     else pos = lv.spawn;
 
@@ -127,13 +134,16 @@ NV.Game = (function () {
     let transitioned = false;
     for (const p of g.level.portals) {
       if (g.player.x < p.x1 || g.player.x > p.x2) continue;
-      if (p.dir === 'top' && g.player.y < -20) { loadLevel(p.to, 'left'); transitioned = true; break; }
-      if (p.dir === 'bottom' && g.player.y > g.level.pxH - 4) { loadLevel(p.to, 'left'); transitioned = true; break; }
+      const xFrac = g.player.x / g.level.pxW;
+      // 'top' = saiu pelo teto (subindo) -> emerge pelo chão do destino;
+      // 'bottom' = saiu pelo chão (caindo) -> cai a partir do teto do destino
+      if (p.dir === 'top' && g.player.y < -20) { loadLevel(p.to, { mode: 'riseFloor', xFrac }); transitioned = true; break; }
+      if (p.dir === 'bottom' && g.player.y > g.level.pxH - 4) { loadLevel(p.to, { mode: 'fallTop', xFrac }); transitioned = true; break; }
     }
     if (!transitioned) {
       const def = g.level.def;
-      if (g.player.x > g.level.pxW + 6 && def.next) { loadLevel(def.next.id, 'left'); transitioned = true; }
-      else if (g.player.x < -6 && def.prev) { loadLevel(def.prev.id, 'right'); transitioned = true; }
+      if (g.player.x > g.level.pxW + 6 && def.next) { loadLevel(def.next.id, { mode: 'left', y: g.player.y }); transitioned = true; }
+      else if (g.player.x < -6 && def.prev) { loadLevel(def.prev.id, { mode: 'right', y: g.player.y }); transitioned = true; }
     }
     // caiu para fora do mapa (fora de qualquer portal válido)
     if (!transitioned && g.player.y > g.level.pxH + 80) {

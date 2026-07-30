@@ -133,6 +133,7 @@ table.keys em { color:#9b8c76; font-size:14px; }
 .dpad-down { grid-column:2; grid-row:3; }
 #tbtnInteract { position:absolute; left:50%; bottom:16vh; transform:translateX(-50%);
   width:56px; height:56px; font-size:20px; }
+#tbtnPause { position:absolute; left:3vw; top:3vh; width:52px; height:52px; font-size:20px; }
 
 /* ---------- editor de layout dos botões touch ---------- */
 .tbtn-editable { position:relative; outline:2px dashed rgba(245,201,107,.85);
