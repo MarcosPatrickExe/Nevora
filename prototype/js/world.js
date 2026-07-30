@@ -47,6 +47,7 @@ NV.World = (function () {
         fill(g, 38, 11, 43, 11, '#');            // plataforma alta
         fill(g, 47, 9, 48, 9, '#');              // trampolim escondido p/ o segredo
         fill(g, 51, 7, 53, 7, '#');               // ledge do segredo
+        fill(g, 55, 11, 58, 11, '#');            // plataforma perto da borda direita (varia a altura de saída pro Bosque)
         fill(g, 15, 15, 17, 16, '.');            // alçapão — buraco no chão até a Adega
         put(g, 3, 14, 'P');
         put(g, 6, 14, 'L');
@@ -93,12 +94,14 @@ NV.World = (function () {
       build() {
         const w = 60, g = grid(w);
         fill(g, 0, 15, w - 1, 16, '#');
+        fill(g, 2, 11, 7, 11, '=');               // plataforma perto da borda esquerda (varia a altura de entrada vinda do Vale)
         fill(g, 6, 12, 11, 12, '=');
         fill(g, 15, 10, 20, 10, '=');
         fill(g, 24, 8, 28, 8, '=');
         fill(g, 33, 11, 38, 11, '=');
         fill(g, 44, 9, 49, 9, '=');
         fill(g, 52, 0, 52, 14, 'V');              // cipó — sobe até a Copa do Bosque
+        fill(g, 55, 9, 58, 9, '=');               // plataforma perto da borda direita (varia a altura de saída pra Galerias)
         put(g, 30, 14, 'L');
         put(g, 18, 7, 'e'); put(g, 27, 6, 'e'); put(g, 36, 8, 'e'); put(g, 47, 6, 'e');
         return g;
@@ -158,6 +161,7 @@ NV.World = (function () {
       build() {
         const w = 60, g = grid(w);
         fill(g, 0, 15, w - 1, 16, '#');
+        fill(g, 2, 12, 7, 12, '#');               // plataforma perto da borda esquerda (varia a altura de entrada vinda de Galerias)
         fill(g, 18, 14, 20, 14, '^');             // espinhos de vidro
         fill(g, 40, 14, 42, 14, '^');
         fill(g, 12, 12, 16, 12, '#');
@@ -230,6 +234,30 @@ NV.World = (function () {
       }
       return { x: col * TILE + 16, y: 14 * TILE };
     }
+    // superfície mais próxima ABAIXO de uma linha de partida — usada pra
+    // preservar a altura (Y) do jogador ao trocar de região pelas laterais,
+    // ou pra pousar num ponto X preservado ao emergir por baixo de um portal.
+    // Conta tanto chão sólido (1) quanto plataforma vazada (2) como pouso.
+    function landable(v) { return v === 1 || v === 2; }
+    function groundBelow(col, fromRow) {
+      const c = Math.max(0, Math.min(w - 1, col));
+      const start = Math.max(0, Math.min(H - 1, fromRow));
+      for (let y = start; y <= H - 1; y++) {
+        if (landable(solids[y * w + c]) && !landable(solids[(y - 1) * w + c])) {
+          return { x: c * TILE + 16, y: y * TILE - 20 };
+        }
+      }
+      return groundAt(c);
+    }
+    // primeira linha vazia a partir do topo — usada pra cair num ponto X
+    // preservado sem nascer dentro de uma parede/teto
+    function airTop(col) {
+      const c = Math.max(0, Math.min(w - 1, col));
+      for (let y = 0; y < H; y++) {
+        if (solids[y * w + c] !== 1) return { x: c * TILE + 16, y: y * TILE + 8 };
+      }
+      return { x: c * TILE + 16, y: 8 };
+    }
     const entryLeft = groundAt(2);
     const entryRight = groundAt(w - 3);
 
@@ -244,7 +272,7 @@ NV.World = (function () {
       id, index: def.index, def, w, h: H, solids,
       pxW: w * TILE, pxH: H * TILE,
       enemies, spawn: spawn || entryLeft, lamp, secrets, npc, portals, updrafts,
-      entryLeft, entryRight,
+      entryLeft, entryRight, groundBelow, airTop,
       cell(tx, ty) {
         if (tx < 0 || tx >= w || ty < 0 || ty >= H) return 0;
         return solids[ty * w + tx];
