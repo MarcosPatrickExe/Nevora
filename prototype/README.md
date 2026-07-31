@@ -133,6 +133,42 @@ mesma rede (ou publicar via GitHub Pages) e usar "Adicionar à tela inicial".
   plataformas extras perto das bordas laterais (variando a altura em que
   dá pra atravessar pra região vizinha).
 
+### Novidades da v3.3
+
+- **Visibilidade melhor em Galerias Fúngicas:** a escuridão tinha um raio de
+  luz pequeno demais e esmaecia desde o centro — difícil de jogar sem
+  conhecer o layout de cor. Raio de luz aumentado e com um "platô" de
+  visão plena (60% do raio totalmente claro, só o restante esmaece),
+  mantendo o clima de escuridão sem prejudicar a jogabilidade.
+- **Corrige bug real de navegação no grafo:** voltar andando por uma região
+  que tem mais de uma entrada possível (ex.: Galerias Fúngicas, alcançável
+  tanto pelo Bosque Murmurante quanto pelo atalho do Sótão do Sineiro)
+  sempre te levava de volta pro vizinho "padrão" da cadeia principal,
+  **não** pra região de onde você realmente veio. Corrigido registrando de
+  verdade de onde o jogador entrou em cada região (`g.enteredFrom`/
+  `g.enteredSide` em `js/game.js`) — voltar agora sempre devolve pro lugar
+  certo. As regiões-atalho continuam de mão única *pelo portal* (não dá
+  pra descer de volta pelo mesmo cipó/brasas/alçapão), mas andar de volta
+  dentro da cadeia principal agora funciona corretamente não importa por
+  onde você entrou. Também adicionadas paredes de segurança nas 3
+  regiões-atalho (antes era possível "vazar" pra fora do mapa pela borda
+  sem parede).
+- **Tela de Mapa** (botão "M" no teclado, ou o botão touch com esse ícone,
+  ambos do tipo *toggle* — aperta de novo pra fechar, não precisa segurar):
+  mostra o grafo das 8 regiões, com a região atual destacada (pulsando) e
+  as já visitadas marcadas na cor de destaque de cada uma.
+- **Tela de Configurações** (⚙, tanto no menu principal quanto na pausa):
+  volume de música e de efeitos (sliders, salvos em `localStorage`), além
+  do que já existia (Botões na tela: Auto/Sempre/Nunca, e o editor de
+  posição/tamanho dos botões touch) — tudo centralizado num só lugar.
+- **Música com variação melódica de verdade:** antes cada região tocava só
+  um drone de 2 osciladores dessintonizados (soava como "uma nota só").
+  Adicionada uma camada de arpejo aleatório por cima do drone, usando uma
+  escala musical diferente por região (pentatônica maior no Vale, dórico
+  no Bosque, frígio nas Galerias — mais tenso/escuro, etc.), com notas
+  soltas em intervalos e oitavas levemente variados — mesmo espírito
+  ambiente, mas sem soar estático.
+
 ## Navegação multi-caminho
 
 ```
@@ -174,14 +210,16 @@ Vale das Velas — Bosque Murmurante — Galerias Fúngicas — Vidraçal — Pi
 | Numpad 8 *(ou L / V)* | curar (gasta 3 Fulgor) |
 | Numpad 2 *(ou E / F)* | interagir / falar com NPCs |
 | Esc | pausar |
+| M | abrir/fechar o Mapa (toggle) |
 
 ## Controles (touch/PWA)
 
 D-pad (◀▶▲▼) para movimento/direção + botões de ação (✚ curar, ⇢ dash,
-✦ atacar, ▲ pular) + ⏸ pausar (canto superior esquerdo). Segurar ▲ ou ▼
-enquanto aperta ✦ mira o ataque pra cima/baixo (pogo pra baixo exige estar
-no ar, igual ao teclado); segurar ▼ e apertar pular desce de plataforma
-vazada.
+✦ atacar, ▲ pular) + ⚙ pausar (canto superior esquerdo) + botão "M" pra
+abrir/fechar o Mapa (canto superior direito, também toggle). Segurar ▲ ou
+▼ enquanto aperta ✦ mira o ataque pra cima/baixo (pogo pra baixo exige
+estar no ar, igual ao teclado); segurar ▼ e apertar pular desce de
+plataforma vazada.
 
 ## Limitações conhecidas (de propósito)
 
