@@ -278,17 +278,17 @@ NV.wind = 0;
     // anel de cera (cintura) em bronze
     ctx.strokeStyle = '#a97b32'; ctx.lineWidth = 3;
     ctx.beginPath(); ctx.moveTo(-10, 6); ctx.quadraticCurveTo(0, 9 + boil(6, 1), 11, 5); ctx.stroke();
-    // olhos de brasa (metade inferior da cabeça)
-    ctx.fillStyle = '#ff9d3b';
+    // olhos de brasa (metade inferior da cabeça) — cor da classe (Acendedor)
+    ctx.fillStyle = p.flameColor || '#ff9d3b';
     ctx.beginPath(); ctx.arc(3, -10, 2.6, 0, 7); ctx.arc(9, -10, 2.6, 0, 7); ctx.fill();
 
-    // pavio + chama
+    // pavio + chama — a cor da chama identifica a classe (Acendedor)
     ctx.strokeStyle = '#2a2018'; ctx.lineWidth = 2;
     ctx.beginPath(); ctx.moveTo(0, -26); ctx.lineTo(boil(7, 1.4), -32); ctx.stroke();
     const fh = 14 + Math.sin(t * 9 + p.flameSeed) * 2.5 + (p.fulgor / 6) * 6;
     const flick = Math.sin(t * 23 + p.flameSeed) * 2;
     const fgrad = ctx.createRadialGradient(0, -34 - fh / 3, 1, 0, -34 - fh / 3, fh);
-    fgrad.addColorStop(0, '#fff3c4'); fgrad.addColorStop(0.5, '#ffb13b'); fgrad.addColorStop(1, 'rgba(210,105,30,0)');
+    fgrad.addColorStop(0, '#fff3c4'); fgrad.addColorStop(0.5, p.flameColor || '#ffb13b'); fgrad.addColorStop(1, 'rgba(210,105,30,0)');
     ctx.fillStyle = fgrad;
     ctx.beginPath();
     ctx.moveTo(-5, -31);
@@ -540,6 +540,28 @@ NV.wind = 0;
     }
   }
 
+  // ---------- eco de chama (passiva Memória Acesa da Véspera) ----------
+  function drawEcho(ctx, g, camX, camY, t) {
+    const e = g.echo;
+    if (!e || e.levelId !== g.level.id) return;
+    const x = e.x - camX, y = e.y - camY;
+    const fade = Math.min(1, e.ttl / 10); // esmaece nos últimos 10s antes de sumir
+    ctx.save();
+    ctx.globalAlpha = fade * (0.55 + 0.25 * Math.sin(t * 3));
+    const gr = ctx.createRadialGradient(x, y, 2, x, y, 34);
+    gr.addColorStop(0, 'rgba(255,79,195,0.55)'); gr.addColorStop(1, 'rgba(255,79,195,0)');
+    ctx.fillStyle = gr; ctx.beginPath(); ctx.arc(x, y, 34, 0, 7); ctx.fill();
+    ctx.globalAlpha = fade;
+    ctx.fillStyle = '#ff4fc3';
+    ctx.beginPath();
+    ctx.moveTo(x, y - 14 + boil(90, 1));
+    ctx.quadraticCurveTo(x + 7, y - 4, x + 3, y + 8);
+    ctx.quadraticCurveTo(x, y + 12, x - 3, y + 8);
+    ctx.quadraticCurveTo(x - 7, y - 4, x, y - 14 + boil(90, 1));
+    ctx.closePath(); ctx.fill();
+    ctx.restore();
+  }
+
   // ---------- HUD ----------
   function drawHUD(ctx, g, t) {
     const p = g.player;
@@ -555,10 +577,10 @@ NV.wind = 0;
       ctx.fill(); ctx.stroke();
       if (i < p.hp) { ctx.fillStyle = '#ffb13b'; ctx.beginPath(); ctx.arc(x, y + 2, 3, 0, 7); ctx.fill(); }
     }
-    // fulgor (chama em pips)
+    // fulgor (chama em pips) — cor da classe (Acendedor)
     for (let i = 0; i < 6; i++) {
       const x = 30 + i * 18, y = 58;
-      ctx.fillStyle = i < p.fulgor ? '#ffb13b' : 'rgba(70,60,50,0.7)';
+      ctx.fillStyle = i < p.fulgor ? (p.flameColor || '#ffb13b') : 'rgba(70,60,50,0.7)';
       ctx.beginPath();
       ctx.moveTo(x - 4, y + 5);
       ctx.quadraticCurveTo(x - 5, y - 3, x + boil(40 + i, 1), y - 8);
@@ -567,6 +589,20 @@ NV.wind = 0;
     }
     ctx.fillStyle = 'rgba(232,220,200,0.55)'; ctx.font = '12px Georgia';
     ctx.fillText('FULGOR', 30, 78);
+
+    // Sílice (Batedora) — passiva Faro de Brasa: bússola pulsa quando há
+    // segredo não encontrado na sala atual
+    if (p.classId === 'silice' && g.level.secrets.some((s) => !s.taken)) {
+      const hx = VW - 30, hy = 58;
+      const pulse = 0.5 + 0.5 * Math.sin(t * 6);
+      ctx.save();
+      ctx.globalAlpha = 0.5 + pulse * 0.4;
+      ctx.strokeStyle = '#4fe3ff'; ctx.lineWidth = 2;
+      ctx.beginPath(); ctx.arc(hx, hy, 8 + pulse * 3, 0, 7); ctx.stroke();
+      ctx.fillStyle = '#4fe3ff';
+      ctx.beginPath(); ctx.arc(hx, hy, 2.5, 0, 7); ctx.fill();
+      ctx.restore();
+    }
 
     // sévia (moeda) — canto superior direito
     const sx = VW - 30, sy = 30;
@@ -609,6 +645,7 @@ NV.wind = 0;
       drawUpdrafts(ctx, g, camX, camY, t);
       drawLamp(ctx, g, camX, camY, t);
       drawSecrets(ctx, g, camX, camY, t);
+      drawEcho(ctx, g, camX, camY, t);
       drawNpc(ctx, g, camX, camY, t);
       for (const e of g.enemies) drawEnemy(ctx, e, camX, camY, t, g.level.def.theme.accent);
       for (const pr of g.projectiles) drawProjectile(ctx, pr, camX, camY);
