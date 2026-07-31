@@ -12,6 +12,10 @@ NV.Game = (function () {
     toast: '', toastSub: '', toastT: 0,
     lampLit: false, lampCd: 0,
     respawn: { id: 'vale', useLamp: false }, // ponto de retorno
+    // de onde o jogador veio de verdade e por qual lado entrou na região
+    // atual — usado pra "voltar" sempre pro lugar certo (grafo por
+    // histórico, não por vizinho fixo — ver loadLevel/update abaixo)
+    enteredFrom: null, enteredSide: null,
     finished: false,
     onPlayerDeath: null,
     collectedSecrets: new Set(),
@@ -20,8 +24,18 @@ NV.Game = (function () {
   };
 
   function loadLevel(id, enter) {
+    const fromId = g.level ? g.level.id : null;
     const lv = NV.World.buildLevel(id, g.collectedSecrets);
     g.level = lv;
+    // registra de onde veio e por qual lado, só quando é uma transição de
+    // verdade (não spawn/lamp) — é isso que permite "voltar" pro lugar
+    // certo mesmo quando a região tem mais de um vizinho possível (ex.:
+    // Galerias é alcançável tanto pelo Bosque quanto pelo Sótão do Sineiro)
+    if (enter && (enter.mode === 'left' || enter.mode === 'right' || enter.mode === 'fallTop' || enter.mode === 'riseFloor')) {
+      g.enteredFrom = fromId; g.enteredSide = enter.mode;
+    } else {
+      g.enteredFrom = null; g.enteredSide = null;
+    }
     g.enemies = lv.enemies.map((s) => NV.Entities.makeEnemy(s));
     g.projectiles = []; g.particles = []; g.pickups = [];
     g.lampLit = (g.respawn.id === id && g.respawn.useLamp);
@@ -142,8 +156,16 @@ NV.Game = (function () {
     }
     if (!transitioned) {
       const def = g.level.def;
-      if (g.player.x > g.level.pxW + 6 && def.next) { loadLevel(def.next.id, { mode: 'left', y: g.player.y }); transitioned = true; }
-      else if (g.player.x < -6 && def.prev) { loadLevel(def.prev.id, { mode: 'right', y: g.player.y }); transitioned = true; }
+      if (g.player.x > g.level.pxW + 6) {
+        // se entrou nesta região pela direita (veio de lá andando), sair de
+        // novo pela direita volta pro mesmo lugar — mesmo se `next` apontar
+        // pra outro vizinho "padrão" da cadeia principal
+        const backId = (g.enteredSide === 'right' && g.enteredFrom) ? g.enteredFrom : (def.next && def.next.id);
+        if (backId) { loadLevel(backId, { mode: 'left', y: g.player.y }); transitioned = true; }
+      } else if (g.player.x < -6) {
+        const backId = (g.enteredSide === 'left' && g.enteredFrom) ? g.enteredFrom : (def.prev && def.prev.id);
+        if (backId) { loadLevel(backId, { mode: 'right', y: g.player.y }); transitioned = true; }
+      }
     }
     // caiu para fora do mapa (fora de qualquer portal válido)
     if (!transitioned && g.player.y > g.level.pxH + 80) {
