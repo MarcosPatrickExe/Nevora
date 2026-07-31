@@ -6,7 +6,7 @@
    os botões touch aparecerem bagunçados numa v3 já publicada: o
    index.html novo carregava, mas o style.css ficava preso na versão de
    antes do D-pad existir. */
-const CACHE = 'nevora-proto-v3';
+const CACHE = 'nevora-proto-v3.3';
 const ASSETS = [
   './',
   'index.html',
@@ -15,9 +15,11 @@ const ASSETS = [
   'icon.svg',
   'js/input.js',
   'js/audio.js',
+  'js/classes.js',
   'js/save.js',
   'js/touch-layout.js',
   'js/world.js',
+  'js/map.js',
   'js/entities.js',
   'js/render.js',
   'js/game.js',
