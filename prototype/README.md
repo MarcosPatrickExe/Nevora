@@ -133,6 +133,96 @@ mesma rede (ou publicar via GitHub Pages) e usar "Adicionar à tela inicial".
   plataformas extras perto das bordas laterais (variando a altura em que
   dá pra atravessar pra região vizinha).
 
+### Novidades da v3.3
+
+- **Visibilidade melhor em Galerias Fúngicas:** a escuridão tinha um raio de
+  luz pequeno demais e esmaecia desde o centro — difícil de jogar sem
+  conhecer o layout de cor. Raio de luz aumentado e com um "platô" de
+  visão plena (60% do raio totalmente claro, só o restante esmaece),
+  mantendo o clima de escuridão sem prejudicar a jogabilidade.
+- **Corrige bug real de navegação no grafo:** voltar andando por uma região
+  que tem mais de uma entrada possível (ex.: Galerias Fúngicas, alcançável
+  tanto pelo Bosque Murmurante quanto pelo atalho do Sótão do Sineiro)
+  sempre te levava de volta pro vizinho "padrão" da cadeia principal,
+  **não** pra região de onde você realmente veio. Corrigido registrando de
+  verdade de onde o jogador entrou em cada região (`g.enteredFrom`/
+  `g.enteredSide` em `js/game.js`) — voltar agora sempre devolve pro lugar
+  certo. As regiões-atalho continuam de mão única *pelo portal* (não dá
+  pra descer de volta pelo mesmo cipó/brasas/alçapão), mas andar de volta
+  dentro da cadeia principal agora funciona corretamente não importa por
+  onde você entrou. Também adicionadas paredes de segurança nas 3
+  regiões-atalho (antes era possível "vazar" pra fora do mapa pela borda
+  sem parede).
+- **Tela de Mapa** (botão "M" no teclado, ou o botão touch com esse ícone,
+  ambos do tipo *toggle* — aperta de novo pra fechar, não precisa segurar):
+  mostra o grafo das 8 regiões conectadas pela topologia real. No espírito
+  do mapa de Hollow Knight/Silksong, cada região é desenhada com o
+  **contorno real do seu terreno** (`js/map.js` traça o perfil de
+  chão/plataformas/tetos direto da grade de tiles, sem formas
+  quadradas/retangulares genéricas) — dá pra reconhecer visualmente os
+  pilares das Galerias, os degraus do Vale, as "chaminés" das saídas por
+  portal etc. Região atual destacada (contorno branco, pulsando); já
+  visitadas ganham a cor de destaque da própria região.
+- **Tela de Configurações** (⚙, tanto no menu principal quanto na pausa):
+  volume de música e de efeitos (sliders, salvos em `localStorage`), além
+  do que já existia (Botões na tela: Auto/Sempre/Nunca, e o editor de
+  posição/tamanho dos botões touch) — tudo centralizado num só lugar.
+- **Música com variação melódica de verdade:** antes cada região tocava só
+  um drone de 2 osciladores dessintonizados (soava como "uma nota só").
+  Adicionada uma camada de arpejo aleatório por cima do drone, usando uma
+  escala musical diferente por região (pentatônica maior no Vale, dórico
+  no Bosque, frígio nas Galerias — mais tenso/escuro, etc.), com notas
+  soltas em intervalos e oitavas levemente variados — mesmo espírito
+  ambiente, mas sem soar estático.
+- **Perigos ambientais** (o próprio espaço como desafio, não só os
+  inimigos), encaixados em 3 regiões já existentes:
+  - **Lava (Vidraçal, x24–27):** poço sob a plataforma vazada já existente
+    — morte instantânea ao tocar (`hurt(g, 99)`, mesmo pipeline de
+    dano/morte/respawn de sempre). A plataforma logo acima serve de rota
+    de desvio pra quem não quiser arriscar.
+  - **Água pútrida (Galerias Fúngicas, x40–47):** poço com um verme
+    (inimigo novo, `Worm`) morando dentro — dano contínuo em picadas
+    espaçadas (a cada 0,6s) e lentidão (velocidade horizontal reduzida a
+    45% enquanto submerso). Tem uma rota alta opcional por cima, na
+    plataforma vazada já existente.
+  - **Água gelada + blocos de gelo (Picos Uivantes, x16–23):** lentidão
+    igual à água pútrida, mas sem dano — e 3 blocos de gelo (`IceFloe`)
+    boiando na superfície, oscilando de um lado pro outro e **carregando o
+    jogador** que ficar em cima (plataforma móvel de verdade, não só
+    visual).
+  - Os 3 novos tipos de terreno (`M`=lava, `W`=água pútrida, `I`=água
+    gelada) foram adicionados ao sistema de tiles existente em
+    `js/world.js` (`buildLevel`), com física em `js/entities.js` e visual
+    fervilhante ("line boil") em `js/render.js`, seguindo o mesmo padrão
+    dos espinhos/cipó/cogumelo-mola que já existiam.
+- **Tela de escolha de classe (Acendedores)**, exibida uma vez, entre o
+  nickname e os controles/o jogo — escolha **permanente para o save**
+  (`js/save.js`, `setClass`), com os 6 retratos gerados em
+  `art/png/personagem-*.png`. Dados das classes centralizados em
+  `js/classes.js` (nome, papel, cor de chama, frase, passiva), espelhando
+  `docs/04-gameplay/CLASSES_ACENDEDORES.md` + `docs/art/ACENDEDORES_REDESIGN.md`.
+  Neste protótipo greybox, **cada classe já tem sua passiva funcionando**
+  (as 2 ativas + a técnica exclusiva de cada uma ficam pra uma fase
+  seguinte, como o próprio doc de design já previa):
+  - **Breo (Viandante) — Passo Firme:** sem recuo de dano leve (espinhos,
+    contato de inimigo); Sévia bônus ao derrotar um inimigo por perto.
+  - **Sílice (Batedora) — Faro de Brasa:** ícone pulsante no HUD quando há
+    um segredo não encontrado na sala atual.
+  - **Brasme (Vigia) — Cera Endurecida:** reduz em 1 o dano vindo de frente
+    (na direção que o personagem está olhando); ao perder um Coração de
+    Cera, empurra os inimigos por perto.
+  - **Véspera (Ritualista) — Memória Acesa:** ao morrer, deixa um eco de
+    chama no local; voltar lá dentro de 60s recupera Fagulhas de bônus
+    (simplificação do design original, que presume uma perda de Fagulhas ao
+    morrer — mecânica ainda não existente neste protótipo).
+  - **Turfo (Coletor) — Olho de Mercador:** ~25% de chance de um drop de
+    Sévia vir em dobro.
+  - **Parafino (Funileiro) — Manutenção:** golpes acertados rendem +1
+    Fulgor extra (2 em vez de 1) e soltam uma fagulha de cobre.
+  - A cor da chama (e dos olhos de brasa) do personagem em jogo, e dos pips
+    de Fulgor no HUD, passa a refletir a classe escolhida — "a chama
+    identifica a classe", regra de design já estabelecida nos docs.
+
 ## Navegação multi-caminho
 
 ```
@@ -174,14 +264,16 @@ Vale das Velas — Bosque Murmurante — Galerias Fúngicas — Vidraçal — Pi
 | Numpad 8 *(ou L / V)* | curar (gasta 3 Fulgor) |
 | Numpad 2 *(ou E / F)* | interagir / falar com NPCs |
 | Esc | pausar |
+| M | abrir/fechar o Mapa (toggle) |
 
 ## Controles (touch/PWA)
 
 D-pad (◀▶▲▼) para movimento/direção + botões de ação (✚ curar, ⇢ dash,
-✦ atacar, ▲ pular) + ⏸ pausar (canto superior esquerdo). Segurar ▲ ou ▼
-enquanto aperta ✦ mira o ataque pra cima/baixo (pogo pra baixo exige estar
-no ar, igual ao teclado); segurar ▼ e apertar pular desce de plataforma
-vazada.
+✦ atacar, ▲ pular) + ⚙ pausar (canto superior esquerdo) + botão "M" pra
+abrir/fechar o Mapa (canto superior direito, também toggle). Segurar ▲ ou
+▼ enquanto aperta ✦ mira o ataque pra cima/baixo (pogo pra baixo exige
+estar no ar, igual ao teclado); segurar ▼ e apertar pular desce de
+plataforma vazada.
 
 ## Limitações conhecidas (de propósito)
 

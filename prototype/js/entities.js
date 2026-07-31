@@ -45,15 +45,16 @@ window.NV = window.NV || {};
     e.y = ny;
   }
 
-  function overlapsSpike(lv, e) {
+  function overlapsCode(lv, e, code) {
     const hw = e.w / 2, hh = e.h / 2;
     const x0 = Math.floor((e.x - hw) / T), x1 = Math.floor((e.x + hw) / T);
     const y0 = Math.floor((e.y - hh) / T), y1 = Math.floor((e.y + hh) / T);
     for (let ty = y0; ty <= y1; ty++) for (let tx = x0; tx <= x1; tx++) {
-      if (lv.cell(tx, ty) === 3) return true;
+      if (lv.cell(tx, ty) === code) return true;
     }
     return false;
   }
+  function overlapsSpike(lv, e) { return overlapsCode(lv, e, 3); }
 
   // ---------- recursos de travessia por região ----------
   function onVine(lv, e) { // cipó (Bosque/Copas do Bosque) — código 4
@@ -92,6 +93,8 @@ window.NV = window.NV || {};
     CLIMB_SPEED: 190,               // cipó (só Bosque/Copas do Bosque)
     UPDRAFT_ACCEL: 2600, UPDRAFT_MAXVY: -260, // brasas do Vale / vórtice do Vidraçal
     BOUNCE_FORCE: -820,             // cogumelo-mola de Galerias
+    WATER_SPEED_MULT: 0.45,         // lentidão em água pútrida/gelada
+    WATER_HURT_INT: 0.6,            // intervalo entre picadas de dano na água pútrida
   };
 
   class Player {
@@ -100,12 +103,17 @@ window.NV = window.NV || {};
       this.vx = 0; this.vy = 0; this.facing = 1;
       this.grounded = false; this.coyote = 0; this.jumpBuf = 0;
       this.dashT = 0; this.dashCd = 0; this.dashAvail = true; this.dropTimer = 0;
+      this.waterHurtT = 0;
       this.atkT = 0; this.atkCd = 0; this.atkDir = 'side'; this.atkHit = new Set();
       this.maxHp = P.MAX_HP; this.maxFulgor = P.MAX_FULGOR;
       this.hp = this.maxHp; this.fulgor = 0; this.invuln = 0;
       this.sevia = 0; this.hasBoot = false;
       this.heartsBought = 0; this.fulgorBought = 0;
       this.dead = false; this.flameSeed = Math.random() * 10;
+      // classe (Acendedor) escolhida no save — permanente; a cor da chama
+      // identifica a classe (ver docs/04-gameplay/CLASSES_ACENDEDORES.md)
+      const cls = NV.Classes.get(NV.Save.state.classId);
+      this.classId = cls.id; this.flameColor = cls.flame;
     }
 
     shopPrice(itemId) {
@@ -133,7 +141,7 @@ window.NV = window.NV || {};
     update(g, dt) {
       const In = NV.Input, lv = g.level;
       this.coyote -= dt; this.jumpBuf -= dt; this.dashCd -= dt;
-      this.atkCd -= dt; this.invuln -= dt; this.dropTimer -= dt;
+      this.atkCd -= dt; this.invuln -= dt; this.dropTimer -= dt; this.waterHurtT -= dt;
 
       // ----- movimento horizontal -----
       const ax = (In.pressed('right') ? 1 : 0) - (In.pressed('left') ? 1 : 0);
@@ -193,6 +201,13 @@ window.NV = window.NV || {};
         this.vy = Math.min(P.TERMINAL, this.vy + P.GRAV * mult * dt);
       }
 
+      // ----- água pútrida (Galerias) / água gelada (Picos) — lentidão -----
+      const inWater = overlapsCode(lv, this, 7) ? 7 : overlapsCode(lv, this, 8) ? 8 : 0;
+      if (inWater) {
+        const cap = P.SPEED * P.WATER_SPEED_MULT;
+        this.vx = Math.max(-cap, Math.min(cap, this.vx));
+      }
+
       const wasGrounded = this.grounded;
       collideMove(lv, this, dt);
       if (this.grounded) { this.coyote = P.COYOTE; this.dashAvail = true; }
@@ -225,7 +240,31 @@ window.NV = window.NV || {};
 
       // ----- espinhos -----
       if (overlapsSpike(lv, this) && this.invuln <= 0) {
-        this.hurt(g, 1); this.vy = -420;
+        this.hurt(g, 1);
+        if (this.classId !== 'breo') this.vy = -420; // Breo (Viandante): sem recuo de dano leve
+      }
+
+      // ----- lava (Vidraçal) — morte instantânea ao tocar -----
+      if (overlapsCode(lv, this, 6) && this.invuln <= 0) {
+        this.hurt(g, 99);
+      }
+
+      // ----- água pútrida (Galerias) — dano contínuo, picadas espaçadas -----
+      if (inWater === 7 && this.waterHurtT <= 0) {
+        this.waterHurtT = P.WATER_HURT_INT;
+        this.hurt(g, 1);
+      }
+
+      // ----- blocos de gelo (Picos) — plataforma móvel, carrega o jogador -----
+      for (const floe of g.floes) {
+        const top = floe.y - floe.h / 2;
+        const withinX = this.x + this.w / 2 > floe.x - floe.w / 2 && this.x - this.w / 2 < floe.x + floe.w / 2;
+        const feetY = this.y + this.h / 2;
+        if (withinX && this.vy >= 0 && feetY >= top - 6 && feetY <= top + 14) {
+          this.x += floe.x - floe.prevX;
+          this.y = top - this.h / 2;
+          this.vy = 0; this.grounded = true; this.coyote = P.COYOTE; this.dashAvail = true;
+        }
       }
     }
 
@@ -243,10 +282,12 @@ window.NV = window.NV || {};
         if (aabb(box, en)) {
           this.atkHit.add(en);
           en.hurt(g, 1, this.facing);
-          this.fulgor = Math.min(this.maxFulgor, this.fulgor + 1);
+          // Parafino (Funileiro) — passiva Manutenção: golpes rendem Fulgor extra
+          this.fulgor = Math.min(this.maxFulgor, this.fulgor + (this.classId === 'parafino' ? 2 : 1));
           g.hitstop = Math.max(g.hitstop, 0.045);
           g.shake = 4;
           NV.FX.slash(g, en.x, en.y, g.level.def.theme.accent);
+          if (this.classId === 'parafino') NV.FX.burst(g, en.x, en.y, '#c9a227', 4);
           NV.Audio.play('attackHit');
           if (this.atkDir === 'down') { this.vy = -560; this.dashAvail = true; }
           else if (this.atkDir === 'side') this.vx -= this.facing * 40;
@@ -262,12 +303,27 @@ window.NV = window.NV || {};
       }
     }
 
-    hurt(g, dmg) {
+    hurt(g, dmg, sourceX) {
       if (this.invuln > 0 || this.dashing || this.dead) return;
+      // Brasme (Vigia) — passiva Cera Endurecida: reduz dano vindo de frente
+      if (this.classId === 'brasme' && dmg < 99 && sourceX !== undefined) {
+        const attackerSide = Math.sign(sourceX - this.x) || this.facing;
+        if (attackerSide === this.facing) dmg = Math.max(1, dmg - 1);
+      }
+      const hpBefore = this.hp;
       this.hp -= dmg; this.invuln = 1.2;
       g.hitstop = Math.max(g.hitstop, 0.09); g.shake = 9;
       NV.FX.burst(g, this.x, this.y, '#ff8f5a', 16);
       NV.Audio.play('takeDamage');
+      // Brasme — ao perder um Coração de Cera, onda que empurra inimigos por perto
+      if (this.classId === 'brasme' && this.hp < hpBefore) {
+        for (const en of g.enemies) {
+          if (en.dead) continue;
+          const d = Math.hypot(en.x - this.x, en.y - this.y);
+          if (d < 110) { en.vx = (Math.sign(en.x - this.x) || 1) * 300; en.vy = -200; }
+        }
+        NV.FX.burst(g, this.x, this.y, '#ff5a3c', 10);
+      }
       if (this.hp <= 0) { this.dead = true; g.onPlayerDeath(); }
     }
 
@@ -301,13 +357,25 @@ window.NV = window.NV || {};
         NV.Audio.play('enemyDeath');
         NV.Save.noteEnemyDefeated();
         const n = 1 + Math.floor(Math.random() * 2);
-        for (let i = 0; i < n; i++) g.pickups.push(new SeviaPickup(this.x + (i - n / 2) * 10, this.y));
+        for (let i = 0; i < n; i++) {
+          const sp = new SeviaPickup(this.x + (i - n / 2) * 10, this.y);
+          // Turfo (Coletor) — passiva Olho de Mercador: chance de Sévia em dobro
+          if (g.player.classId === 'turfo' && Math.random() < 0.25) sp.value = 2;
+          g.pickups.push(sp);
+        }
+        // Breo (Viandante) — passiva Passo Firme: Sévia bônus por kill de perto
+        if (g.player.classId === 'breo' && Math.hypot(g.player.x - this.x, g.player.y - this.y) < 90) {
+          g.pickups.push(new SeviaPickup(this.x, this.y - 10));
+        }
       }
     }
     contact(g) {
       if (!this.dead && aabb(this, g.player) && g.player.invuln <= 0) {
-        g.player.hurt(g, 1);
-        g.player.vx = Math.sign(g.player.x - this.x) * 260; g.player.vy = -280;
+        g.player.hurt(g, 1, this.x);
+        // Breo (Viandante): sem recuo de dano leve (Passo Firme)
+        if (g.player.classId !== 'breo') {
+          g.player.vx = Math.sign(g.player.x - this.x) * 260; g.player.vy = -280;
+        }
       }
     }
   }
@@ -424,6 +492,32 @@ window.NV = window.NV || {};
     }
   }
 
+  class Worm extends Enemy { // Galerias — Verme do poço pútrido
+    constructor(x, y) { super(x, y); this.w = 30; this.h = 16; this.hp = 2; this.vx = 50; this.range = 70; }
+    update(g, dt) {
+      this.t += dt; this.flash -= dt;
+      this.y = this.spawnY + Math.sin(this.t * 1.4) * 5;
+      this.x += this.vx * dt;
+      if (Math.abs(this.x - this.spawnX) > this.range) this.vx *= -1;
+      this.facing = Math.sign(this.vx) || this.facing;
+      this.contact(g);
+    }
+  }
+
+  // ---------- bloco de gelo (Picos) — plataforma móvel que carrega o jogador ----------
+  class IceFloe {
+    constructor(x, y, range) {
+      this.spawnX = x; this.x = x; this.prevX = x; this.y = y;
+      this.w = 46; this.h = 12; this.range = range;
+      this.speed = 0.5 + Math.random() * 0.25; this.t = Math.random() * 10;
+    }
+    update(g, dt) {
+      this.t += dt;
+      this.prevX = this.x;
+      this.x = this.spawnX + Math.sin(this.t * this.speed) * this.range;
+    }
+  }
+
   class Projectile {
     constructor(x, y, vx, vy, grav, kind) {
       this.x = x; this.y = y; this.vx = vx; this.vy = vy; this.grav = grav;
@@ -436,7 +530,7 @@ window.NV = window.NV || {};
       const c = g.level.cell(Math.floor(this.x / T), Math.floor(this.y / T));
       if (c === 1 || this.t > 5) { this.dead = true; NV.FX.burst(g, this.x, this.y, '#9fb4c8', 5); return; }
       if (aabb(this, g.player) && g.player.invuln <= 0) {
-        this.dead = true; g.player.hurt(g, 1);
+        this.dead = true; g.player.hurt(g, 1, this.x);
       }
     }
   }
@@ -473,10 +567,11 @@ window.NV = window.NV || {};
     }
   }
 
-  const TYPES = { beetle: Beetle, moth: Moth, spore: Spore, glass: GlassAnt, wasp: IceWasp };
+  const TYPES = { beetle: Beetle, moth: Moth, spore: Spore, glass: GlassAnt, wasp: IceWasp, worm: Worm };
 
   NV.Entities = {
-    Player, SeviaPickup,
+    Player, SeviaPickup, IceFloe,
     makeEnemy(spec) { return new TYPES[spec.type](spec.x, spec.y); },
+    makeFloe(spec) { return new IceFloe(spec.x, spec.y, spec.range); },
   };
 })();

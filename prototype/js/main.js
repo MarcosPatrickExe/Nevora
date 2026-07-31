@@ -12,7 +12,15 @@ NV.VERSION = 'v3'; // acompanha o nome da branch prototype/vN-* que originou o b
     controls: document.getElementById('controlsScreen'),
     pause: document.getElementById('pauseScreen'),
     nickname: document.getElementById('nicknameScreen'),
+    classScreen: document.getElementById('classScreen'),
+    classGrid: document.getElementById('classGrid'),
+    btnClassConfirm: document.getElementById('btnClassConfirm'),
     summary: document.getElementById('summaryScreen'),
+    settings: document.getElementById('settingsScreen'),
+    map: document.getElementById('mapScreen'),
+    mapGraph: document.getElementById('mapGraph'),
+    volMusic: document.getElementById('volMusic'),
+    volSfx: document.getElementById('volSfx'),
     touch: document.getElementById('touch'),
     touchModeLabel: document.getElementById('touchModeLabel'),
     shop: document.getElementById('shopScreen'),
@@ -25,9 +33,11 @@ NV.VERSION = 'v3'; // acompanha o nome da branch prototype/vN-* que originou o b
     touchEditBar: document.getElementById('touchEditBar'),
   };
 
-  let state = 'menu';          // menu | controls | game | pause | nickname | summary
+  let state = 'menu';          // menu | controls | game | pause | nickname | class | summary | settings | map
+  let selectedClassId = null;  // escolha em andamento na tela de classe (antes de confirmar)
   let controlsReturn = 'menu'; // para onde o "voltar" dos controles leva
   let summaryReturn = 'menu';  // para onde o "voltar" do resumo leva
+  let settingsReturn = 'menu'; // para onde o "voltar" das configurações leva
   let touchMode = localStorage.getItem('nv-touch') || 'auto'; // auto|on|off
   let audioUnlocked = false;
   function unlockAudioOnce() {
@@ -55,7 +65,10 @@ NV.VERSION = 'v3'; // acompanha o nome da branch prototype/vN-* que originou o b
     el.controls.classList.toggle('hidden', which !== 'controls');
     el.pause.classList.toggle('hidden', which !== 'pause');
     el.nickname.classList.toggle('hidden', which !== 'nickname');
+    el.classScreen.classList.toggle('hidden', which !== 'class');
     el.summary.classList.toggle('hidden', which !== 'summary');
+    el.settings.classList.toggle('hidden', which !== 'settings');
+    el.map.classList.toggle('hidden', which !== 'map');
     el.touch.classList.toggle('hidden', !(which === 'game' && touchUIWanted()));
     if (which !== 'game') { el.shop.classList.add('hidden'); el.tbtnInteract.classList.add('hidden'); }
     state = which;
@@ -69,12 +82,52 @@ NV.VERSION = 'v3'; // acompanha o nome da branch prototype/vN-* que originou o b
     show('summary');
   }
 
+  function openSettings(from) {
+    settingsReturn = from;
+    el.volMusic.value = Math.round(NV.Audio.musicVolume * 100);
+    el.volSfx.value = Math.round(NV.Audio.sfxVolume * 100);
+    show('settings');
+  }
+
+  function openMap() {
+    NV.MapUI.refresh();
+    show('map');
+  }
+
   function updateTouchLabel() {
     el.touchModeLabel.textContent = { auto: 'Auto', on: 'Sempre', off: 'Nunca' }[touchMode];
   }
 
+  // ---------- tela de escolha de classe (permanente por save) ----------
+  function buildClassGrid() {
+    el.classGrid.innerHTML = '';
+    for (const cls of NV.Classes.list) {
+      const card = document.createElement('div');
+      card.className = 'class-card';
+      card.dataset.id = cls.id;
+      card.style.setProperty('--cc', cls.flame);
+      card.innerHTML = `
+        <img src="${cls.img}" alt="${cls.name}">
+        <div class="class-name">${cls.name}</div>
+        <div class="class-role">${cls.role}</div>
+        <div class="class-passive"><b>${cls.passiveName}</b><br>${cls.passiveDesc}</div>`;
+      card.addEventListener('click', () => {
+        selectedClassId = cls.id;
+        el.classGrid.querySelectorAll('.class-card').forEach((c) => c.classList.toggle('selected', c === card));
+        el.btnClassConfirm.disabled = false;
+      });
+      el.classGrid.appendChild(card);
+    }
+  }
+  document.getElementById('btnClassConfirm').addEventListener('click', () => {
+    if (!selectedClassId) return;
+    NV.Save.setClass(selectedClassId);
+    proceedToPlay();
+  });
+
   // ---------- botões ----------
   function proceedToPlay() {
+    if (!NV.Save.state.classId) { show('class'); return; }
     // desktop com teclado: mostra o mapeamento antes da primeira partida
     if (!touchUIWanted() && !localStorage.getItem('nv-seen-controls')) {
       controlsReturn = 'startgame';
@@ -100,6 +153,12 @@ NV.VERSION = 'v3'; // acompanha o nome da branch prototype/vN-* que originou o b
   document.getElementById('btnSummary').addEventListener('click', () => openSummary('menu'));
   document.getElementById('btnPauseSummary').addEventListener('click', () => openSummary('pause'));
   document.getElementById('btnBackFromSummary').addEventListener('click', () => show(summaryReturn));
+  document.getElementById('btnSettings').addEventListener('click', () => { unlockAudioOnce(); openSettings('menu'); });
+  document.getElementById('btnPauseSettings').addEventListener('click', () => openSettings('pause'));
+  document.getElementById('btnBackFromSettings').addEventListener('click', () => show(settingsReturn));
+  el.volMusic.addEventListener('input', () => NV.Audio.setMusicVolume(el.volMusic.value / 100));
+  el.volSfx.addEventListener('input', () => NV.Audio.setSfxVolume(el.volSfx.value / 100));
+  document.getElementById('btnCloseMap').addEventListener('click', () => show('game'));
   document.getElementById('btnCopySummary').addEventListener('click', () => {
     const text = NV.Save.summaryText();
     if (navigator.clipboard && navigator.clipboard.writeText) {
@@ -131,6 +190,7 @@ NV.VERSION = 'v3'; // acompanha o nome da branch prototype/vN-* que originou o b
   // ---------- editor de layout dos botões touch ----------
   function enterTouchEdit() {
     el.menu.classList.add('hidden');
+    el.settings.classList.add('hidden');
     el.touch.classList.remove('hidden');
     el.tbtnInteract.classList.remove('hidden');
     el.touchEditBar.classList.remove('hidden');
@@ -176,6 +236,8 @@ NV.VERSION = 'v3'; // acompanha o nome da branch prototype/vN-* que originou o b
 
   NV.Input.bindTouchButtons(el.touch);
   NV.TouchLayout.init(el.touch);
+  NV.MapUI.init(el.mapGraph);
+  buildClassGrid();
 
   // ---------- loop ----------
   let last = performance.now() / 1000, acc = 0, elapsed = 0;
@@ -189,6 +251,7 @@ NV.VERSION = 'v3'; // acompanha o nome da branch prototype/vN-* que originou o b
 
     if (state === 'game') {
       if (NV.Input.justPressed('pause') && !NV.Game.state.shopOpen) { show('pause'); }
+      else if (NV.Input.justPressed('map') && !NV.Game.state.shopOpen) { openMap(); }
       else {
         acc += dt;
         while (acc >= STEP) { NV.Game.update(STEP, elapsed); acc -= STEP; }
@@ -200,6 +263,10 @@ NV.VERSION = 'v3'; // acompanha o nome da branch prototype/vN-* que originou o b
       }
     } else if (state === 'pause') {
       if (NV.Input.justPressed('pause')) show('game');
+      NV.Render.frame(ctx, NV.Game.state, elapsed, 0);
+    } else if (state === 'map') {
+      // toggle: apertar de novo (M ou o botão) fecha o mapa
+      if (NV.Input.justPressed('map') || NV.Input.justPressed('pause')) show('game');
       NV.Render.frame(ctx, NV.Game.state, elapsed, 0);
     } else {
       // fundo animado simples do menu

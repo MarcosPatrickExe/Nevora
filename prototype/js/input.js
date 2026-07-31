@@ -24,7 +24,7 @@ NV.Input = (function () {
     KeyK: ['dash'], KeyC: ['dash'], Numpad6: ['dash'],
     KeyL: ['heal'], KeyV: ['heal'], Numpad8: ['heal'],
     KeyE: ['interact'], KeyF: ['interact'], Numpad2: ['interact'],
-    Escape: ['pause'], Enter: ['confirm'],
+    Escape: ['pause'], Enter: ['confirm'], KeyM: ['map'],
   };
 
   function isDownAnywhere(action) {

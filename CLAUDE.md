@@ -38,6 +38,18 @@ Epic, Play Store e App Store.
   (greybox descartável, vanilla JS); a stack definitiva será TypeScript +
   PixiJS + sim compartilhada + Colyseus (ADR-002), em monorepo conforme
   `docs/06-tecnologia/ARQUITETURA.md`.
+- **Paleta de cor por região:** cada região do mapa tem uma paleta de cor
+  própria e distinta das demais, refletindo o ambiente predominante daquele
+  bioma (ex.: Galerias Fúngicas = azuis escuros de caverna; Vidraçal =
+  laranjas/amarelos de deserto de vidro; Picos Uivantes = azul-gelo). No
+  código isso é o objeto `theme` de cada região em `prototype/js/world.js`
+  (`skyTop`, `skyBot`, `ground`, `top`, `far`, `accent`) — toda região nova
+  (protótipo ou stack definitiva) precisa definir sua própria paleta, nunca
+  reaproveitar a de uma região vizinha. Referência visual (só inspiração de
+  processo, não de conteúdo — ver regra de IP abaixo): mapa-múndi de
+  Hollow Knight Silksong em
+  `docs/referencias/mapas/silksong-mapa-mundo-referencia.png`, onde cada
+  área tem cor de contorno própria no mapa in-game.
 - **Branch por versão do protótipo, deploy só no merge para `main`** (regra
   do Diretor, 2026-07-23 — detalhada em `docs/09-roadmap/BACKLOG_PROTOTIPO.md`):
   1. Toda leva de mudanças do protótipo começa numa branch nova:
@@ -57,6 +69,8 @@ Epic, Play Store e App Store.
 |---|---|
 | `docs/` | Toda a especificação e regras do jogo (fonte da verdade) |
 | `docs/art/` | Sistema de design de personagens + prompts + assets gerados |
+| `docs/referencias/` | Imagens de referência externa (só inspiração de processo/mecânica — nunca conteúdo, ver regra de IP acima) |
+| `docs/04-gameplay/CLASSES_ACENDEDORES.md` | Sistema das 6 classes jogáveis (Acendedores) — passiva + 2 ativas + técnica exclusiva por classe |
 | `prototype/` | Protótipo web jogável (greybox) — deployado no GitHub Pages |
 | `.github/workflows/pages.yml` | Deploy automático de `prototype/` no Pages |
 

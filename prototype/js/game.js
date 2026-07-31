@@ -7,12 +7,20 @@ NV.Game = (function () {
 
   const g = {
     level: null, player: null,
-    enemies: [], projectiles: [], particles: [], pickups: [],
+    enemies: [], projectiles: [], particles: [], pickups: [], floes: [],
     camX: 0, camY: 0, shake: 0, hitstop: 0, fade: 1,
     toast: '', toastSub: '', toastT: 0,
     lampLit: false, lampCd: 0,
     respawn: { id: 'vale', useLamp: false }, // ponto de retorno
+    // de onde o jogador veio de verdade e por qual lado entrou na região
+    // atual — usado pra "voltar" sempre pro lugar certo (grafo por
+    // histórico, não por vizinho fixo — ver loadLevel/update abaixo)
+    enteredFrom: null, enteredSide: null,
     finished: false,
+    // Véspera (Ritualista) — passiva Memória Acesa: eco de chama deixado ao
+    // morrer; sobrevive a trocas de região (não é resetado por loadLevel),
+    // expira sozinho depois de 60s (ver update() e onPlayerDeath abaixo)
+    echo: null,
     onPlayerDeath: null,
     collectedSecrets: new Set(),
     shopOpen: false, nearNpc: false, interactCd: 0,
@@ -20,10 +28,21 @@ NV.Game = (function () {
   };
 
   function loadLevel(id, enter) {
+    const fromId = g.level ? g.level.id : null;
     const lv = NV.World.buildLevel(id, g.collectedSecrets);
     g.level = lv;
+    // registra de onde veio e por qual lado, só quando é uma transição de
+    // verdade (não spawn/lamp) — é isso que permite "voltar" pro lugar
+    // certo mesmo quando a região tem mais de um vizinho possível (ex.:
+    // Galerias é alcançável tanto pelo Bosque quanto pelo Sótão do Sineiro)
+    if (enter && (enter.mode === 'left' || enter.mode === 'right' || enter.mode === 'fallTop' || enter.mode === 'riseFloor')) {
+      g.enteredFrom = fromId; g.enteredSide = enter.mode;
+    } else {
+      g.enteredFrom = null; g.enteredSide = null;
+    }
     g.enemies = lv.enemies.map((s) => NV.Entities.makeEnemy(s));
     g.projectiles = []; g.particles = []; g.pickups = [];
+    g.floes = lv.floes.map((f) => NV.Entities.makeFloe(f));
     g.lampLit = (g.respawn.id === id && g.respawn.useLamp);
     g.lampCd = 0; g.shopOpen = false; g.nearNpc = false;
 
@@ -57,6 +76,7 @@ NV.Game = (function () {
   function start() {
     g.respawn = { id: 'vale', useLamp: false };
     g.finished = false;
+    g.echo = null;
     g.player = null;
     g.collectedSecrets = new Set(NV.Save.state.secretsFound || []);
     loadLevel('vale', 'spawn');
@@ -66,6 +86,11 @@ NV.Game = (function () {
   g.onPlayerDeath = function () {
     NV.Audio.play('gameOver');
     NV.Save.noteDeath();
+    // Véspera — passiva Memória Acesa: eco de chama no local da morte;
+    // recompensa em Fagulhas se ela voltar lá dentro de 60s
+    if (g.player.classId === 'vespera') {
+      g.echo = { x: g.player.x, y: g.player.y, levelId: g.level.id, ttl: 60, reward: 8 };
+    }
     // Eco de Cera simplificado: volta ao último lampião com vida cheia
     setTimeout(() => {
       const id = g.respawn.id;
@@ -81,6 +106,7 @@ NV.Game = (function () {
     if (g.toastT > 0) g.toastT -= dt;
     if (g.shake > 0) g.shake *= Math.pow(0.001, dt);
     g.lampCd -= dt; if (g.interactCd > 0) g.interactCd -= dt;
+    if (g.echo) { g.echo.ttl -= dt; if (g.echo.ttl <= 0) g.echo = null; }
     g.playAccum += dt;
     if (g.playAccum >= 5) { NV.Save.addPlaySeconds(5); g.playAccum -= 5; }
 
@@ -96,6 +122,7 @@ NV.Game = (function () {
     }
     if (g.shopOpen) return; // mundo congela enquanto a loja está aberta
 
+    for (const fl of g.floes) fl.update(g, dt);
     g.player.update(g, dt);
     for (const e of g.enemies) if (!e.dead) e.update(g, dt);
     g.enemies = g.enemies.filter((e) => !e.dead);
@@ -130,6 +157,17 @@ NV.Game = (function () {
       }
     }
 
+    // ----- eco de chama da Véspera: coletar de volta as Fagulhas -----
+    if (g.echo && g.echo.levelId === g.level.id
+      && Math.abs(g.player.x - g.echo.x) < 30 && Math.abs(g.player.y - g.echo.y) < 40) {
+      g.player.sevia += g.echo.reward;
+      NV.Save.noteSevia(g.echo.reward);
+      NV.FX.burst(g, g.echo.x, g.echo.y, '#ff4fc3', 20);
+      NV.Audio.play('secretFound');
+      showToast('Memória Acesa', `+${g.echo.reward} Fagulhas recuperadas`);
+      g.echo = null;
+    }
+
     // ----- transição entre regiões -----
     let transitioned = false;
     for (const p of g.level.portals) {
@@ -142,8 +180,16 @@ NV.Game = (function () {
     }
     if (!transitioned) {
       const def = g.level.def;
-      if (g.player.x > g.level.pxW + 6 && def.next) { loadLevel(def.next.id, { mode: 'left', y: g.player.y }); transitioned = true; }
-      else if (g.player.x < -6 && def.prev) { loadLevel(def.prev.id, { mode: 'right', y: g.player.y }); transitioned = true; }
+      if (g.player.x > g.level.pxW + 6) {
+        // se entrou nesta região pela direita (veio de lá andando), sair de
+        // novo pela direita volta pro mesmo lugar — mesmo se `next` apontar
+        // pra outro vizinho "padrão" da cadeia principal
+        const backId = (g.enteredSide === 'right' && g.enteredFrom) ? g.enteredFrom : (def.next && def.next.id);
+        if (backId) { loadLevel(backId, { mode: 'left', y: g.player.y }); transitioned = true; }
+      } else if (g.player.x < -6) {
+        const backId = (g.enteredSide === 'left' && g.enteredFrom) ? g.enteredFrom : (def.prev && def.prev.id);
+        if (backId) { loadLevel(backId, { mode: 'right', y: g.player.y }); transitioned = true; }
+      }
     }
     // caiu para fora do mapa (fora de qualquer portal válido)
     if (!transitioned && g.player.y > g.level.pxH + 80) {

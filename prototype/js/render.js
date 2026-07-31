@@ -144,7 +144,52 @@ NV.wind = 0;
         ctx.closePath(); ctx.fill(); ctx.stroke();
         ctx.fillStyle = 'rgba(255,255,255,0.55)';
         ctx.beginPath(); ctx.arc(px + T / 2 - 5, py + T - 16, 2, 0, 7); ctx.fill();
+      } else if (c === 6) { // lava (Vidraçal) — morte instantânea ao tocar
+        const glow = 0.5 + 0.5 * Math.abs(Math.sin(boilEpoch * 0.7 + tx));
+        ctx.fillStyle = `rgba(255,${90 + Math.floor(glow * 60)},20,1)`;
+        ctx.fillRect(px, py, T + 1, T + 1);
+        ctx.fillStyle = `rgba(255,225,130,${0.35 + glow * 0.3})`;
+        for (let s = 0; s < 3; s++) {
+          const bx = px + 6 + s * 9 + boil(tx * 5 + s, 3);
+          const by = py + 8 + boil(tx * 5 + s + 1, 6);
+          ctx.beginPath(); ctx.arc(bx, by, 2.4, 0, 7); ctx.fill();
+        }
+      } else if (c === 7) { // água pútrida (Galerias) — dano contínuo + lentidão
+        ctx.fillStyle = 'rgba(70,90,40,0.88)';
+        ctx.fillRect(px, py, T + 1, T + 1);
+        ctx.strokeStyle = 'rgba(150,190,90,0.5)'; ctx.lineWidth = 1.4;
+        ctx.beginPath();
+        ctx.moveTo(px, py + 8 + boil(tx * 2, 3));
+        ctx.lineTo(px + T / 2, py + 10 + boil(tx * 2 + 1, 3));
+        ctx.lineTo(px + T, py + 8 + boil(tx * 2 + 2, 3));
+        ctx.stroke();
+      } else if (c === 8) { // água gelada (Picos) — lentidão, sem dano
+        ctx.fillStyle = 'rgba(140,190,230,0.75)';
+        ctx.fillRect(px, py, T + 1, T + 1);
+        ctx.strokeStyle = 'rgba(230,245,255,0.7)'; ctx.lineWidth = 1.4;
+        ctx.beginPath();
+        ctx.moveTo(px, py + 6 + boil(tx * 3, 2));
+        ctx.lineTo(px + T, py + 6 + boil(tx * 3 + 1, 2));
+        ctx.stroke();
       }
+    }
+  }
+
+  // ---------- blocos de gelo (Picos) — plataforma móvel ----------
+  function drawFloes(ctx, g, camX, camY) {
+    for (const fl of g.floes) {
+      const x = fl.x - camX, y = fl.y - camY;
+      if (x < -60 || x > VW + 60) continue;
+      ctx.fillStyle = 'rgba(210,235,250,0.92)';
+      ctx.strokeStyle = 'rgba(15,10,8,0.85)'; ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.moveTo(x - fl.w / 2, y - fl.h / 2 + 3 + boil(fl.x, 1.5));
+      ctx.lineTo(x + fl.w / 2, y - fl.h / 2 + 3 + boil(fl.x + 1, 1.5));
+      ctx.lineTo(x + fl.w / 2 - 4, y + fl.h / 2);
+      ctx.lineTo(x - fl.w / 2 + 4, y + fl.h / 2);
+      ctx.closePath(); ctx.fill(); ctx.stroke();
+      ctx.strokeStyle = 'rgba(255,255,255,0.6)'; ctx.lineWidth = 1.2;
+      ctx.beginPath(); ctx.moveTo(x - fl.w / 3, y - 1); ctx.lineTo(x + fl.w / 4, y - 2); ctx.stroke();
     }
   }
 
@@ -233,17 +278,17 @@ NV.wind = 0;
     // anel de cera (cintura) em bronze
     ctx.strokeStyle = '#a97b32'; ctx.lineWidth = 3;
     ctx.beginPath(); ctx.moveTo(-10, 6); ctx.quadraticCurveTo(0, 9 + boil(6, 1), 11, 5); ctx.stroke();
-    // olhos de brasa (metade inferior da cabeça)
-    ctx.fillStyle = '#ff9d3b';
+    // olhos de brasa (metade inferior da cabeça) — cor da classe (Acendedor)
+    ctx.fillStyle = p.flameColor || '#ff9d3b';
     ctx.beginPath(); ctx.arc(3, -10, 2.6, 0, 7); ctx.arc(9, -10, 2.6, 0, 7); ctx.fill();
 
-    // pavio + chama
+    // pavio + chama — a cor da chama identifica a classe (Acendedor)
     ctx.strokeStyle = '#2a2018'; ctx.lineWidth = 2;
     ctx.beginPath(); ctx.moveTo(0, -26); ctx.lineTo(boil(7, 1.4), -32); ctx.stroke();
     const fh = 14 + Math.sin(t * 9 + p.flameSeed) * 2.5 + (p.fulgor / 6) * 6;
     const flick = Math.sin(t * 23 + p.flameSeed) * 2;
     const fgrad = ctx.createRadialGradient(0, -34 - fh / 3, 1, 0, -34 - fh / 3, fh);
-    fgrad.addColorStop(0, '#fff3c4'); fgrad.addColorStop(0.5, '#ffb13b'); fgrad.addColorStop(1, 'rgba(210,105,30,0)');
+    fgrad.addColorStop(0, '#fff3c4'); fgrad.addColorStop(0.5, p.flameColor || '#ffb13b'); fgrad.addColorStop(1, 'rgba(210,105,30,0)');
     ctx.fillStyle = fgrad;
     ctx.beginPath();
     ctx.moveTo(-5, -31);
@@ -319,6 +364,17 @@ NV.wind = 0;
       ctx.fillStyle = 'rgba(220,240,255,0.7)';
       ctx.beginPath(); ctx.ellipse(-4, -8, 9, 4 + w * 0.3, -0.4, 0, 7); ctx.fill();
       ctx.strokeStyle = accent; ctx.beginPath(); ctx.moveTo(-14, 2); ctx.lineTo(-20, 5 + boil(20, 1)); ctx.stroke();
+    } else if (k === 'Worm') {
+      ctx.fillStyle = base;
+      ctx.beginPath();
+      ctx.moveTo(-14, 2 + boil(22, 1.5));
+      ctx.quadraticCurveTo(-6, -6 + boil(23, 2), 2, 2 + boil(24, 1.5));
+      ctx.quadraticCurveTo(8, 8 + boil(25, 2), 14, 0 + boil(26, 1.5));
+      ctx.lineWidth = 9; ctx.lineCap = 'round'; ctx.strokeStyle = base;
+      ctx.stroke();
+      ctx.strokeStyle = 'rgba(20,15,12,0.9)'; ctx.lineWidth = 2; ctx.stroke();
+      ctx.fillStyle = accent;
+      ctx.beginPath(); ctx.arc(14, 0 + boil(26, 1.5), 2, 0, 7); ctx.fill();
     }
     ctx.restore();
   }
@@ -379,22 +435,25 @@ NV.wind = 0;
       }
       ctx.globalAlpha = 1;
     } else if (w === 'dark') {
-      // escuridão com halo de luz ao redor do jogador (e do lampião)
+      // escuridão com halo de luz ao redor do jogador (e do lampião) —
+      // raio maior e um "platô" de visão plena (0→60% do raio totalmente
+      // claro, só o restante esmaece) em vez de esmaecer desde o centro,
+      // pra dar tempo de reação real contra inimigos/espinhos
       const p = g.player;
       const px = p.x - camX, py = p.y - camY - 20;
       ctx.save();
-      ctx.fillStyle = 'rgba(4,5,10,0.86)';
+      ctx.fillStyle = 'rgba(6,7,13,0.8)';
       ctx.fillRect(0, 0, VW, VH);
       ctx.globalCompositeOperation = 'destination-out';
-      const R = 150 + (p.fulgor / 6) * 60 + Math.sin(t * 7) * 5;
+      const R = 190 + (p.fulgor / 6) * 80 + Math.sin(t * 7) * 5;
       let gr = ctx.createRadialGradient(px, py, 20, px, py, R);
-      gr.addColorStop(0, 'rgba(0,0,0,1)'); gr.addColorStop(1, 'rgba(0,0,0,0)');
+      gr.addColorStop(0, 'rgba(0,0,0,1)'); gr.addColorStop(0.6, 'rgba(0,0,0,1)'); gr.addColorStop(1, 'rgba(0,0,0,0)');
       ctx.fillStyle = gr; ctx.fillRect(px - R, py - R, R * 2, R * 2);
       if (g.level.lamp && g.lampLit) {
         const lx = g.level.lamp.x - camX, ly = g.level.lamp.y - camY - 40;
-        gr = ctx.createRadialGradient(lx, ly, 10, lx, ly, 120);
-        gr.addColorStop(0, 'rgba(0,0,0,1)'); gr.addColorStop(1, 'rgba(0,0,0,0)');
-        ctx.fillStyle = gr; ctx.fillRect(lx - 120, ly - 120, 240, 240);
+        gr = ctx.createRadialGradient(lx, ly, 10, lx, ly, 150);
+        gr.addColorStop(0, 'rgba(0,0,0,1)'); gr.addColorStop(0.55, 'rgba(0,0,0,1)'); gr.addColorStop(1, 'rgba(0,0,0,0)');
+        ctx.fillStyle = gr; ctx.fillRect(lx - 150, ly - 150, 300, 300);
       }
       ctx.restore();
       // brilho quente da chama por cima (para a luz "existir" na caverna)
@@ -481,6 +540,28 @@ NV.wind = 0;
     }
   }
 
+  // ---------- eco de chama (passiva Memória Acesa da Véspera) ----------
+  function drawEcho(ctx, g, camX, camY, t) {
+    const e = g.echo;
+    if (!e || e.levelId !== g.level.id) return;
+    const x = e.x - camX, y = e.y - camY;
+    const fade = Math.min(1, e.ttl / 10); // esmaece nos últimos 10s antes de sumir
+    ctx.save();
+    ctx.globalAlpha = fade * (0.55 + 0.25 * Math.sin(t * 3));
+    const gr = ctx.createRadialGradient(x, y, 2, x, y, 34);
+    gr.addColorStop(0, 'rgba(255,79,195,0.55)'); gr.addColorStop(1, 'rgba(255,79,195,0)');
+    ctx.fillStyle = gr; ctx.beginPath(); ctx.arc(x, y, 34, 0, 7); ctx.fill();
+    ctx.globalAlpha = fade;
+    ctx.fillStyle = '#ff4fc3';
+    ctx.beginPath();
+    ctx.moveTo(x, y - 14 + boil(90, 1));
+    ctx.quadraticCurveTo(x + 7, y - 4, x + 3, y + 8);
+    ctx.quadraticCurveTo(x, y + 12, x - 3, y + 8);
+    ctx.quadraticCurveTo(x - 7, y - 4, x, y - 14 + boil(90, 1));
+    ctx.closePath(); ctx.fill();
+    ctx.restore();
+  }
+
   // ---------- HUD ----------
   function drawHUD(ctx, g, t) {
     const p = g.player;
@@ -496,10 +577,10 @@ NV.wind = 0;
       ctx.fill(); ctx.stroke();
       if (i < p.hp) { ctx.fillStyle = '#ffb13b'; ctx.beginPath(); ctx.arc(x, y + 2, 3, 0, 7); ctx.fill(); }
     }
-    // fulgor (chama em pips)
+    // fulgor (chama em pips) — cor da classe (Acendedor)
     for (let i = 0; i < 6; i++) {
       const x = 30 + i * 18, y = 58;
-      ctx.fillStyle = i < p.fulgor ? '#ffb13b' : 'rgba(70,60,50,0.7)';
+      ctx.fillStyle = i < p.fulgor ? (p.flameColor || '#ffb13b') : 'rgba(70,60,50,0.7)';
       ctx.beginPath();
       ctx.moveTo(x - 4, y + 5);
       ctx.quadraticCurveTo(x - 5, y - 3, x + boil(40 + i, 1), y - 8);
@@ -508,6 +589,20 @@ NV.wind = 0;
     }
     ctx.fillStyle = 'rgba(232,220,200,0.55)'; ctx.font = '12px Georgia';
     ctx.fillText('FULGOR', 30, 78);
+
+    // Sílice (Batedora) — passiva Faro de Brasa: bússola pulsa quando há
+    // segredo não encontrado na sala atual
+    if (p.classId === 'silice' && g.level.secrets.some((s) => !s.taken)) {
+      const hx = VW - 30, hy = 58;
+      const pulse = 0.5 + 0.5 * Math.sin(t * 6);
+      ctx.save();
+      ctx.globalAlpha = 0.5 + pulse * 0.4;
+      ctx.strokeStyle = '#4fe3ff'; ctx.lineWidth = 2;
+      ctx.beginPath(); ctx.arc(hx, hy, 8 + pulse * 3, 0, 7); ctx.stroke();
+      ctx.fillStyle = '#4fe3ff';
+      ctx.beginPath(); ctx.arc(hx, hy, 2.5, 0, 7); ctx.fill();
+      ctx.restore();
+    }
 
     // sévia (moeda) — canto superior direito
     const sx = VW - 30, sy = 30;
@@ -545,10 +640,12 @@ NV.wind = 0;
       }
       drawBackground(ctx, g, camX);
       drawTiles(ctx, g, camX, camY);
+      drawFloes(ctx, g, camX, camY);
       drawPortals(ctx, g, camX, camY, t);
       drawUpdrafts(ctx, g, camX, camY, t);
       drawLamp(ctx, g, camX, camY, t);
       drawSecrets(ctx, g, camX, camY, t);
+      drawEcho(ctx, g, camX, camY, t);
       drawNpc(ctx, g, camX, camY, t);
       for (const e of g.enemies) drawEnemy(ctx, e, camX, camY, t, g.level.def.theme.accent);
       for (const pr of g.projectiles) drawProjectile(ctx, pr, camX, camY);

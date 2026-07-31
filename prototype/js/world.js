@@ -63,6 +63,7 @@ NV.World = (function () {
       next: { id: 'galerias' },
       build() {
         const w = 26, g = grid(w);
+        fill(g, 0, 0, 0, H - 1, '#');             // parede esquerda (região mão-única)
         fill(g, 0, 15, w - 1, 16, '#');
         fill(g, 6, 12, 10, 12, '#');
         fill(g, 14, 9, 18, 9, '=');
@@ -78,6 +79,7 @@ NV.World = (function () {
       next: { id: 'vidracal' },
       build() {
         const w = 26, g = grid(w);
+        fill(g, 0, 0, 0, H - 1, '#');             // parede esquerda (região mão-única)
         fill(g, 0, 15, w - 1, 16, '#');
         fill(g, 8, 13, 12, 13, '#');
         fill(g, 16, 12, 19, 12, '=');
@@ -115,6 +117,7 @@ NV.World = (function () {
       next: { id: 'picos' },
       build() {
         const w = 30, g = grid(w);
+        fill(g, 0, 0, 0, H - 1, '#');              // parede esquerda (região mão-única)
         fill(g, 0, 15, w - 1, 16, '#');
         fill(g, 6, 12, 10, 12, '=');
         fill(g, 13, 9, 17, 9, '=');
@@ -142,9 +145,12 @@ NV.World = (function () {
         fill(g, 48, 12, 53, 12, '#');
         fill(g, 24, 8, 24, 8, '#');                // trampolim escondido (só visível com luz)
         fill(g, 26, 5, 27, 5, '#');                // ledge do segredo
+        fill(g, 40, 15, 47, 15, 'W');              // poço de água pútrida (leito sólido) — dano contínuo + lentidão
+        fill(g, 41, 11, 46, 11, '=');              // rota alta opcional, por cima do poço
         put(g, 17, 15, 'O');                       // cogumelo-mola (recurso próprio da região)
         put(g, 4, 14, 'L');
         put(g, 10, 10, 'e'); put(g, 22, 11, 'e'); put(g, 36, 9, 'e'); put(g, 50, 11, 'e');
+        put(g, 43, 14, 'w');                       // verme, morador do poço
         return g;
       },
     },
@@ -166,6 +172,7 @@ NV.World = (function () {
         fill(g, 40, 14, 42, 14, '^');
         fill(g, 12, 12, 16, 12, '#');
         fill(g, 22, 10, 27, 10, '=');
+        fill(g, 24, 15, 27, 15, 'M');              // poço de lava (leito continua sólido) — sob a vazada, rota de risco/desvio
         fill(g, 36, 12, 39, 12, '#');
         fill(g, 44, 10, 48, 10, '=');
         fill(g, 47, 5, 50, 5, '=');               // ledge do segredo (alcançada pelo vórtice de areia)
@@ -180,10 +187,14 @@ NV.World = (function () {
       weather: 'snow', enemy: 'wasp', bgShape: 'peaks',
       secrets: [{ x: 37, y: 5, item: 'fragment', id: 'picos-fragmento' }],
       prev: { id: 'vidracal' }, final: true,
+      // blocos de gelo — plataformas móveis que boiam sobre o lago gelado,
+      // levando o jogador conforme a correnteza (x/y em tiles; range em px)
+      floes: [{ x: 17, y: 14, range: 44 }, { x: 20, y: 14, range: 44 }, { x: 23, y: 14, range: 44 }],
       build() {
         const w = 60, g = grid(w);
         fill(g, w - 1, 0, w - 1, H - 1, '#');     // parede direita (fim do protótipo)
         fill(g, 0, 15, w - 1, 16, '#');
+        fill(g, 16, 15, 23, 15, 'I');              // lago gelado — só a superfície (linha 16 segue sólida, é o leito)
         fill(g, 24, 14, 26, 14, '^');
         fill(g, 44, 14, 46, 14, '^');
         fill(g, 10, 12, 14, 12, '#');
@@ -207,7 +218,9 @@ NV.World = (function () {
     const def = LEVELS_BY_ID[id];
     const g = def.build();
     const w = g[0].length;
-    // 1 sólido, 2 vazada (one-way), 3 espinho, 4 cipó (climbável), 5 bounce pad
+    // 1 sólido, 2 vazada (one-way), 3 espinho, 4 cipó (climbável), 5 bounce pad,
+    // 6 lava (morte instantânea), 7 água pútrida (dano contínuo + lentidão),
+    // 8 água gelada (lentidão, sem dano)
     const solids = new Uint8Array(w * H);
     const enemies = [];
     let spawn = null, lamp = null;
@@ -219,9 +232,13 @@ NV.World = (function () {
       else if (c === '^') solids[y * w + x] = 3;
       else if (c === 'V') solids[y * w + x] = 4;
       else if (c === 'O') solids[y * w + x] = 5;
+      else if (c === 'M') solids[y * w + x] = 6;
+      else if (c === 'W') solids[y * w + x] = 7;
+      else if (c === 'I') solids[y * w + x] = 8;
       else if (c === 'P') spawn = { x: x * TILE + 16, y: y * TILE + 16 };
       else if (c === 'L') lamp = { x: x * TILE + 16, y: y * TILE + 16 };
       else if (c === 'e') enemies.push({ type: def.enemy, x: x * TILE + 16, y: y * TILE + 16 });
+      else if (c === 'w') enemies.push({ type: 'worm', x: x * TILE + 16, y: y * TILE + 16 });
     }
 
     // pontos de entrada pelas bordas (procura o chão de baixo para cima,
@@ -267,11 +284,12 @@ NV.World = (function () {
     const npc = def.npc ? { ...def.npc, x: def.npc.x * TILE + 16, y: def.npc.y * TILE + 16 } : null;
     const portals = (def.portals || []).map((p) => ({ ...p, x1: p.x1 * TILE, x2: p.x2 * TILE }));
     const updrafts = (def.updrafts || []).map((u) => ({ ...u, x1: u.x1 * TILE, x2: u.x2 * TILE }));
+    const floes = (def.floes || []).map((f) => ({ x: f.x * TILE + 16, y: f.y * TILE + 16, range: f.range }));
 
     return {
       id, index: def.index, def, w, h: H, solids,
       pxW: w * TILE, pxH: H * TILE,
-      enemies, spawn: spawn || entryLeft, lamp, secrets, npc, portals, updrafts,
+      enemies, spawn: spawn || entryLeft, lamp, secrets, npc, portals, updrafts, floes,
       entryLeft, entryRight, groundBelow, airTop,
       cell(tx, ty) {
         if (tx < 0 || tx >= w || ty < 0 || ty >= H) return 0;
