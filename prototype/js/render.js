@@ -379,22 +379,25 @@ NV.wind = 0;
       }
       ctx.globalAlpha = 1;
     } else if (w === 'dark') {
-      // escuridão com halo de luz ao redor do jogador (e do lampião)
+      // escuridão com halo de luz ao redor do jogador (e do lampião) —
+      // raio maior e um "platô" de visão plena (0→60% do raio totalmente
+      // claro, só o restante esmaece) em vez de esmaecer desde o centro,
+      // pra dar tempo de reação real contra inimigos/espinhos
       const p = g.player;
       const px = p.x - camX, py = p.y - camY - 20;
       ctx.save();
-      ctx.fillStyle = 'rgba(4,5,10,0.86)';
+      ctx.fillStyle = 'rgba(6,7,13,0.8)';
       ctx.fillRect(0, 0, VW, VH);
       ctx.globalCompositeOperation = 'destination-out';
-      const R = 150 + (p.fulgor / 6) * 60 + Math.sin(t * 7) * 5;
+      const R = 190 + (p.fulgor / 6) * 80 + Math.sin(t * 7) * 5;
       let gr = ctx.createRadialGradient(px, py, 20, px, py, R);
-      gr.addColorStop(0, 'rgba(0,0,0,1)'); gr.addColorStop(1, 'rgba(0,0,0,0)');
+      gr.addColorStop(0, 'rgba(0,0,0,1)'); gr.addColorStop(0.6, 'rgba(0,0,0,1)'); gr.addColorStop(1, 'rgba(0,0,0,0)');
       ctx.fillStyle = gr; ctx.fillRect(px - R, py - R, R * 2, R * 2);
       if (g.level.lamp && g.lampLit) {
         const lx = g.level.lamp.x - camX, ly = g.level.lamp.y - camY - 40;
-        gr = ctx.createRadialGradient(lx, ly, 10, lx, ly, 120);
-        gr.addColorStop(0, 'rgba(0,0,0,1)'); gr.addColorStop(1, 'rgba(0,0,0,0)');
-        ctx.fillStyle = gr; ctx.fillRect(lx - 120, ly - 120, 240, 240);
+        gr = ctx.createRadialGradient(lx, ly, 10, lx, ly, 150);
+        gr.addColorStop(0, 'rgba(0,0,0,1)'); gr.addColorStop(0.55, 'rgba(0,0,0,1)'); gr.addColorStop(1, 'rgba(0,0,0,0)');
+        ctx.fillStyle = gr; ctx.fillRect(lx - 150, ly - 150, 300, 300);
       }
       ctx.restore();
       // brilho quente da chama por cima (para a luz "existir" na caverna)
