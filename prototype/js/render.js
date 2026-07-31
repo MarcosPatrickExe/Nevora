@@ -144,7 +144,52 @@ NV.wind = 0;
         ctx.closePath(); ctx.fill(); ctx.stroke();
         ctx.fillStyle = 'rgba(255,255,255,0.55)';
         ctx.beginPath(); ctx.arc(px + T / 2 - 5, py + T - 16, 2, 0, 7); ctx.fill();
+      } else if (c === 6) { // lava (Vidraçal) — morte instantânea ao tocar
+        const glow = 0.5 + 0.5 * Math.abs(Math.sin(boilEpoch * 0.7 + tx));
+        ctx.fillStyle = `rgba(255,${90 + Math.floor(glow * 60)},20,1)`;
+        ctx.fillRect(px, py, T + 1, T + 1);
+        ctx.fillStyle = `rgba(255,225,130,${0.35 + glow * 0.3})`;
+        for (let s = 0; s < 3; s++) {
+          const bx = px + 6 + s * 9 + boil(tx * 5 + s, 3);
+          const by = py + 8 + boil(tx * 5 + s + 1, 6);
+          ctx.beginPath(); ctx.arc(bx, by, 2.4, 0, 7); ctx.fill();
+        }
+      } else if (c === 7) { // água pútrida (Galerias) — dano contínuo + lentidão
+        ctx.fillStyle = 'rgba(70,90,40,0.88)';
+        ctx.fillRect(px, py, T + 1, T + 1);
+        ctx.strokeStyle = 'rgba(150,190,90,0.5)'; ctx.lineWidth = 1.4;
+        ctx.beginPath();
+        ctx.moveTo(px, py + 8 + boil(tx * 2, 3));
+        ctx.lineTo(px + T / 2, py + 10 + boil(tx * 2 + 1, 3));
+        ctx.lineTo(px + T, py + 8 + boil(tx * 2 + 2, 3));
+        ctx.stroke();
+      } else if (c === 8) { // água gelada (Picos) — lentidão, sem dano
+        ctx.fillStyle = 'rgba(140,190,230,0.75)';
+        ctx.fillRect(px, py, T + 1, T + 1);
+        ctx.strokeStyle = 'rgba(230,245,255,0.7)'; ctx.lineWidth = 1.4;
+        ctx.beginPath();
+        ctx.moveTo(px, py + 6 + boil(tx * 3, 2));
+        ctx.lineTo(px + T, py + 6 + boil(tx * 3 + 1, 2));
+        ctx.stroke();
       }
+    }
+  }
+
+  // ---------- blocos de gelo (Picos) — plataforma móvel ----------
+  function drawFloes(ctx, g, camX, camY) {
+    for (const fl of g.floes) {
+      const x = fl.x - camX, y = fl.y - camY;
+      if (x < -60 || x > VW + 60) continue;
+      ctx.fillStyle = 'rgba(210,235,250,0.92)';
+      ctx.strokeStyle = 'rgba(15,10,8,0.85)'; ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.moveTo(x - fl.w / 2, y - fl.h / 2 + 3 + boil(fl.x, 1.5));
+      ctx.lineTo(x + fl.w / 2, y - fl.h / 2 + 3 + boil(fl.x + 1, 1.5));
+      ctx.lineTo(x + fl.w / 2 - 4, y + fl.h / 2);
+      ctx.lineTo(x - fl.w / 2 + 4, y + fl.h / 2);
+      ctx.closePath(); ctx.fill(); ctx.stroke();
+      ctx.strokeStyle = 'rgba(255,255,255,0.6)'; ctx.lineWidth = 1.2;
+      ctx.beginPath(); ctx.moveTo(x - fl.w / 3, y - 1); ctx.lineTo(x + fl.w / 4, y - 2); ctx.stroke();
     }
   }
 
@@ -319,6 +364,17 @@ NV.wind = 0;
       ctx.fillStyle = 'rgba(220,240,255,0.7)';
       ctx.beginPath(); ctx.ellipse(-4, -8, 9, 4 + w * 0.3, -0.4, 0, 7); ctx.fill();
       ctx.strokeStyle = accent; ctx.beginPath(); ctx.moveTo(-14, 2); ctx.lineTo(-20, 5 + boil(20, 1)); ctx.stroke();
+    } else if (k === 'Worm') {
+      ctx.fillStyle = base;
+      ctx.beginPath();
+      ctx.moveTo(-14, 2 + boil(22, 1.5));
+      ctx.quadraticCurveTo(-6, -6 + boil(23, 2), 2, 2 + boil(24, 1.5));
+      ctx.quadraticCurveTo(8, 8 + boil(25, 2), 14, 0 + boil(26, 1.5));
+      ctx.lineWidth = 9; ctx.lineCap = 'round'; ctx.strokeStyle = base;
+      ctx.stroke();
+      ctx.strokeStyle = 'rgba(20,15,12,0.9)'; ctx.lineWidth = 2; ctx.stroke();
+      ctx.fillStyle = accent;
+      ctx.beginPath(); ctx.arc(14, 0 + boil(26, 1.5), 2, 0, 7); ctx.fill();
     }
     ctx.restore();
   }
@@ -548,6 +604,7 @@ NV.wind = 0;
       }
       drawBackground(ctx, g, camX);
       drawTiles(ctx, g, camX, camY);
+      drawFloes(ctx, g, camX, camY);
       drawPortals(ctx, g, camX, camY, t);
       drawUpdrafts(ctx, g, camX, camY, t);
       drawLamp(ctx, g, camX, camY, t);
