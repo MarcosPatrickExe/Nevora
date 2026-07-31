@@ -174,6 +174,27 @@ mesma rede (ou publicar via GitHub Pages) e usar "Adicionar à tela inicial".
   no Bosque, frígio nas Galerias — mais tenso/escuro, etc.), com notas
   soltas em intervalos e oitavas levemente variados — mesmo espírito
   ambiente, mas sem soar estático.
+- **Perigos ambientais** (o próprio espaço como desafio, não só os
+  inimigos), encaixados em 3 regiões já existentes:
+  - **Lava (Vidraçal, x24–27):** poço sob a plataforma vazada já existente
+    — morte instantânea ao tocar (`hurt(g, 99)`, mesmo pipeline de
+    dano/morte/respawn de sempre). A plataforma logo acima serve de rota
+    de desvio pra quem não quiser arriscar.
+  - **Água pútrida (Galerias Fúngicas, x40–47):** poço com um verme
+    (inimigo novo, `Worm`) morando dentro — dano contínuo em picadas
+    espaçadas (a cada 0,6s) e lentidão (velocidade horizontal reduzida a
+    45% enquanto submerso). Tem uma rota alta opcional por cima, na
+    plataforma vazada já existente.
+  - **Água gelada + blocos de gelo (Picos Uivantes, x16–23):** lentidão
+    igual à água pútrida, mas sem dano — e 3 blocos de gelo (`IceFloe`)
+    boiando na superfície, oscilando de um lado pro outro e **carregando o
+    jogador** que ficar em cima (plataforma móvel de verdade, não só
+    visual).
+  - Os 3 novos tipos de terreno (`M`=lava, `W`=água pútrida, `I`=água
+    gelada) foram adicionados ao sistema de tiles existente em
+    `js/world.js` (`buildLevel`), com física em `js/entities.js` e visual
+    fervilhante ("line boil") em `js/render.js`, seguindo o mesmo padrão
+    dos espinhos/cipó/cogumelo-mola que já existiam.
 
 ## Navegação multi-caminho
 
