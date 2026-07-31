@@ -110,6 +110,10 @@ window.NV = window.NV || {};
       this.sevia = 0; this.hasBoot = false;
       this.heartsBought = 0; this.fulgorBought = 0;
       this.dead = false; this.flameSeed = Math.random() * 10;
+      // classe (Acendedor) escolhida no save — permanente; a cor da chama
+      // identifica a classe (ver docs/04-gameplay/CLASSES_ACENDEDORES.md)
+      const cls = NV.Classes.get(NV.Save.state.classId);
+      this.classId = cls.id; this.flameColor = cls.flame;
     }
 
     shopPrice(itemId) {
@@ -236,7 +240,8 @@ window.NV = window.NV || {};
 
       // ----- espinhos -----
       if (overlapsSpike(lv, this) && this.invuln <= 0) {
-        this.hurt(g, 1); this.vy = -420;
+        this.hurt(g, 1);
+        if (this.classId !== 'breo') this.vy = -420; // Breo (Viandante): sem recuo de dano leve
       }
 
       // ----- lava (Vidraçal) — morte instantânea ao tocar -----
@@ -277,10 +282,12 @@ window.NV = window.NV || {};
         if (aabb(box, en)) {
           this.atkHit.add(en);
           en.hurt(g, 1, this.facing);
-          this.fulgor = Math.min(this.maxFulgor, this.fulgor + 1);
+          // Parafino (Funileiro) — passiva Manutenção: golpes rendem Fulgor extra
+          this.fulgor = Math.min(this.maxFulgor, this.fulgor + (this.classId === 'parafino' ? 2 : 1));
           g.hitstop = Math.max(g.hitstop, 0.045);
           g.shake = 4;
           NV.FX.slash(g, en.x, en.y, g.level.def.theme.accent);
+          if (this.classId === 'parafino') NV.FX.burst(g, en.x, en.y, '#c9a227', 4);
           NV.Audio.play('attackHit');
           if (this.atkDir === 'down') { this.vy = -560; this.dashAvail = true; }
           else if (this.atkDir === 'side') this.vx -= this.facing * 40;
@@ -296,12 +303,27 @@ window.NV = window.NV || {};
       }
     }
 
-    hurt(g, dmg) {
+    hurt(g, dmg, sourceX) {
       if (this.invuln > 0 || this.dashing || this.dead) return;
+      // Brasme (Vigia) — passiva Cera Endurecida: reduz dano vindo de frente
+      if (this.classId === 'brasme' && dmg < 99 && sourceX !== undefined) {
+        const attackerSide = Math.sign(sourceX - this.x) || this.facing;
+        if (attackerSide === this.facing) dmg = Math.max(1, dmg - 1);
+      }
+      const hpBefore = this.hp;
       this.hp -= dmg; this.invuln = 1.2;
       g.hitstop = Math.max(g.hitstop, 0.09); g.shake = 9;
       NV.FX.burst(g, this.x, this.y, '#ff8f5a', 16);
       NV.Audio.play('takeDamage');
+      // Brasme — ao perder um Coração de Cera, onda que empurra inimigos por perto
+      if (this.classId === 'brasme' && this.hp < hpBefore) {
+        for (const en of g.enemies) {
+          if (en.dead) continue;
+          const d = Math.hypot(en.x - this.x, en.y - this.y);
+          if (d < 110) { en.vx = (Math.sign(en.x - this.x) || 1) * 300; en.vy = -200; }
+        }
+        NV.FX.burst(g, this.x, this.y, '#ff5a3c', 10);
+      }
       if (this.hp <= 0) { this.dead = true; g.onPlayerDeath(); }
     }
 
@@ -335,13 +357,25 @@ window.NV = window.NV || {};
         NV.Audio.play('enemyDeath');
         NV.Save.noteEnemyDefeated();
         const n = 1 + Math.floor(Math.random() * 2);
-        for (let i = 0; i < n; i++) g.pickups.push(new SeviaPickup(this.x + (i - n / 2) * 10, this.y));
+        for (let i = 0; i < n; i++) {
+          const sp = new SeviaPickup(this.x + (i - n / 2) * 10, this.y);
+          // Turfo (Coletor) — passiva Olho de Mercador: chance de Sévia em dobro
+          if (g.player.classId === 'turfo' && Math.random() < 0.25) sp.value = 2;
+          g.pickups.push(sp);
+        }
+        // Breo (Viandante) — passiva Passo Firme: Sévia bônus por kill de perto
+        if (g.player.classId === 'breo' && Math.hypot(g.player.x - this.x, g.player.y - this.y) < 90) {
+          g.pickups.push(new SeviaPickup(this.x, this.y - 10));
+        }
       }
     }
     contact(g) {
       if (!this.dead && aabb(this, g.player) && g.player.invuln <= 0) {
-        g.player.hurt(g, 1);
-        g.player.vx = Math.sign(g.player.x - this.x) * 260; g.player.vy = -280;
+        g.player.hurt(g, 1, this.x);
+        // Breo (Viandante): sem recuo de dano leve (Passo Firme)
+        if (g.player.classId !== 'breo') {
+          g.player.vx = Math.sign(g.player.x - this.x) * 260; g.player.vy = -280;
+        }
       }
     }
   }
@@ -496,7 +530,7 @@ window.NV = window.NV || {};
       const c = g.level.cell(Math.floor(this.x / T), Math.floor(this.y / T));
       if (c === 1 || this.t > 5) { this.dead = true; NV.FX.burst(g, this.x, this.y, '#9fb4c8', 5); return; }
       if (aabb(this, g.player) && g.player.invuln <= 0) {
-        this.dead = true; g.player.hurt(g, 1);
+        this.dead = true; g.player.hurt(g, 1, this.x);
       }
     }
   }
