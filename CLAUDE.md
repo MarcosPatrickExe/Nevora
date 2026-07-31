@@ -59,6 +59,18 @@ Epic, Play Store e App Store.
   3. Só quando o Diretor aprovar, faz o merge dessa branch para `main` — é
      esse merge que dispara o deploy automático no GitHub Pages.
   4. Depois do merge, marcar a versão com uma tag (`git tag proto-vN`).
+  5. **Sempre atualize dois números juntos, na mesma leva de mudanças** (bug
+     real já visto em produção — ver `docs/00-processo/DIARIO_DE_BORDO.md`,
+     2026-07-31: o Diretor viu a versão antiga mesmo com o deploy
+     funcionando, porque só o `CACHE` esqueceu de subir):
+     - `NV.VERSION` em `prototype/js/main.js` (mostrado no menu como
+       "Protótipo vN") — nunca deixar genérico tipo "v3" quando já tem
+       vN.1/vN.2/vN.3 publicados; sempre com o número específico.
+     - `CACHE` em `prototype/sw.js` — o comentário no próprio arquivo já
+       avisa: sem subir esse número, o service worker (cache-first) continua
+       servindo os arquivos antigos pra sempre em qualquer PWA já instalado,
+       *mesmo que o deploy no Pages tenha funcionado perfeitamente*. Também
+       conferir que todo arquivo `.js` novo entrou na lista `ASSETS`.
   - Isso já é o comportamento nativo do workflow atual (`branches: [main]`
     em `.github/workflows/pages.yml`) — não precisa mudar o YAML, só seguir
     a disciplina de branch acima.
