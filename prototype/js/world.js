@@ -63,6 +63,7 @@ NV.World = (function () {
       next: { id: 'galerias' },
       build() {
         const w = 26, g = grid(w);
+        fill(g, 0, 0, 0, H - 1, '#');             // parede esquerda (região mão-única)
         fill(g, 0, 15, w - 1, 16, '#');
         fill(g, 6, 12, 10, 12, '#');
         fill(g, 14, 9, 18, 9, '=');
@@ -78,6 +79,7 @@ NV.World = (function () {
       next: { id: 'vidracal' },
       build() {
         const w = 26, g = grid(w);
+        fill(g, 0, 0, 0, H - 1, '#');             // parede esquerda (região mão-única)
         fill(g, 0, 15, w - 1, 16, '#');
         fill(g, 8, 13, 12, 13, '#');
         fill(g, 16, 12, 19, 12, '=');
@@ -115,6 +117,7 @@ NV.World = (function () {
       next: { id: 'picos' },
       build() {
         const w = 30, g = grid(w);
+        fill(g, 0, 0, 0, H - 1, '#');              // parede esquerda (região mão-única)
         fill(g, 0, 15, w - 1, 16, '#');
         fill(g, 6, 12, 10, 12, '=');
         fill(g, 13, 9, 17, 9, '=');
