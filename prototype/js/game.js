@@ -17,6 +17,10 @@ NV.Game = (function () {
     // histórico, não por vizinho fixo — ver loadLevel/update abaixo)
     enteredFrom: null, enteredSide: null,
     finished: false,
+    // Véspera (Ritualista) — passiva Memória Acesa: eco de chama deixado ao
+    // morrer; sobrevive a trocas de região (não é resetado por loadLevel),
+    // expira sozinho depois de 60s (ver update() e onPlayerDeath abaixo)
+    echo: null,
     onPlayerDeath: null,
     collectedSecrets: new Set(),
     shopOpen: false, nearNpc: false, interactCd: 0,
@@ -72,6 +76,7 @@ NV.Game = (function () {
   function start() {
     g.respawn = { id: 'vale', useLamp: false };
     g.finished = false;
+    g.echo = null;
     g.player = null;
     g.collectedSecrets = new Set(NV.Save.state.secretsFound || []);
     loadLevel('vale', 'spawn');
@@ -81,6 +86,11 @@ NV.Game = (function () {
   g.onPlayerDeath = function () {
     NV.Audio.play('gameOver');
     NV.Save.noteDeath();
+    // Véspera — passiva Memória Acesa: eco de chama no local da morte;
+    // recompensa em Fagulhas se ela voltar lá dentro de 60s
+    if (g.player.classId === 'vespera') {
+      g.echo = { x: g.player.x, y: g.player.y, levelId: g.level.id, ttl: 60, reward: 8 };
+    }
     // Eco de Cera simplificado: volta ao último lampião com vida cheia
     setTimeout(() => {
       const id = g.respawn.id;
@@ -96,6 +106,7 @@ NV.Game = (function () {
     if (g.toastT > 0) g.toastT -= dt;
     if (g.shake > 0) g.shake *= Math.pow(0.001, dt);
     g.lampCd -= dt; if (g.interactCd > 0) g.interactCd -= dt;
+    if (g.echo) { g.echo.ttl -= dt; if (g.echo.ttl <= 0) g.echo = null; }
     g.playAccum += dt;
     if (g.playAccum >= 5) { NV.Save.addPlaySeconds(5); g.playAccum -= 5; }
 
@@ -144,6 +155,17 @@ NV.Game = (function () {
           showToast('Fim do protótipo!', 'você atravessou até os Picos Uivantes — obrigado por jogar');
         } else showToast('Lampião aceso', 'ponto de retorno salvo · vida restaurada');
       }
+    }
+
+    // ----- eco de chama da Véspera: coletar de volta as Fagulhas -----
+    if (g.echo && g.echo.levelId === g.level.id
+      && Math.abs(g.player.x - g.echo.x) < 30 && Math.abs(g.player.y - g.echo.y) < 40) {
+      g.player.sevia += g.echo.reward;
+      NV.Save.noteSevia(g.echo.reward);
+      NV.FX.burst(g, g.echo.x, g.echo.y, '#ff4fc3', 20);
+      NV.Audio.play('secretFound');
+      showToast('Memória Acesa', `+${g.echo.reward} Fagulhas recuperadas`);
+      g.echo = null;
     }
 
     // ----- transição entre regiões -----
