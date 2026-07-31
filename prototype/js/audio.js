@@ -6,12 +6,21 @@ NV.Audio = (function () {
   let musicNodes = null, unlocked = false;
   let muted = { music: false, sfx: false };
 
+  // volume do usuário (0..1), fatores do mix-base (0.22/0.55) — persistido
+  function loadVol(key, def) {
+    const v = parseFloat(localStorage.getItem(key));
+    return isNaN(v) ? def : Math.max(0, Math.min(1, v));
+  }
+  let musicVol = loadVol('nv-vol-music', 0.6);
+  let sfxVol = loadVol('nv-vol-sfx', 0.8);
+  const MUSIC_BASE = 0.22, SFX_BASE = 0.55;
+
   function ensure() {
     if (ctx) return ctx;
     ctx = new (window.AudioContext || window.webkitAudioContext)();
     master = ctx.createGain(); master.gain.value = 0.9; master.connect(ctx.destination);
-    musicGain = ctx.createGain(); musicGain.gain.value = 0.22; musicGain.connect(master);
-    sfxGain = ctx.createGain(); sfxGain.gain.value = 0.55; sfxGain.connect(master);
+    musicGain = ctx.createGain(); musicGain.gain.value = MUSIC_BASE * musicVol; musicGain.connect(master);
+    sfxGain = ctx.createGain(); sfxGain.gain.value = SFX_BASE * sfxVol; sfxGain.connect(master);
     return ctx;
   }
 
@@ -103,9 +112,10 @@ NV.Audio = (function () {
     menuClick() { tone(600, 0.05, { type: 'triangle', gain: 0.15 }); },
   };
 
-  // ---------- pad ambiente por região (loop simples, 2 osciladores) ----------
+  // ---------- pad ambiente por região (drone + arpejo melódico) ----------
   function stopMusic() {
     if (!musicNodes) return;
+    if (musicNodes.melody) { musicNodes.melody.active = false; clearTimeout(musicNodes.melody.timer); }
     const t0 = ctx.currentTime;
     musicNodes.gain.gain.exponentialRampToValueAtTime(0.0001, t0 + 0.6);
     const nodes = musicNodes;
@@ -113,16 +123,45 @@ NV.Audio = (function () {
     musicNodes = null;
   }
 
+  // scale: semitons acima da nota-base de cada região (pentatônicas/modos
+  // diferentes por bioma, pra cada região soar melodicamente distinta)
   const REGION_TONES = {
-    vale: { base: 220, detune: 6, filt: 900, type: 'sine' },
-    sotao: { base: 233, detune: 4, filt: 850, type: 'sine' },     // variação mais alta do Vale (mesmo sótão)
-    adega: { base: 185, detune: 5, filt: 600, type: 'sine' },     // mais grave/fria (cave de cera)
-    bosque: { base: 196, detune: 5, filt: 700, type: 'triangle' },
-    copas: { base: 220, detune: 3, filt: 950, type: 'triangle' }, // Bosque mais claro/alto
-    galerias: { base: 174, detune: 8, filt: 500, type: 'sine' },  // escuro/grave
-    vidracal: { base: 246, detune: 4, filt: 1400, type: 'sawtooth' },
-    picos: { base: 261, detune: 3, filt: 1200, type: 'triangle' },
+    vale: { base: 220, detune: 6, filt: 900, type: 'sine', scale: [0, 2, 4, 7, 9] },        // maior pentatônica — acolhedor
+    sotao: { base: 233, detune: 4, filt: 850, type: 'sine', scale: [0, 3, 5, 7, 10] },       // menor pentatônica — mais alto
+    adega: { base: 185, detune: 5, filt: 600, type: 'sine', scale: [0, 3, 5, 7, 10] },       // menor pentatônica — frio
+    bosque: { base: 196, detune: 5, filt: 700, type: 'triangle', scale: [0, 2, 3, 7, 9] },   // dórico — chuva
+    copas: { base: 220, detune: 3, filt: 950, type: 'triangle', scale: [0, 2, 4, 7, 9] },    // maior pentatônica — claro
+    galerias: { base: 174, detune: 8, filt: 500, type: 'sine', scale: [0, 1, 5, 6, 10] },    // frígio — tenso/escuro
+    vidracal: { base: 246, detune: 4, filt: 1400, type: 'sawtooth', scale: [0, 2, 5, 7, 9] }, // suspenso — deserto
+    picos: { base: 261, detune: 3, filt: 1200, type: 'triangle', scale: [0, 2, 4, 6, 9] },   // lídio — frio/brilhante
   };
+
+  function scheduleMelody(cfg, gainBus) {
+    const melody = { timer: null, active: true };
+    let lastDeg = -1;
+    function playNote() {
+      if (!melody.active) return;
+      let deg = Math.floor(Math.random() * cfg.scale.length);
+      if (deg === lastDeg) deg = (deg + 1) % cfg.scale.length;
+      lastDeg = deg;
+      const octUp = Math.random() < 0.22;
+      const semis = cfg.scale[deg] + (octUp ? 12 : 0);
+      const freq = cfg.base * Math.pow(2, semis / 12);
+      const t0 = ctx.currentTime;
+      const osc = ctx.createOscillator();
+      osc.type = 'triangle'; osc.frequency.value = freq;
+      const g = ctx.createGain();
+      const peak = octUp ? 0.08 : 0.13;
+      g.gain.setValueAtTime(0.0001, t0);
+      g.gain.exponentialRampToValueAtTime(peak, t0 + 0.03);
+      g.gain.exponentialRampToValueAtTime(0.0001, t0 + 1.15);
+      osc.connect(g); g.connect(gainBus);
+      osc.start(t0); osc.stop(t0 + 1.2);
+      melody.timer = setTimeout(playNote, (0.75 + Math.random() * 0.85) * 1000);
+    }
+    melody.timer = setTimeout(playNote, 1200 + Math.random() * 900);
+    return melody;
+  }
 
   function playMusicForRegion(id) {
     if (!ctx || muted.music) return;
@@ -140,7 +179,19 @@ NV.Audio = (function () {
     lfo.connect(lfoGain); lfoGain.connect(filt.frequency);
     osc1.connect(filt); osc2.connect(filt); filt.connect(gain); gain.connect(musicGain);
     osc1.start(); osc2.start(); lfo.start();
-    musicNodes = { osc1, osc2, lfo, gain };
+    const melody = scheduleMelody(cfg, gain);
+    musicNodes = { osc1, osc2, lfo, gain, melody };
+  }
+
+  function setMusicVolume(v) {
+    musicVol = Math.max(0, Math.min(1, v));
+    localStorage.setItem('nv-vol-music', musicVol);
+    if (musicGain) musicGain.gain.value = MUSIC_BASE * musicVol;
+  }
+  function setSfxVolume(v) {
+    sfxVol = Math.max(0, Math.min(1, v));
+    localStorage.setItem('nv-vol-sfx', sfxVol);
+    if (sfxGain) sfxGain.gain.value = SFX_BASE * sfxVol;
   }
 
   return {
@@ -149,5 +200,8 @@ NV.Audio = (function () {
     get unlocked() { return unlocked; },
     toggleMusic(on) { muted.music = !on; if (!on) stopMusic(); },
     toggleSfx(on) { muted.sfx = !on; },
+    setMusicVolume, setSfxVolume,
+    get musicVolume() { return musicVol; },
+    get sfxVolume() { return sfxVol; },
   };
 })();
