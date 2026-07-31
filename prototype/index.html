@@ -41,6 +41,18 @@
     </div>
   </div>
 
+  <!-- ESCOLHA DE CLASSE (primeira vez — permanente para este save) -->
+  <div id="classScreen" class="overlay hidden">
+    <div class="menu-inner wide">
+      <h2>Escolha seu Acendedor</h2>
+      <p class="tip small">A cor da chama identifica sua classe. Esta escolha é
+      permanente para este save — cada classe tem uma habilidade passiva
+      própria.</p>
+      <div class="class-grid" id="classGrid"></div>
+      <button id="btnClassConfirm" class="mbtn" disabled>Confirmar</button>
+    </div>
+  </div>
+
   <!-- RESUMO DE PROGRESSO -->
   <div id="summaryScreen" class="overlay hidden">
     <div class="menu-inner wide">
@@ -203,6 +215,7 @@
 
 <script src="js/input.js"></script>
 <script src="js/audio.js"></script>
+<script src="js/classes.js"></script>
 <script src="js/save.js"></script>
 <script src="js/touch-layout.js"></script>
 <script src="js/world.js"></script>
