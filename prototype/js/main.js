@@ -12,6 +12,9 @@ NV.VERSION = 'v3'; // acompanha o nome da branch prototype/vN-* que originou o b
     controls: document.getElementById('controlsScreen'),
     pause: document.getElementById('pauseScreen'),
     nickname: document.getElementById('nicknameScreen'),
+    classScreen: document.getElementById('classScreen'),
+    classGrid: document.getElementById('classGrid'),
+    btnClassConfirm: document.getElementById('btnClassConfirm'),
     summary: document.getElementById('summaryScreen'),
     settings: document.getElementById('settingsScreen'),
     map: document.getElementById('mapScreen'),
@@ -30,7 +33,8 @@ NV.VERSION = 'v3'; // acompanha o nome da branch prototype/vN-* que originou o b
     touchEditBar: document.getElementById('touchEditBar'),
   };
 
-  let state = 'menu';          // menu | controls | game | pause | nickname | summary | settings | map
+  let state = 'menu';          // menu | controls | game | pause | nickname | class | summary | settings | map
+  let selectedClassId = null;  // escolha em andamento na tela de classe (antes de confirmar)
   let controlsReturn = 'menu'; // para onde o "voltar" dos controles leva
   let summaryReturn = 'menu';  // para onde o "voltar" do resumo leva
   let settingsReturn = 'menu'; // para onde o "voltar" das configurações leva
@@ -61,6 +65,7 @@ NV.VERSION = 'v3'; // acompanha o nome da branch prototype/vN-* que originou o b
     el.controls.classList.toggle('hidden', which !== 'controls');
     el.pause.classList.toggle('hidden', which !== 'pause');
     el.nickname.classList.toggle('hidden', which !== 'nickname');
+    el.classScreen.classList.toggle('hidden', which !== 'class');
     el.summary.classList.toggle('hidden', which !== 'summary');
     el.settings.classList.toggle('hidden', which !== 'settings');
     el.map.classList.toggle('hidden', which !== 'map');
@@ -93,8 +98,36 @@ NV.VERSION = 'v3'; // acompanha o nome da branch prototype/vN-* que originou o b
     el.touchModeLabel.textContent = { auto: 'Auto', on: 'Sempre', off: 'Nunca' }[touchMode];
   }
 
+  // ---------- tela de escolha de classe (permanente por save) ----------
+  function buildClassGrid() {
+    el.classGrid.innerHTML = '';
+    for (const cls of NV.Classes.list) {
+      const card = document.createElement('div');
+      card.className = 'class-card';
+      card.dataset.id = cls.id;
+      card.style.setProperty('--cc', cls.flame);
+      card.innerHTML = `
+        <img src="${cls.img}" alt="${cls.name}">
+        <div class="class-name">${cls.name}</div>
+        <div class="class-role">${cls.role}</div>
+        <div class="class-passive"><b>${cls.passiveName}</b><br>${cls.passiveDesc}</div>`;
+      card.addEventListener('click', () => {
+        selectedClassId = cls.id;
+        el.classGrid.querySelectorAll('.class-card').forEach((c) => c.classList.toggle('selected', c === card));
+        el.btnClassConfirm.disabled = false;
+      });
+      el.classGrid.appendChild(card);
+    }
+  }
+  document.getElementById('btnClassConfirm').addEventListener('click', () => {
+    if (!selectedClassId) return;
+    NV.Save.setClass(selectedClassId);
+    proceedToPlay();
+  });
+
   // ---------- botões ----------
   function proceedToPlay() {
+    if (!NV.Save.state.classId) { show('class'); return; }
     // desktop com teclado: mostra o mapeamento antes da primeira partida
     if (!touchUIWanted() && !localStorage.getItem('nv-seen-controls')) {
       controlsReturn = 'startgame';
@@ -204,6 +237,7 @@ NV.VERSION = 'v3'; // acompanha o nome da branch prototype/vN-* que originou o b
   NV.Input.bindTouchButtons(el.touch);
   NV.TouchLayout.init(el.touch);
   NV.MapUI.init(el.mapGraph);
+  buildClassGrid();
 
   // ---------- loop ----------
   let last = performance.now() / 1000, acc = 0, elapsed = 0;
