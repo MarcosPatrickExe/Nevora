@@ -7,7 +7,7 @@ NV.Game = (function () {
 
   const g = {
     level: null, player: null,
-    enemies: [], projectiles: [], particles: [], pickups: [],
+    enemies: [], projectiles: [], particles: [], pickups: [], floes: [],
     camX: 0, camY: 0, shake: 0, hitstop: 0, fade: 1,
     toast: '', toastSub: '', toastT: 0,
     lampLit: false, lampCd: 0,
@@ -38,6 +38,7 @@ NV.Game = (function () {
     }
     g.enemies = lv.enemies.map((s) => NV.Entities.makeEnemy(s));
     g.projectiles = []; g.particles = []; g.pickups = [];
+    g.floes = lv.floes.map((f) => NV.Entities.makeFloe(f));
     g.lampLit = (g.respawn.id === id && g.respawn.useLamp);
     g.lampCd = 0; g.shopOpen = false; g.nearNpc = false;
 
@@ -110,6 +111,7 @@ NV.Game = (function () {
     }
     if (g.shopOpen) return; // mundo congela enquanto a loja está aberta
 
+    for (const fl of g.floes) fl.update(g, dt);
     g.player.update(g, dt);
     for (const e of g.enemies) if (!e.dead) e.update(g, dt);
     g.enemies = g.enemies.filter((e) => !e.dead);
