@@ -6,7 +6,7 @@ NV.Save = (function () {
 
   function empty() {
     return {
-      nickname: '', createdAt: Date.now(),
+      nickname: '', createdAt: Date.now(), classId: '',
       regionsVisited: ['vale'], lastRegionName: 'Vale das Velas',
       deaths: 0, enemiesDefeated: 0, seviaCollected: 0,
       secretsFound: [], upgradesBought: [], finishedRun: false,
@@ -34,6 +34,13 @@ NV.Save = (function () {
     save(state);
   }
 
+  // escolha de classe é permanente por save (regra de design — ver
+  // docs/04-gameplay/CLASSES_ACENDEDORES.md, "uma classe por save") — só
+  // grava se ainda não houver classe escolhida
+  function setClass(id) {
+    if (!state.classId) { state.classId = id; save(state); }
+  }
+
   function noteRegion(id, name) {
     state.lastRegionName = name;
     if (!state.regionsVisited.includes(id)) state.regionsVisited.push(id);
@@ -49,8 +56,10 @@ NV.Save = (function () {
 
   function summaryText() {
     const mins = Math.round(state.playSeconds / 60);
+    const cls = NV.Classes ? NV.Classes.get(state.classId) : null;
     return [
       `Névora — resumo de ${state.nickname || 'jogador'}`,
+      cls ? `Classe: ${cls.name} (${cls.role})` : '',
       `Versão testada: ${NV.VERSION || '?'}`,
       `Regiões visitadas: ${state.regionsVisited.length}/${NV.World ? NV.World.count : '?'} (última: ${state.lastRegionName})`,
       `Inimigos derrotados: ${state.enemiesDefeated}`,
@@ -65,7 +74,7 @@ NV.Save = (function () {
 
   return {
     get state() { return state; },
-    setNickname, noteRegion, noteDeath, noteEnemyDefeated, noteSevia,
+    setNickname, setClass, noteRegion, noteDeath, noteEnemyDefeated, noteSevia,
     noteSecret, noteUpgrade, noteFinished, addPlaySeconds, summaryText,
   };
 })();
