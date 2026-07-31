@@ -23,8 +23,7 @@
       <button id="btnPlay" class="mbtn">Jogar</button>
       <button id="btnControls" class="mbtn">Controles</button>
       <button id="btnSummary" class="mbtn small">Meu resumo</button>
-      <button id="btnTouchMode" class="mbtn small">Botões na tela: <span id="touchModeLabel">Auto</span></button>
-      <button id="btnEditTouch" class="mbtn small">Editar botões na tela</button>
+      <button id="btnSettings" class="mbtn small">Configurações</button>
       <p class="foot">8 regiões em grafo · movimento · combate · inimigos<br>
       arte final será desenhada à mão (ver docs/art/)</p>
     </div>
@@ -94,6 +93,7 @@
         <tr><td>Numpad 8 <em>(ou L / V)</em></td><td>Curar <em>(gasta 3 de Fulgor)</em></td></tr>
         <tr><td>Numpad 2 <em>(ou E / F)</em></td><td>Interagir / falar com NPCs</td></tr>
         <tr><td>Esc</td><td>Pausar</td></tr>
+        <tr><td>M</td><td>Abrir/fechar o Mapa</td></tr>
       </table>
       <p class="tip">Acenda os <b>Lampiões</b> para salvar seu ponto de retorno.<br>
       Golpes acertados enchem o <b>Fulgor</b> (a chama no canto da tela). As
@@ -110,8 +110,39 @@
       <h2>Pausado</h2>
       <button id="btnResume" class="mbtn">Continuar</button>
       <button id="btnPauseControls" class="mbtn small">Controles</button>
+      <button id="btnPauseSettings" class="mbtn small">⚙ Configurações</button>
       <button id="btnPauseSummary" class="mbtn small">Meu resumo</button>
       <button id="btnQuit" class="mbtn small">Sair para o menu</button>
+    </div>
+  </div>
+
+  <!-- CONFIGURAÇÕES -->
+  <div id="settingsScreen" class="overlay hidden">
+    <div class="menu-inner">
+      <h2>⚙ Configurações</h2>
+      <div class="settings-row">
+        <label for="volMusic">Volume da música</label>
+        <input id="volMusic" type="range" min="0" max="100" value="60">
+      </div>
+      <div class="settings-row">
+        <label for="volSfx">Volume dos efeitos</label>
+        <input id="volSfx" type="range" min="0" max="100" value="80">
+      </div>
+      <button id="btnTouchMode" class="mbtn small">Botões na tela: <span id="touchModeLabel">Auto</span></button>
+      <button id="btnEditTouch" class="mbtn small">Editar posição/tamanho dos botões</button>
+      <button id="btnBackFromSettings" class="mbtn">Voltar</button>
+    </div>
+  </div>
+
+  <!-- MAPA -->
+  <div id="mapScreen" class="overlay hidden">
+    <div class="menu-inner wide">
+      <h2>Mapa</h2>
+      <div class="map-graph" id="mapGraph"></div>
+      <p class="tip small"><span class="map-legend-dot map-legend-current"></span> onde você está ·
+      <span class="map-legend-dot map-legend-visited"></span> já visitada ·
+      <span class="map-legend-dot"></span> ainda não visitada</p>
+      <button id="btnCloseMap" class="mbtn">Fechar</button>
     </div>
   </div>
 
@@ -142,6 +173,7 @@
   <!-- CONTROLES TOUCH -->
   <div id="touch" class="hidden">
     <button id="tbtnPause" class="tbtn" data-action="pause">⚙</button>
+    <button id="tbtnMap" class="tbtn" data-action="map">M</button>
     <div class="t-left">
       <div class="dpad">
         <button class="tbtn dpad-btn dpad-up" data-action="up">▲</button>
@@ -174,6 +206,7 @@
 <script src="js/save.js"></script>
 <script src="js/touch-layout.js"></script>
 <script src="js/world.js"></script>
+<script src="js/map.js"></script>
 <script src="js/entities.js"></script>
 <script src="js/render.js"></script>
 <script src="js/game.js"></script>
