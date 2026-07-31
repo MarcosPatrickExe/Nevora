@@ -195,6 +195,33 @@ mesma rede (ou publicar via GitHub Pages) e usar "Adicionar à tela inicial".
     `js/world.js` (`buildLevel`), com física em `js/entities.js` e visual
     fervilhante ("line boil") em `js/render.js`, seguindo o mesmo padrão
     dos espinhos/cipó/cogumelo-mola que já existiam.
+- **Tela de escolha de classe (Acendedores)**, exibida uma vez, entre o
+  nickname e os controles/o jogo — escolha **permanente para o save**
+  (`js/save.js`, `setClass`), com os 6 retratos gerados em
+  `art/png/personagem-*.png`. Dados das classes centralizados em
+  `js/classes.js` (nome, papel, cor de chama, frase, passiva), espelhando
+  `docs/04-gameplay/CLASSES_ACENDEDORES.md` + `docs/art/ACENDEDORES_REDESIGN.md`.
+  Neste protótipo greybox, **cada classe já tem sua passiva funcionando**
+  (as 2 ativas + a técnica exclusiva de cada uma ficam pra uma fase
+  seguinte, como o próprio doc de design já previa):
+  - **Breo (Viandante) — Passo Firme:** sem recuo de dano leve (espinhos,
+    contato de inimigo); Sévia bônus ao derrotar um inimigo por perto.
+  - **Sílice (Batedora) — Faro de Brasa:** ícone pulsante no HUD quando há
+    um segredo não encontrado na sala atual.
+  - **Brasme (Vigia) — Cera Endurecida:** reduz em 1 o dano vindo de frente
+    (na direção que o personagem está olhando); ao perder um Coração de
+    Cera, empurra os inimigos por perto.
+  - **Véspera (Ritualista) — Memória Acesa:** ao morrer, deixa um eco de
+    chama no local; voltar lá dentro de 60s recupera Fagulhas de bônus
+    (simplificação do design original, que presume uma perda de Fagulhas ao
+    morrer — mecânica ainda não existente neste protótipo).
+  - **Turfo (Coletor) — Olho de Mercador:** ~25% de chance de um drop de
+    Sévia vir em dobro.
+  - **Parafino (Funileiro) — Manutenção:** golpes acertados rendem +1
+    Fulgor extra (2 em vez de 1) e soltam uma fagulha de cobre.
+  - A cor da chama (e dos olhos de brasa) do personagem em jogo, e dos pips
+    de Fulgor no HUD, passa a refletir a classe escolhida — "a chama
+    identifica a classe", regra de design já estabelecida nos docs.
 
 ## Navegação multi-caminho
 
