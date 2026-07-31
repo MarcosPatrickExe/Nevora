@@ -134,6 +134,35 @@ table.keys em { color:#9b8c76; font-size:14px; }
 #tbtnInteract { position:absolute; left:50%; bottom:16vh; transform:translateX(-50%);
   width:56px; height:56px; font-size:20px; }
 #tbtnPause { position:absolute; left:3vw; top:3vh; width:52px; height:52px; font-size:20px; }
+#tbtnMap { position:absolute; right:3vw; top:3vh; width:52px; height:52px; font-size:19px; font-weight:bold; }
+
+/* ---------- configurações ---------- */
+.settings-row { text-align:left; margin:14px 0; }
+.settings-row label { display:block; color:#c9b896; font-size:13.5px; margin-bottom:6px; }
+.settings-row input[type=range] { width:100%; accent-color:#f5c96b; }
+
+/* ---------- mapa ---------- */
+.map-graph { position:relative; width:100%; max-width:660px; height:280px;
+  margin:10px auto 6px; }
+.map-edges { position:absolute; inset:0; width:100%; height:100%; overflow:visible; }
+.map-edges line { stroke:rgba(180,160,130,.35); stroke-width:.6; }
+.map-edges line.map-edge-seen { stroke:rgba(245,201,107,.7); stroke-width:.9; }
+.map-node { position:absolute; transform:translate(-50%,-50%); display:flex;
+  flex-direction:column; align-items:center; gap:3px; width:76px; }
+.map-dot { width:14px; height:14px; border-radius:50%; background:#3a3128;
+  border:2px solid rgba(200,180,150,.4); box-shadow:0 0 0 rgba(0,0,0,0); }
+.map-node.map-visited .map-dot { background:var(--dotc, #f5c96b); border-color:rgba(255,255,255,.5); }
+.map-node.map-current .map-dot { box-shadow:0 0 12px 3px var(--dotc, #f5c96b);
+  border-color:#fff; animation:mapPulse 1.4s infinite ease-in-out; }
+@keyframes mapPulse { 0%,100%{transform:scale(1)} 50%{transform:scale(1.25)} }
+.map-label { font-size:10px; color:#8a7c68; line-height:1.15; text-align:center; }
+.map-node.map-visited .map-label { color:#e8dcc8; }
+.map-node.map-current .map-label { color:#f5c96b; font-weight:bold; }
+.map-legend-dot { display:inline-block; width:9px; height:9px; border-radius:50%;
+  background:#3a3128; border:1.5px solid rgba(200,180,150,.4); margin:0 3px 0 8px;
+  vertical-align:middle; }
+.map-legend-current { background:#f5c96b; border-color:#fff; }
+.map-legend-visited { background:#f5c96b; }
 
 /* ---------- editor de layout dos botões touch ---------- */
 .tbtn-editable { position:relative; outline:2px dashed rgba(245,201,107,.85);
