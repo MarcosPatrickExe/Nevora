@@ -1,6 +1,8 @@
 /* Névora protótipo — boot, estados (menu/jogo/pausa), loop e PWA */
 window.NV = window.NV || {};
-NV.VERSION = 'v3'; // acompanha o nome da branch prototype/vN-* que originou o build
+// acompanha o nome da branch prototype/vN-* que originou o build — SEMPRE
+// atualizar junto com o CACHE de sw.js a cada release (ver comentário lá)
+NV.VERSION = 'v3.3';
 
 (function () {
   const canvas = document.getElementById('game');
