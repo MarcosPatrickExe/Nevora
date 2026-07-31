@@ -155,8 +155,14 @@ mesma rede (ou publicar via GitHub Pages) e usar "Adicionar à tela inicial".
   sem parede).
 - **Tela de Mapa** (botão "M" no teclado, ou o botão touch com esse ícone,
   ambos do tipo *toggle* — aperta de novo pra fechar, não precisa segurar):
-  mostra o grafo das 8 regiões, com a região atual destacada (pulsando) e
-  as já visitadas marcadas na cor de destaque de cada uma.
+  mostra o grafo das 8 regiões conectadas pela topologia real. No espírito
+  do mapa de Hollow Knight/Silksong, cada região é desenhada com o
+  **contorno real do seu terreno** (`js/map.js` traça o perfil de
+  chão/plataformas/tetos direto da grade de tiles, sem formas
+  quadradas/retangulares genéricas) — dá pra reconhecer visualmente os
+  pilares das Galerias, os degraus do Vale, as "chaminés" das saídas por
+  portal etc. Região atual destacada (contorno branco, pulsando); já
+  visitadas ganham a cor de destaque da própria região.
 - **Tela de Configurações** (⚙, tanto no menu principal quanto na pausa):
   volume de música e de efeitos (sliders, salvos em `localStorage`), além
   do que já existia (Botões na tela: Auto/Sempre/Nunca, e o editor de
