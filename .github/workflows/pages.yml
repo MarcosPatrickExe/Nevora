@@ -25,6 +25,10 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - uses: actions/checkout@v4
+      # cache-busting automático do service worker — nunca mais depender de
+      # lembrar de subir manualmente um número de versão (ver prototype/sw.js)
+      - name: Stamp cache-busting build id into service worker
+        run: sed -i "s/__BUILD_ID__/${{ github.sha }}/" prototype/sw.js
       - uses: actions/configure-pages@v5
         with:
           enablement: true
