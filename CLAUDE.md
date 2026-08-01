@@ -59,18 +59,27 @@ Epic, Play Store e App Store.
   3. Só quando o Diretor aprovar, faz o merge dessa branch para `main` — é
      esse merge que dispara o deploy automático no GitHub Pages.
   4. Depois do merge, marcar a versão com uma tag (`git tag proto-vN`).
-  5. **Sempre atualize dois números juntos, na mesma leva de mudanças** (bug
-     real já visto em produção — ver `docs/00-processo/DIARIO_DE_BORDO.md`,
-     2026-07-31: o Diretor viu a versão antiga mesmo com o deploy
-     funcionando, porque só o `CACHE` esqueceu de subir):
-     - `NV.VERSION` em `prototype/js/main.js` (mostrado no menu como
-       "Protótipo vN") — nunca deixar genérico tipo "v3" quando já tem
-       vN.1/vN.2/vN.3 publicados; sempre com o número específico.
-     - `CACHE` em `prototype/sw.js` — o comentário no próprio arquivo já
-       avisa: sem subir esse número, o service worker (cache-first) continua
-       servindo os arquivos antigos pra sempre em qualquer PWA já instalado,
-       *mesmo que o deploy no Pages tenha funcionado perfeitamente*. Também
-       conferir que todo arquivo `.js` novo entrou na lista `ASSETS`.
+  5. **Atualize `NV.VERSION`** em `prototype/js/main.js` (mostrado no menu
+     como "Protótipo vN") a cada release — nunca deixar genérico tipo "v3"
+     quando já tem vN.1/vN.2/vN.3 publicados; sempre com o número
+     específico. (Isso é só o texto exibido pro Diretor conferir a build —
+     não afeta se o jogo atualiza de verdade, ver item 6.)
+  6. **Cache do service worker: já é automático, não precisa lembrar de
+     nada.** Incidente real (2026-07-31, ver `DIARIO_DE_BORDO.md`): o
+     Diretor via versão antiga mesmo com o deploy funcionando, porque o
+     `CACHE` de `prototype/sw.js` dependia de um humano lembrar de subir
+     o número toda vez — e isso já falhou duas vezes. Corrigido na
+     estrutura, não só no sintoma: `sw.js` usa `CACHE =
+     'nevora-proto-__BUILD_ID__'`, e o workflow
+     (`.github/workflows/pages.yml`) substitui `__BUILD_ID__` pelo SHA do
+     commit automaticamente em todo deploy — sempre único, sem depender de
+     ninguém editar nada. Além disso o `fetch()` do service worker virou
+     "rede primeiro, cache como reserva" (em vez de "cache primeiro"), como
+     segunda camada de proteção: mesmo se o cache-busting falhasse por
+     algum motivo, o jogador online ainda recebe a versão mais nova, porque
+     o service worker sempre tenta a rede antes do cache. Se algum dia
+     `prototype/sw.js` ou `.github/workflows/pages.yml` forem reescritos do
+     zero, preservar esse mecanismo.
   - Isso já é o comportamento nativo do workflow atual (`branches: [main]`
     em `.github/workflows/pages.yml`) — não precisa mudar o YAML, só seguir
     a disciplina de branch acima.
