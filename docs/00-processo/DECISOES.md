@@ -292,3 +292,104 @@ Formato:
 - Consequências: `art/PLAYER_CHARACTER_DESIGN.md` atualizado; teste de cor
   da `CHARACTER_ART_BIBLE.md` passa a validar tom de slot × 6 chamas ×
   biomas; revisitar após o primeiro playtest co-op com 4 jogadores.
+
+---
+
+## ADR-017 — Perigos ambientais do protótipo: encaixados em regiões já existentes
+- Data: 2026-07-31 · Status: **🟢 aceita**
+- Contexto: o Diretor trouxe uma screenshot do mapa-múndi de Hollow Knight
+  Silksong e pediu que "os inimigos nem sempre devem ser o maior desafio do
+  usuário, mas sim o próprio espaço" — citando lava, lago verde cheio de
+  vermes e lago gelado com blocos de gelo flutuantes como exemplos
+  concretos. Ficou em aberto se isso viraria uma região nova dedicada ou se
+  encaixaria nas 8 já existentes.
+- Alternativas: (a) região nova só de perigos ambientais; (b) encaixar cada
+  perigo numa região temática já existente.
+- Decisão (perguntada ao Diretor via múltipla escolha, respondida
+  2026-07-31): **(b) encaixar nas regiões existentes**, com as 3 mecânicas
+  específicas confirmadas — lago verde = dano contínuo + lentidão; lago
+  gelado = blocos de gelo como plataforma móvel; lava = morte/dano
+  instantâneo ao tocar. Regiões escolhidas por afinidade temática, decisão
+  do agente: **lava → Vidraçal** (deserto de vidro, fit de "derretido"),
+  **água pútrida + verme → Galerias Fúngicas** (caverna úmida), **água
+  gelada + blocos de gelo → Picos Uivantes** (já é bioma de neve/gelo).
+- Consequências: implementado na v3.3 (`prototype/js/world.js` — códigos de
+  tile 6/lava, 7/água pútrida, 8/água gelada; física em `entities.js`;
+  visual em `render.js`). Nenhuma região nova criada; as 8 regiões do
+  protótipo continuam as mesmas, agora com um perigo ambiental cada uma das
+  3 citadas. Referência visual salva em
+  `docs/referencias/mapas/silksong-mapa-mundo-referencia.png` — só
+  inspiração de processo (regra de IP em vigor).
+
+---
+
+## ADR-018 — Sistema de 6 classes no protótipo: cosmético + passiva de verdade; ativas e técnica exclusiva ficam para depois
+- Data: 2026-07-31 · Status: **🟢 aceita**
+- Contexto: `04-gameplay/CLASSES_ACENDEDORES.md` (ADR-014) já definia que
+  cada classe teria 1 passiva + 2 habilidades ativas + 1 técnica exclusiva
+  — o próprio documento já previa fatiar isso ("protótipo v2: implementar
+  primeiro a seleção de classe + 1 passiva e 1 ativa por classe; técnicas
+  exclusivas ficam para v3"). O Diretor pediu a tela de escolha de classe
+  antes do merge da v3.3; perguntado sobre o escopo (só visual, ou com
+  mecânica de verdade), respondeu **"quero passiva de cada classe"**.
+- Alternativas: (a) escolha 100% cosmética (só cor de chama, sem efeito de
+  jogo); (b) escolha + passiva de cada classe funcionando; (c) escolha +
+  passiva + 1 ativa por classe (nível do que `CLASSES_ACENDEDORES.md`
+  cogitava para "protótipo v2").
+- Decisão: **(b)** — tela de seleção dos 6 Acendedores (retrato +
+  papel + frase + passiva descrita), escolha **permanente por save**
+  (`NV.Save.setClass`, só grava uma vez), cor da chama do personagem em
+  jogo (e dos pips de Fulgor no HUD) reflete a classe escolhida. As 6
+  passivas foram implementadas de verdade (não só texto): Breo (sem recuo
+  de dano leve + Sévia bônus em kill próximo), Sílice (pista de segredo no
+  HUD), Brasme (reduz dano frontal + onda ao perder Coração de Cera),
+  Véspera (eco de chama pós-morte), Turfo (chance de Sévia em dobro),
+  Parafino (+1 Fulgor extra por acerto). As 2 ativas e a técnica exclusiva
+  de cada classe **ficam para uma fase seguinte**, como o próprio
+  `CLASSES_ACENDEDORES.md` já previa — não implementadas nesta rodada.
+- Simplificação registrada (não é bug, é decisão consciente): a passiva de
+  Véspera no design original ("Memória Acesa: recupera metade das Fagulhas
+  perdidas ao morrer") presume um sistema de "perder moeda ao morrer" que
+  **não existe** em nenhuma classe do protótipo hoje. Implementada como "o
+  eco de chama dá Fagulhas de **bônus** se revisitado em 60s" — mantém o
+  espírito (voltar ao local da morte) sem inventar uma penalidade de morte
+  nova pra todo o jogo sem aprovação explícita do Diretor.
+- Consequências: `prototype/js/classes.js` (novo), `save.js`, `main.js`,
+  `entities.js`, `game.js`, `render.js`, `index.html`, `style.css`
+  alterados. Documentado em `prototype/README.md` (seção "Novidades da
+  v3.3"). Trabalho futuro (ativas + técnica exclusiva por classe) não tem
+  branch/data ainda — depende de nova ordem do Diretor.
+
+---
+
+## ADR-019 — Deploy do protótipo: cache-busting automático (SHA do commit), não mais manual
+- Data: 2026-08-01 · Status: **🟢 aceita**
+- Contexto: o service worker do protótipo é cache-first e dependia de um
+  humano lembrar de subir manualmente um número de versão (`CACHE` em
+  `prototype/sw.js`) toda vez que algum arquivo mudasse — sem isso, o
+  navegador/PWA de quem já tinha jogado antes continuava servindo os
+  arquivos antigos pra sempre, **mesmo com o deploy no GitHub Pages
+  funcionando perfeitamente**. Isso já causou dois incidentes reais: um
+  antes da v3.2 (botões touch bagunçados) e outro em 2026-07-31/08-01 (o
+  Diretor via a v3.3 antiga mesmo depois do merge — reportou com
+  screenshot mostrando o deploy "Active" no GitHub, confirmando que o
+  problema era só cache do lado do cliente, não falha de publicação).
+- Alternativas: (a) continuar manual, só reforçar a disciplina/checklist;
+  (b) automatizar o cache-busting no pipeline de deploy; (c) trocar a
+  estratégia do service worker de "cache primeiro" para "rede primeiro".
+- Decisão: **(b) + (c) juntas**, pra não depender de memória humana em
+  nenhuma camada. `prototype/sw.js` usa `CACHE =
+  'nevora-proto-__BUILD_ID__'`; o workflow
+  (`.github/workflows/pages.yml`) substitui `__BUILD_ID__` pelo SHA do
+  commit automaticamente em todo deploy (`sed` antes do
+  `upload-pages-artifact`) — sempre único, sem intervenção humana. Como
+  segunda camada de proteção, o `fetch()` do service worker virou "rede
+  primeiro, cache como reserva" (com `cache:'no-store'`, necessário porque
+  o cache HTTP comum do navegador também intercepta `fetch()` dentro do
+  service worker, não só o Cache API) — mesmo que (b) falhasse por algum
+  motivo, o jogador online ainda recebe a versão mais nova.
+- Consequências: `prototype/sw.js` e `.github/workflows/pages.yml`
+  alterados; regra registrada em `CLAUDE.md` (seção de branch/deploy) pra
+  qualquer reescrita futura desses arquivos preservar o mecanismo. Testado
+  via Playwright: conteúdo novo aparece sem precisar mudar `CACHE`
+  manualmente, e o fallback offline (PWA) continua funcionando.
