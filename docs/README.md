@@ -79,6 +79,9 @@ Hollow Knight e Silksong nunca realizaram.
 | 014 | **6 classes** de Acendedores, 1 por save; chama identifica **classe** (slot usa outros canais) | 🟢 |
 | 015 | Co-op "Expedição": visitante **surge no ponto do anfitrião**; volta ao próprio progresso depois | 🟢 |
 | 016 | Identidade de slot: **pips (1–4) + 4 tons pálidos** (decisão delegada, ajustável em playtest) | 🟢 |
+| 017 | Perigos ambientais (lava/água pútrida/água gelada) **encaixados em regiões já existentes**, não região nova | 🟢 |
+| 018 | Sistema de classes no protótipo: cosmético + **passiva de verdade**; 2 ativas + técnica exclusiva ficam pra depois | 🟢 |
+| 019 | Deploy do protótipo: **cache-busting automático** (SHA do commit) — não depende mais de memória humana | 🟢 |
 
 ## Decisões em aberto
 
@@ -87,3 +90,6 @@ Hollow Knight e Silksong nunca realizaram.
 | 1 | Modelo comercial da versão web (demo grátis × completo pago) — Diretor: "depois vemos" | `08-publicacao/PUBLICACAO.md` |
 | 2 | Revisão do Diretor: fichas dos 8 bosses (criadas pelo agente, ver `04-gameplay/bosses/`) | `04-gameplay/bosses/` |
 | 3 | Revisão do Diretor: arte das 6 classes gerada pelo agente (galeria + Drive) | `art/GENERATED_ASSETS.md` |
+| 4 | Próximas áreas do mapa além das 8 atuais, inspiradas na diversidade de bioma/paleta do mapa-múndi de referência do Silksong | `docs/referencias/mapas/`, `03-mundo/MAPA.md` |
+| 5 | 2 habilidades ativas + técnica exclusiva de cada uma das 6 classes (ADR-018) — passiva já implementada no protótipo | `04-gameplay/CLASSES_ACENDEDORES.md` |
+| 6 | Conector Google Drive: autorizado na conta, mas não habilitado nas sessões de chat (Claude Code Remote) — assets novos (referência do mapa, etc.) ficam salvos no repo até isso mudar | `docs/art/GENERATED_ASSETS.md` |
