@@ -34,11 +34,18 @@ aqui e em `CLAUDE.md`.
 
 ## Itens do backlog (ordem de menção, não de prioridade)
 
-### 1. Áudio 🟡 (adiado — confirmado pelo Diretor)
-Trilha e SFX do protótipo. Depende de decisões de `07-arte-audio/AUDIO.md`.
-Fica para depois das próximas rodadas de gameplay.
+> ✅ **Todos os itens 1–6 abaixo já foram implementados** (protótipos v2 e
+> v3) — mantidos aqui como registro histórico do pedido original. Detalhe
+> técnico de cada um em `prototype/README.md` (seções "Novidades da v2/v3")
+> e em `docs/00-processo/DIARIO_DE_BORDO.md`.
 
-### 2. Tela de nickname + identificação de jogador
+### 1. Áudio ✅ implementado (v2)
+Trilha e SFX **100% sintetizados via Web Audio API** (osciladores + ruído
+filtrado, zero arquivos externos) — `prototype/js/audio.js`. Na v3.3 ganhou
+variação melódica de verdade (escala musical + arpejo por região, antes
+era só um drone de 2 notas).
+
+### 2. Tela de nickname + identificação de jogador ✅ implementado (v2)
 Ao clicar "Jogar", pedir nome/apelido antes de começar. Objetivo: testes com
 amigos, saber **quem** chegou onde (bosses derrotados, áreas alcançadas,
 versão do protótipo zerada).
@@ -56,31 +63,36 @@ versão do protótipo zerada).
     infraestrutura (custo, LGPD básico de nomes) — melhor tratar como ADR
     própria quando chegarmos nela.
 
-### 3. Loja (Tio Sebo) + economia de compra
+### 3. Loja (Tio Sebo) + economia de compra ✅ implementado (v2)
 Design já registrado em `docs/04-gameplay/PROGRESSAO.md` (seção "A Loja de
 Tio Sebo"): vitrine isca cara desde cedo, Fragmentos de Coração como item
 mais caro, Artes/magias com cargas limitadas recarregadas só em Lampião.
-Falta: implementar no protótipo (NPC clicável, UI de compra, persistência
-do inventário no save).
+NPC clicável (tecla/botão **E**), preço sobe a cada compra, mundo congela
+com a loja aberta.
 
-### 4. Upgrades comprável/encontrável
-Pulo maior, dash extra, novas Artes/magias — alguns na loja (caros), alguns
-só em áreas secretas (grátis, mas escondidos). Ver item 5.
+### 4. Upgrades comprável/encontrável ✅ implementado (v2)
+Bota de Salto (pulo mais alto) encontrável em segredo; Fragmento de
+Coração e Frasco de Fulgor compráveis na loja. Novas Artes/magias e dash
+extra seguem como ideia pra fases futuras do protótipo.
 
-### 5. Áreas secretas com itens exclusivos
-Pelo menos 1 segredo por região do protótipo, com item que **não existe na
-loja** (arma alternativa, magia rara, Fragmento de Coração "grátis"). Reforça
-o pilar "exploração recompensada" já documentado.
+### 5. Áreas secretas com itens exclusivos ✅ implementado (v2/v3.3)
+Pelo menos 1 segredo por região do protótipo — hoje são 8 regiões, todas
+com segredo próprio. Reforça o pilar "exploração recompensada" já
+documentado.
 
-### 6. Mais clima dinâmico nos cenários
+### 6. Mais clima dinâmico nos cenários ✅ implementado (v1–v3.3)
 O Diretor destacou a neve com vento dos Picos Uivantes como ponto alto —
-"cenários com dinamismo e movimento... mostram que o jogo está vivo". Ação:
+"cenários com dinamismo e movimento... mostram que o jogo está vivo". Hoje
+toda região tem seu próprio clima/efeito (chuva, brasas, areia, escuridão
+com halo, neve com vento) — mais os perigos ambientais da v3.3 (lava, água
+pútrida, água gelada com blocos de gelo móveis), que aumentam ainda mais
+essa sensação de "o espaço é vivo e é desafio". Ação original:
 aumentar a frequência/variedade de efeitos de clima animado nas próximas
 versões (todas as 5 regiões, não só Picos), e considerar 1–2 efeitos novos
 (ex.: folhas caindo no Bosque já existe como chuva — adicionar vento
 visível balançando elementos do cenário).
 
-### 7. Comunicação multiplayer entre jogadores (sincronizar ações em tempo real)
+### 7. Comunicação multiplayer entre jogadores (sincronizar ações em tempo real) 🟡 decidido (ADR-012), ainda não implementado no protótipo
 
 Pergunta do Diretor: com até 4 jogadores em salas (1–4 jogadores por sala,
 ADR-005), como transmitir rápido uma ação como "jogador 1 pulou" para que
@@ -138,12 +150,14 @@ fiel do que foi pedido nesta sessão, esperando a ordem final de ataque.
 
 ---
 
-## Pendências da v3 (branch `prototype/v3-controles-inputs`, ainda não mergeada)
+## Pendências da v3 ✅ mergeada e no ar desde 2026-07-29
 
-> Registro de implementado × pendente pedido pelo Diretor em 2026-07-29,
-> depois de testar a v2 publicada (a v3 ainda não tinha ido ao ar). Antes
-> de reabrir pedido de merge, comparar sempre esta lista com o que já
-> existe na branch para não duplicar trabalho.
+> Registro histórico de implementado × pendente, pedido pelo Diretor em
+> 2026-07-29, depois de testar a v2 publicada. **A v3 já foi mergeada em
+> `main` há muito tempo** — mantido como registro do pedido original. Para
+> o estado atual do protótipo (v3.1/v3.2/v3.3 e o hotfix de cache), ver a
+> seção "Releases desde a v3" logo abaixo, ou `docs/00-processo/DIARIO_DE_BORDO.md`
+> → "Estado atual".
 
 ### ✅ Implementado nesta rodada (commits em `prototype/v3-controles-inputs`)
 1. Correção da latência/corte do pulo (W × Espaço) — já estava feito antes
@@ -196,3 +210,45 @@ testado. Implementado por completo nesta mesma branch
   coletar **qualquer** segredo (inclusive os 3 que já existiam antes desta
   sessão) quebrava o jogo com uma exceção não tratada. Corrigido expondo
   `g.showToast` em `js/game.js`.
+
+---
+
+## Releases desde a v3 ✅ (registro resumido — detalhe completo no Diário de Bordo)
+
+Todas mergeadas em `main` e publicadas com sucesso. Changelog técnico
+completo em `prototype/README.md` ("Novidades da vN"); narrativa
+sessão-a-sessão em `docs/00-processo/DIARIO_DE_BORDO.md` (Sessões 7-9).
+
+- **v3.1 (2026-07-30):** hotfix de cache do service worker (botões touch
+  ficaram bagunçados numa v3 já publicada — cache preso numa versão
+  anterior ao D-pad).
+- **v3.2 (2026-07-30):** botão de pausa touch; posição preservada nas
+  transições de região (X proporcional, Y por gravidade/preservado).
+- **v3.3 (2026-07-31):** visibilidade em Galerias Fúngicas, correção do
+  bug de grafo (backtracking pro lugar certo), tela de Mapa (contorno real
+  do terreno, estilo Silksong), tela de Configurações, música com
+  variação melódica, **3 perigos ambientais** (lava/água pútrida/água
+  gelada — ADR-017) e **sistema de 6 classes jogáveis** com passiva
+  funcional cada (ADR-018).
+- **Hotfix pós-v3.3 (2026-08-01):** cache-busting automático (SHA do
+  commit) + `fetch()` rede-primeiro — corrige de vez o tipo de incidente
+  da v3.1, de forma estrutural (ADR-019).
+
+## Pendências abertas (atualizado 2026-08-01)
+
+1. **Próximas áreas do mapa** além das 8 atuais, inspiradas na diversidade
+   de bioma/paleta do mapa-múndi de referência do Silksong
+   (`docs/referencias/mapas/`) — regra de paleta-por-região já formalizada
+   em `CLAUDE.md`; aguardando ordem do Diretor pra desenhar as áreas.
+2. **2 habilidades ativas + técnica exclusiva** de cada uma das 6 classes
+   (a passiva de cada uma já está implementada — ADR-018).
+3. Revisão do Diretor: 8 fichas de boss (`docs/04-gameplay/bosses/`) e os
+   6 retratos de personagem (`prototype/art/png/personagem-*.png`).
+4. Upload dos 6 retratos de personagem para o Google Drive do Diretor —
+   o conector existe mas não fica habilitado nas sessões de chat CCR (ver
+   nota operacional no Diário de Bordo); enquanto isso, assets novos ficam
+   salvos no próprio repositório.
+5. Modelo comercial da versão web (demo grátis × pago) — Diretor: "depois
+   vemos".
+6. Multiplayer de verdade (Colyseus/WebSocket, ADR-012) — decidido, ainda
+   não implementado no protótipo.
