@@ -11,77 +11,56 @@
 ## 📍 Estado atual (leia isto primeiro)
 
 **Fase:** 0 (pré-produção) concluída em `docs/`; protótipo web greybox no ar
-e em validação com o Diretor. Nenhum código de produção (stack final)
+e em validação ativa com o Diretor (várias rodadas de feedback jogando de
+verdade, inclusive no celular). Nenhum código de produção (stack final)
 começou ainda — só o protótipo descartável.
 
 **🕹️ Protótipo jogável:** https://marcospatrickexe.github.io/Nevora/
 **🎨 Galeria de arte conceitual:** https://marcospatrickexe.github.io/Nevora/art/
 Ambos republicam sozinhos a cada push na branch `main` (ver regra de branch
-abaixo).
+abaixo). **O deploy automático está confirmado funcionando de verdade** —
+inclusive o cache do PWA, que já causou confusão duas vezes (ver ADR-019).
 
-### ⏸️ Onde paramos exatamente
+### ⏸️ Onde paramos exatamente (atualizado 2026-08-01)
 
-O protótipo v2 está **no ar**; a v3 segue **pronta e testada, mas ainda NÃO
-mergeada em `main`** — o Diretor pediu explicitamente pra só mergear
-"quando acabar e testar tudo", depois de decidir tocar pra frente com o
-item grande de navegação multi-caminho em vez de mergear cedo.
+**v3.3 está mergeada em `main` e no ar**, com tudo testado antes do merge:
+mapa estilo Silksong (contorno real do terreno por região), tela de
+Configurações (volume + editor de botões touch), correção do bug de grafo
+(voltar pelo mesmo caminho levava a região errada), 3 perigos ambientais
+(lava no Vidraçal, água pútrida com verme em Galerias, água gelada +
+blocos de gelo em Picos — ADR-017) e o **sistema de 6 classes jogáveis**
+(tela de escolha permanente por save, cor de chama por classe, passiva de
+cada uma funcionando de verdade — ADR-018). Detalhe sessão a sessão nas
+entradas "Sessão 7/8/9" logo abaixo; changelog técnico completo em
+`prototype/README.md` (seções "Novidades da v3.1/v3.2/v3.3").
 
-Sequência desta sessão: (1) versão no menu + D-pad de 4 direções touch
-implementados e registrados com 3 perguntas de escopo sobre o item grande
-(navegação); (2) o Diretor respondeu as 3 perguntas de uma vez — rotas
-devem levar a **regiões diferentes** mesmo que demore, cipó só no Bosque
-com recurso de traversal próprio pras outras 4 regiões também, e tudo
-junto na v3 antes do merge; (3) **implementado por completo**: o protótipo
-foi de 5 regiões em corrente linear pra **8 regiões em grafo** (`js/world.js`
-e `js/game.js` reescritos — `prev`/`next`/`portals` por id em vez de
-índice), com 3 regiões-atalho novas (Sótão do Sineiro, Adega de Cera, Copa
-do Bosque) cada uma com 1 segredo exclusivo, e um recurso de travessia
-próprio por região: brasas ascendentes (Vale), cipó (Bosque, único pedido
-específico do Diretor), cogumelo-mola/bounce pad (Galerias), vórtice de
-areia (Vidraçal, com segredo novo) e o vento uivante que já existia
-(Picos). Topologia completa em `docs/03-mundo/MAPA.md` (seção "Protótipo
-web").
+**Incidente pós-merge, já resolvido:** depois do merge da v3.3 o Diretor
+reportou (com screenshot) que o jogo publicado "não atualizava". Não era
+falha de deploy — o GitHub Actions confirmava sucesso a cada push — era o
+service worker do PWA preso servindo um cache antigo (`CACHE` em
+`prototype/sw.js` nunca tinha subido de número desde antes da v3.1).
+Corrigido de forma estrutural, não só o sintoma: cache-busting agora é
+**automático** (SHA do commit estampado pelo workflow a cada deploy) e o
+`fetch()` virou "rede primeiro, cache como reserva" — ver ADR-019. Esse
+tipo de incidente não deve mais acontecer em releases futuras.
 
-**Bug real encontrado e corrigido no processo de teste** (não introduzido
-nesta sessão, já existia desde antes): `Player.collectSecret` em
-`entities.js` chamava `g.showToast(...)`, mas isso nunca existiu no objeto
-de estado do jogo (só como `NV.Game.showToast`, um método do módulo) — ou
-seja, coletar **qualquer segredo do protótipo, em qualquer versão anterior
-já publicada**, lançava uma exceção não tratada e quebrava o jogo. Só não
-tinha aparecido porque nenhum teste automatizado anterior chegava a pisar
-exatamente em cima de um segredo. Corrigido expondo `g.showToast` em
-`js/game.js`.
+**Próxima ação:** aguardando o Diretor jogar a v3.3 (já com o hotfix de
+cache aplicado) e trazer feedback. Pendências abertas conhecidas — ver
+tabela "Decisões em aberto" em `docs/README.md`:
+1. Próximas áreas do mapa além das 8 atuais, inspiradas na diversidade de
+   bioma/paleta do mapa-múndi de referência do Silksong que o Diretor
+   mandou (`docs/referencias/mapas/`) — regra de paleta-por-região já
+   documentada em `CLAUDE.md`, esperando ordem pra desenhar as áreas novas.
+2. As 2 habilidades ativas + a técnica exclusiva de cada uma das 6 classes
+   (a passiva já está implementada — ADR-018).
+3. Revisão do Diretor: 8 fichas de boss (`docs/04-gameplay/bosses/`) e os
+   6 retratos de personagem (`prototype/art/png/personagem-*.png`) —
+   pendência antiga, ainda em aberto.
+4. Upload dos 6 retratos de personagem para o Google Drive do Diretor —
+   ver nota operacional abaixo (ainda não resolvido, causa diferente da
+   registrada em 2026-07-24).
 
-Testado via Playwright: cada mecânica nova isoladamente (updraft leva ao
-Sótão, alçapão leva à Adega, cipó leva à Copa do Bosque, bounce pad
-lança o jogador, vórtice de areia entrega o segredo novo do Vidraçal),
-a cadeia principal completa ida e volta, os 3 links das regiões-atalho de
-volta pra cadeia principal, os 7 segredos totais coletáveis sem erro,
-conclusão do protótipo (lampião final) disparando corretamente, resumo de
-progresso mostrando "regiões visitadas X/8", e regressão completa da UI já
-entregue (numpad, D-pad touch, editor de layout, loja, pausa, resumo) —
-zero erros de console em todos os cenários.
-
-O bug do pulo (sessão anterior) era real, não só sensação: `js/input.js`
-mapeava Espaço e W/↑ para a mesma ação "jump" através de uma variável
-auxiliar (`_spaceHeld`) que se contaminava entre as duas teclas — soltar
-Espaço enquanto W ainda estava pressionado cortava o pulo pela metade (a
-mecânica de pulo variável interpretava como "botão solto"). Reescrito para
-que cada ação seja o **OU lógico de todas as teclas físicas** que a
-controlam, sem uma tecla conseguir sobrescrever o estado criado por outra —
-confirmado via teste headless que o bug desapareceu e que o pulo responde
-em 1 frame.
-
-**Próxima ação:** com tudo implementado e testado, o merge de
-`prototype/v3-controles-inputs` → `main` já pode acontecer (segue a regra
-de branch: só publica quando o Diretor aprovar). Depois do merge, jogar a
-v3 no ar é o próximo passo natural. Segue pendente também: revisão dos 8
-fichas de boss em `docs/04-gameplay/bosses/` e dos 6 retratos de
-personagem em `prototype/art/png/personagem-*.png`.
-
-📋 **Lista completa de pedidos do backlog:** `docs/09-roadmap/BACKLOG_PROTOTIPO.md`
-(todos implementados nos protótipos v2/v3, exceto multiplayer/Colyseus —
-esse item o próprio Diretor adiou: "a) depois vemos isso").
+📋 **Lista completa de pedidos do backlog:** `docs/09-roadmap/BACKLOG_PROTOTIPO.md`.
 
 ### ✅ Bloqueio resolvido — classes e nomenclatura de vida fechados
 
@@ -129,6 +108,22 @@ abaixo.
   lançar, revisitar com testes de latência real; candidato forte: **Steam
   Datagram Relay (SDR)** via Steamworks Networking Sockets. Detalhes em
   `05-multiplayer/NETCODE.md` e `08-publicacao/PUBLICACAO.md`.
+- **Cache-busting do PWA é automático desde 2026-08-01 (ADR-019):** nunca
+  mais precisa editar manualmente `CACHE` em `prototype/sw.js` — o workflow
+  já estampa o SHA do commit sozinho a cada deploy. Se algum dia
+  `prototype/sw.js` ou `.github/workflows/pages.yml` forem reescritos do
+  zero, preservar esse mecanismo (senão o incidente de "versão antiga"
+  volta a acontecer).
+- **Google Drive nas sessões de Claude Code Remote (CCR):** confirmado em
+  2026-07-31 que o conector Google Drive aparece **autorizado na conta**
+  do Diretor (`ListConnectors` retorna `connected: true`), mas **não fica
+  habilitado por padrão nas sessões de chat CCR** (`enabledInChat: false`)
+  — nenhuma ferramenta de Drive fica disponível nessas sessões, mesmo sem
+  erro de conexão. Diferente do incidente de 2026-07-24 (conector caiu no
+  meio da sessão): aqui ele nunca chega a ligar. Enquanto isso não mudar,
+  assets novos (ex.: a imagem de referência do mapa de Silksong) ficam
+  salvos dentro do próprio repositório (`docs/referencias/`), no mesmo
+  espírito de `docs/art/`.
 
 ### Decisões em aberto (sem resposta ainda)
 - Modelo comercial da versão web (demo grátis × pago).
@@ -138,17 +133,211 @@ abaixo.
   jogadores (nota de playtest em
   `docs/04-gameplay/bosses/08-pavio-rei.md`).
 - Upload dos 6 retratos de personagem para o Google Drive do Diretor —
-  conector caiu no meio da sessão (ver nota abaixo); pendente retry.
+  ver nota operacional acima (Drive não habilitado nas sessões CCR); ainda
+  sem solução — precisa ou habilitar o conector nessa sessão, ou o Diretor
+  fazer o upload manualmente a partir do repositório.
+- Próximas áreas do mapa além das 8 atuais (ver ADR-017 e a referência
+  visual em `docs/referencias/mapas/`) — aguardando ordem do Diretor pra
+  desenhar.
+- As 2 ativas + a técnica exclusiva de cada uma das 6 classes (ADR-018) —
+  passiva já implementada, resto fica pra uma fase futura.
 
-### Nota operacional — Google Drive desconectado
+### Nota operacional — Google Drive desconectado (2026-07-24, histórico)
 
-Em algum ponto desta sessão o conector `mcp__Google_Drive__*` parou de
+Em algum ponto da Sessão 3 o conector `mcp__Google_Drive__*` parou de
 responder (funcionava antes, no início da mesma sessão). Os 6 retratos de
 personagem foram commitados normalmente no GitHub (`prototype/art/svg/` e
 `prototype/art/png/`), mas **não** foram copiados para a pasta "Névora —
 Arte Conceitual" do Drive como de costume. Marcado como `⏳ pendente (Drive
-offline)` em `docs/art/GENERATED_ASSETS.md`. Uma sessão futura deve tentar
-reconectar e replicar esses 6 arquivos para o Drive.
+offline)` em `docs/art/GENERATED_ASSETS.md` — **segue pendente até hoje**;
+ver o fato operacional novo acima (2026-07-31) sobre por que isso continua
+sem solução nas sessões CCR.
+
+---
+
+## Sessão 9 — 2026-08-01 (investigação "o jogo não atualizou" + cache-busting automático + checkpoint dos documentos)
+
+Depois do merge da v3.3 (Sessão 8), o Diretor reportou duas vezes seguidas
+que a versão publicada "não atualizou" — a primeira com uma foto do menu
+mostrando "Protótipo v3" (sem os botões de Mapa/Configurações novos), a
+segunda com uma captura da página de deployments do GitHub mostrando o
+histórico completo de publicações.
+
+**Investigação:** confirmado via `mcp__github__actions_get`
+(`get_workflow_run`) que o deploy da v3.3 (commit `f7a423d`) tinha
+`status: completed, conclusion: success` — ou seja, **o deploy funcionou
+perfeitamente**. A própria screenshot do Diretor confirmou isso de outro
+ângulo: o deploy da v3.3 aparecia como "Active" (run #7) na lista de
+`Latest deployments`. O problema não era publicação, era **cache do lado
+do cliente**: `prototype/sw.js` é um service worker cache-first cujo
+`CACHE` nunca tinha subido de número desde antes da v3.1 — o comentário no
+próprio arquivo já alertava exatamente sobre esse risco (fruto de um
+incidente anterior, ver Sessão 7). Qualquer PWA já instalado no celular do
+Diretor continuava servindo os arquivos daquele cache antigo pra sempre,
+não importa quantos deploys novos acontecessem depois.
+
+**Correção em duas etapas** (a pedido do Diretor: "veja uma forma de
+prevenir isto nos lançamentos das próximas versões", depois de já ter
+mergeado um primeiro hotfix manual):
+
+1. **Hotfix imediato** (branch `prototype/v3.3.1-fix-cache-versao`,
+   mergeada): bump manual de `CACHE` (`v3` → `v3.3`) + `NV.VERSION`
+   atualizado de "v3" genérico pra "v3.3" no menu + os arquivos novos
+   (`classes.js`, `map.js`) adicionados à lista `ASSETS` do precache.
+2. **Correção estrutural** (mesma branch, commits seguintes, também
+   mergeados) — ADR-019: `CACHE` passou a usar um placeholder
+   (`nevora-proto-__BUILD_ID__`) substituído automaticamente pelo **SHA do
+   commit** via um passo novo no workflow
+   (`.github/workflows/pages.yml`, `sed` antes do
+   `upload-pages-artifact`) — elimina de vez a dependência de memória
+   humana. Como segunda camada de proteção, o `fetch()` do service worker
+   virou "rede primeiro, cache como reserva" (`cache:'no-store'`,
+   necessário porque o `fetch()` dentro do service worker também é
+   interceptado pelo cache HTTP comum do navegador, não só pelo Cache API)
+   — mesmo que o cache-busting automático falhasse por algum motivo, quem
+   estiver online recebe a versão mais nova mesmo assim.
+
+Testado via Playwright: simulado um cache antigo pré-existente + registro
+do service worker novo, confirmando que o `activate()` limpa o cache velho
+e o novo cache busting funciona; simulada uma "mudança no servidor" sem
+tocar em `CACHE` nenhum, confirmando que o `fetch()` rede-primeiro traz o
+conteúdo novo mesmo assim; testado o fallback offline (continua
+funcionando via cache quando não há rede); smoke test completo do boot do
+jogo com o service worker novo presente, zero erros de console.
+
+Merge aprovado e deployado com sucesso (`1bdd355`, run #8, confirmado via
+API). Registrado como **ADR-019** em `DECISOES.md`.
+
+**Checkpoint dos documentos** (a pedido explícito do Diretor, mesma
+sessão): `DIARIO_DE_BORDO.md` (este arquivo — "Estado atual" reescrito,
+Sessões 7/8/9 adicionadas), `docs/09-roadmap/BACKLOG_PROTOTIPO.md`
+(itens antigos marcados como implementados, pendências novas registradas),
+`docs/00-processo/DECISOES.md` (ADR-017/018/019 novas) e `docs/README.md`
+(tabela de decisões + decisões em aberto atualizadas) — tudo só no
+repositório **Nevora** (`ptk_plays` nunca tocado, conforme regra fixa do
+projeto).
+
+**Estado ao final:** v3.3 + hotfix de cache no ar, deploy automático
+confirmado funcionando de ponta a ponta (inclusive o cache do PWA).
+Documentação de checkpoint atualizada. Aguardando o Diretor confirmar que
+a versão nova apareceu no celular dele e trazer o próximo feedback.
+
+---
+
+## Sessão 8 — 2026-07-31 (v3.3: mapa estilo Silksong, Configurações, correção do grafo, perigos ambientais, sistema de 6 classes)
+
+Sessão longa, em duas partes: primeiro um lote de correções de bugs reais
+relatados pelo Diretor depois de ver a namorada dele jogar, depois (mesma
+branch, antes do merge) um pedido de duas features grandes vindo de uma
+screenshot do mapa-múndi de Silksong.
+
+**Parte 1 — bugs relatados jogando de verdade** (branch
+`prototype/v3.3-mapa-config-correcoes`):
+1. **Visibilidade ruim em Galerias Fúngicas** (área escura): raio de luz
+   do halo do jogador aumentado (150→190, até 270 com Fulgor cheio) e
+   ganhou um "platô" de visão plena (60% do raio totalmente claro antes de
+   esmaecer), em vez de esmaecer desde o centro — dá tempo de reação real
+   contra inimigos/espinhos sem perder o clima de escuridão.
+2. **Bug real de grafo confirmado e corrigido:** voltar andando por uma
+   região com mais de uma entrada possível (ex.: Galerias, alcançável
+   tanto pelo Bosque quanto pelo atalho do Sótão) sempre devolvia pro
+   vizinho "padrão" da cadeia principal, não pra região de onde o jogador
+   realmente veio. Corrigido registrando de verdade a origem de cada
+   transição (`g.enteredFrom`/`g.enteredSide` em `js/game.js`) — sem
+   precisar reescrever o sistema de portais pra um grafo bidirecional
+   completo, só rastrear o histórico da sessão.
+3. **X/Y não preservados nas transições** — investigado e confirmado que
+   já tinha sido corrigido na v3.2 (`groundBelow`/`airTop` em
+   `world.js`); testes de regressão específicos confirmaram que continua
+   funcionando depois das mudanças desta sessão.
+4. **Tela de Mapa** (toggle — abre/fecha no mesmo botão, tecla `M` ou
+   botão touch): reescrita como SVG que traça o **contorno real do
+   terreno** de cada região (`js/map.js`, amostra a grade de tiles via
+   `NV.World.buildLevel` — função pura, segura de chamar fora do
+   gameplay), no espírito do mapa de Hollow Knight/Silksong — nada de
+   círculos/retângulos genéricos.
+5. **Tela de Configurações** (ícone ⚙, menu e pausa): volume de
+   música/efeitos (sliders, `localStorage`) + o que já existia (modo dos
+   botões touch, editor de posição/tamanho), tudo centralizado.
+6. **Música com variação melódica de verdade:** cada região ganhou uma
+   escala musical própria e uma camada de arpejo aleatório sobre o drone
+   de sempre (`scheduleMelody` em `js/audio.js`) — antes soava "uma nota
+   só".
+
+**Parte 2 — pedido do Diretor com screenshot do mapa de Silksong** (antes
+do merge): (a) redesenhar o visual do Mapa pra mostrar o terreno orgânico
+de cada região (já coberto pelo item 4 acima, adiantado); (b) "os inimigos
+nem sempre devem ser o maior desafio... mas sim o próprio espaço" — lava,
+lago verde de vermes, lago gelado. Perguntado sobre escopo via
+`AskUserQuestion`, o Diretor respondeu **"encaixar nas regiões
+existentes"** e confirmou as 3 mecânicas (ADR-017): lava = morte
+instantânea (Vidraçal), água pútrida = dano contínuo + lentidão + inimigo
+Verme novo (Galerias), água gelada + blocos de gelo como plataforma móvel
+(Picos). Implementado com 3 novos códigos de tile (6/7/8) em
+`world.js`/`entities.js`/`render.js`, seguindo o mesmo padrão dos
+espinhos/cipó já existentes.
+
+Antes do merge, o Diretor trouxe mais dois pedidos: (c) salvar a imagem de
+referência do Silksong organizada em algum lugar (Google Drive não
+disponível nesta sessão — ver nota operacional — guardada em
+`docs/referencias/mapas/` no repo) e formalizar a regra de paleta por
+região no `CLAUDE.md`; (d) **tela de escolha de classe antes do jogo**,
+já que os 6 personagens gerados representam 6 classes jogáveis.
+Perguntado sobre o nível de profundidade, o Diretor pediu explicitamente
+**"quero passiva de cada classe"** — não só visual (ADR-018). Implementado:
+`js/classes.js` (dados das 6 classes), tela `#classScreen` com escolha
+**permanente por save**, cor de chama refletindo a classe em jogo/HUD, e
+as 6 passivas funcionando de verdade (Breo: sem recuo de dano leve +
+Sévia bônus por kill próximo · Sílice: pista de segredo no HUD · Brasme:
+reduz dano frontal + onda ao perder Coração de Cera · Véspera: eco de
+chama pós-morte com bônus de Fagulhas · Turfo: chance de Sévia em dobro ·
+Parafino: +1 Fulgor extra por acerto). As 2 ativas + técnica exclusiva de
+cada classe ficam pra depois (ADR-018).
+
+**Testado via Playwright em cada etapa** (zero erros de console em todos
+os cenários): visibilidade de Galerias, backtracking sótão↔galerias↔bosque
+em ambas direções, mapa abrindo/fechando com as 8 formas renderizando sem
+exceção, segredos das regiões alteradas continuando coletáveis, os 3
+hazards isoladamente (dano/morte/lentidão/carregamento pelo floe), fluxo
+completo da tela de classe (nickname→classe→controles→jogo) com
+permanência confirmada após reload, e as 6 passivas isoladamente.
+
+**Estado ao final:** branch `prototype/v3.3-mapa-config-correcoes`
+mergeada em `main` (commit `f7a423d`) com aprovação explícita do Diretor,
+deploy confirmado com sucesso. (O incidente de cache pós-merge e sua
+correção estão na Sessão 9, junto com o checkpoint destes documentos.)
+
+---
+
+## Sessão 7 — 2026-07-30 (hotfix de cache antigo + v3.2: pausa touch e posição nas transições)
+
+Dois lotes nesta data. **Primeiro, um hotfix isolado** de service worker
+(merge separado, antes da v3.2): os botões touch apareceram bagunçados
+numa v3 já publicada — `index.html` novo carregava, mas `style.css`
+ficava preso numa versão de cache anterior à existência do D-pad.
+Corrigido subindo o número de `CACHE` em `prototype/sw.js` (o comentário
+de aviso que motivou toda a investigação da Sessão 9 nasceu aqui). Esse
+foi o **primeiro** dos dois incidentes de cache do PWA — o segundo, mais
+sério, aconteceu depois da v3.3 e recebeu correção estrutural (ADR-019,
+Sessão 9).
+
+**Depois, protótipo v3.2** (branch `prototype/v3.2-pausa-e-transicoes`,
+mergeada em `main`): botão de pausa touch (canto superior esquerdo —
+antes só dava pra pausar pelo Esc do teclado, sem opção nenhuma no
+celular/PWA) e correção de posição nas transições de região — os portais
+verticais (brasas, alçapão, cipó) sempre jogavam o jogador no canto
+inferior esquerdo da região de destino, ignorando de onde ele veio.
+Corrigido: **X preservado proporcionalmente** (cai num ponto a 1/4 da
+largura de origem → chega a 1/4 da largura do destino) e **Y livre pra
+gravidade** (cai do teto do destino ou emerge do chão, em vez de
+teleportar pra uma posição fixa); transições **laterais** também passaram
+a preservar a altura Y quando existe chão/plataforma correspondente na
+região vizinha (Vale/Bosque/Vidraçal ganharam plataformas extras perto das
+bordas pra essa preservação ter efeito de verdade). Detalhe técnico
+completo em `prototype/README.md` → "Novidades da v3.2".
+
+**Estado ao final:** hotfix de cache e v3.2 ambos mergeados e publicados
+com sucesso.
 
 ---
 
